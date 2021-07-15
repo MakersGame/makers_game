@@ -1,6 +1,7 @@
 extends Node2D
 
 func _ready():
+    $PlayerInfo.show()
     $Backpack.hide()
     $Options.hide()
     hide()

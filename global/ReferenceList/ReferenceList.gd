@@ -9,7 +9,7 @@ var ItemRference={
         "Price":1,                              #单价（出售）
         "Description":"一小堆木材，常见的建筑材料。" 
         },
-    "0.9mm子弹":{
+    "9mm子弹":{
         "ID":11,
         "Type":"Bullet",
         "Weight":0.01,

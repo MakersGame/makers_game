@@ -10,8 +10,8 @@ var GameStatus:String                   #游戏状态
 #“PlayerControl”：玩家控制中，可以自由移动
 #“AnimationPlaying"：动画播放中，游戏暂停
 #"Paused"：玩家暂停游戏
-var GoodInHome = {}                     #家中的物品
-var GoodInBackpack = {}                 #背包中的物品
+var GoodInHome:Dictionary={}            #家中的物品
+var GoodInBackpack:Dictionary={}        #背包中的物品
 
 onready var PlayerCamera=$PlayerCamera  #游戏镜头对象实例
 onready var SceneChanger=$PlayerCamera/SceneChanger
@@ -22,6 +22,9 @@ func _ready():#游戏最开始会执行一次，之后就不会了
     GameStatus="PlayerControl"
     $PlayerCamera.current=true
     set_scnene_info()
+    GoodInBackpack["木材"]=100
+    GoodInBackpack["9mm子弹"]=200
+    $PauseWindow/Backpack.update_items_in_backpack()
 
 func _input(event):
     if event.is_action_pressed("ui_pause"):

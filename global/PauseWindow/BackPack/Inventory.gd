@@ -8,6 +8,9 @@ onready var BackPack=get_parent().get_parent()
 func _ready():
     Number=int(name.right(9))
 
+func update_sprite(ItemName):
+    $AnimatedSprite.animation=ItemName
+
 func _on_Inventory_mouse_entered():
     CursorOn=true
     BackPack.inventory_focus_get(Number)

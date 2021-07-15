@@ -1,9 +1,22 @@
-[gd_resource type="SpriteFrames" format=2]
+[gd_resource type="SpriteFrames" load_steps=3 format=2]
+
+[ext_resource path="res://art/temp/items/wood.png" type="Texture" id=1]
+[ext_resource path="res://art/temp/items/9mm_bullet.png" type="Texture" id=2]
 
 [resource]
 animations = [ {
+"frames": [ ExtResource( 1 ) ],
+"loop": true,
+"name": "木材",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 2 ) ],
+"loop": true,
+"name": "9mm子弹",
+"speed": 5.0
+}, {
 "frames": [  ],
 "loop": true,
-"name": "default",
+"name": "null",
 "speed": 5.0
 } ]
