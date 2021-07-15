@@ -2,7 +2,6 @@ extends Area2D
 signal hit_with_synthesis
 
 # 这里只是一个用于交互的结点
-#var whether_in = false#采用帕斯卡命名格式
 var WhetherIn=false
 
 
