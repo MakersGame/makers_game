@@ -19,7 +19,6 @@ func _on_Inventory_mouse_entered():
     CursorOn=true
     BackPack.inventory_focus_get(Number)
 
-
 func _on_Inventory_mouse_exited():
     CursorOn=false
     BackPack.inventory_focus_lose(Number)

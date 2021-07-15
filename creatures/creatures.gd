@@ -1,5 +1,7 @@
 extends KinematicBody2D
 
+var TargetPath=null
+var temp
 var Identifier="Creature"
 var Health:float            #当前生命值
 var MaxHealth:float         #生命上限
@@ -65,7 +67,7 @@ func find_way(target:Vector2):#寻路算法，并且在拐弯处修正移动，�
         return Vector2()
 #注意，碰撞遮罩中，layer1为障碍物，也是creature作为底层对象在实现寻路时考虑的
     var _Speed=Speed[SpeedType]
-    var TargetPath=navigation.get_simple_path(global_position,target)
+    TargetPath=navigation.get_simple_path(global_position,target)
     if TargetPath.size()<=1:
         return Vector2(0,0)
     var TargetDirection=(TargetPath[1]-TargetPath[0]).normalized()
@@ -110,4 +112,19 @@ func find_way(target:Vector2):#寻路算法，并且在拐弯处修正移动，�
         position=original_position
     return movement
 
+func _process(delta):
+    temp=TargetPath
+    if TargetPath==null:
+        return
+    if temp.size()>1 and temp[0]!=temp[1]:
+        for i in range(temp.size()):
+            temp[i]-=global_position
+    update()
 
+func _draw():
+    if TargetPath==null:
+        return
+    z_index=999
+    visible=true
+    if temp.size()>1 and temp[0]!=temp[1]:
+        draw_multiline(temp,Color.black,5) 
