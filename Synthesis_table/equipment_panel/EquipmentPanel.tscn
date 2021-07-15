@@ -1,0 +1,124 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Synthesis_table/inventory/Goods.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Synthesis_table/equipment_panel/EquipmentPanel.gd" type="Script" id=2]
+
+[node name="EquipmentPanel" type="Panel"]
+margin_right = 200.0
+margin_bottom = 200.0
+rect_scale = Vector2( 1.74138, 1.61029 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="Panel" parent="."]
+margin_right = 284.0
+margin_bottom = 329.0
+rect_scale = Vector2( 0.703117, 0.601638 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel_up" type="Panel" parent="Panel"]
+anchor_right = 1.0
+margin_bottom = 88.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Goods" parent="Panel/Panel_up" instance=ExtResource( 1 )]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -25.0
+margin_top = -25.0
+margin_right = 25.0
+margin_bottom = 25.0
+
+[node name="Goods2" parent="Panel/Panel_up" instance=ExtResource( 1 )]
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_top = -25.0
+margin_bottom = 25.0
+
+[node name="Goods3" parent="Panel/Panel_up" instance=ExtResource( 1 )]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -50.0
+margin_top = -25.0
+margin_right = 0.0
+margin_bottom = 25.0
+
+[node name="Panel_middle" type="Panel" parent="Panel"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -1.0
+margin_top = -56.5
+margin_right = -1.0
+margin_bottom = 66.5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Goods4" parent="Panel/Panel_middle" instance=ExtResource( 1 )]
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_top = -25.0
+margin_bottom = 25.0
+
+[node name="Goods5" parent="Panel/Panel_middle" instance=ExtResource( 1 )]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -25.0
+margin_top = -25.0
+margin_right = 25.0
+margin_bottom = 25.0
+
+[node name="Goods6" parent="Panel/Panel_middle" instance=ExtResource( 1 )]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -50.0003
+margin_top = -25.0
+margin_right = 0.0
+margin_bottom = 25.0
+
+[node name="Panel_down" type="Panel" parent="Panel"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -89.0
+
+[node name="Goods7" parent="Panel/Panel_down" instance=ExtResource( 1 )]
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_top = -25.0
+margin_bottom = 25.0
+
+[node name="Goods8" parent="Panel/Panel_down" instance=ExtResource( 1 )]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -25.0
+margin_top = -25.0
+margin_right = 25.0
+margin_bottom = 25.0
+
+[node name="Goods9" parent="Panel/Panel_down" instance=ExtResource( 1 )]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -50.0
+margin_top = -25.0
+margin_right = 0.0
+margin_bottom = 25.0

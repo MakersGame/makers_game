@@ -1,0 +1,12 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://inventory/GoodsProperty.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+goods_name = ""
+goods_description = ""
+price = 0
+damage = 0
+move_speed = 0
+attack_range = 0

@@ -1,0 +1,8 @@
+@GoodInHome
+木材 1000
+@end
+
+@GoodInBackpack
+木材 100
+9mm子弹 200
+@end

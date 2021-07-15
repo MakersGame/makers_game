@@ -22,8 +22,7 @@ func _ready():#游戏最开始会执行一次，之后就不会了
     GameStatus="PlayerControl"
     $PlayerCamera.current=true
     set_scnene_info()
-    GoodInBackpack["木材"]=100
-    GoodInBackpack["9mm子弹"]=200
+    FileManager.load_data()
     $PauseWindow/Backpack.update_items_in_backpack()
 
 func _input(event):
@@ -65,4 +64,13 @@ func change_scene(path):#切换场景
     yield(SceneChanger.get_node("AnimationPlayer"), "animation_finished")
     SceneChanger.get_node("ColorRect").hide()
 
-
+# 用于打开合成面板
+func open_synthesis():
+    var SynthesisTablePanel=load("res://Synthesis_table/Synthesis_table_panel.tscn").instance()
+    var middle_position=Global.PlayerCamera.global_position
+    SynthesisTablePanel.set_global_position(Vector2(middle_position.x - 450, middle_position.y - 250))
+    CurrentScene.add_child(SynthesisTablePanel)
+    
+# 关闭合成面板
+func close_synthesis():
+    CurrentScene.get_node("Synthesis_table_panel").queue_free()
