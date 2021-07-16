@@ -1,8 +1,18 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://art/temp/SynthesisTable/close.png" type="Texture" id=1]
 [ext_resource path="res://Synthesis_table/Synthesis_table_panel.gd" type="Script" id=2]
-[ext_resource path="res://Synthesis_table/Test.tscn" type="PackedScene" id=3]
+[ext_resource path="res://art/temp/SynthesisTable/background.png" type="Texture" id=3]
+[ext_resource path="res://global/PauseWindow/BackPack/Inventory.tscn" type="PackedScene" id=4]
+[ext_resource path="res://art/temp/PauseWindow/item_selected.png" type="Texture" id=5]
+[ext_resource path="res://art/temp/PauseWindow/item_touched.png" type="Texture" id=6]
+[ext_resource path="res://art/temp/PauseWindow/NextPageButton.png" type="Texture" id=7]
+[ext_resource path="res://art/temp/PauseWindow/PreviousPageButton.png" type="Texture" id=8]
+[ext_resource path="res://art/fonts/STXINWEI.TTF" type="DynamicFontData" id=9]
+[ext_resource path="res://global/ReferenceList/ItemSprite.tres" type="SpriteFrames" id=10]
+[ext_resource path="res://art/temp/PauseWindow/ItemDetail_background.png" type="Texture" id=11]
+[ext_resource path="res://art/temp/SynthesisTable/hecheng.png" type="Texture" id=12]
+[ext_resource path="res://art/temp/SynthesisTable/cannothecheng.png" type="Texture" id=13]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.196078, 0.196078, 0.196078, 0.462745 )
@@ -22,15 +32,24 @@ animations = [ {
 "speed": 5.0
 } ]
 
+[sub_resource type="DynamicFont" id=5]
+size = 32
+font_data = ExtResource( 9 )
+
+[sub_resource type="DynamicFont" id=6]
+size = 20
+font_data = ExtResource( 9 )
+
 [node name="Synthesis_table_panel" type="Panel"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -377.5
-margin_top = -253.0
-margin_right = 522.5
-margin_bottom = 247.0
+anchor_left = 0.352
+anchor_top = 0.347
+anchor_right = 0.352
+anchor_bottom = 0.347
+margin_left = -450.56
+margin_top = -249.84
+margin_right = 449.44
+margin_bottom = 250.16
+mouse_filter = 2
 custom_styles/panel = SubResource( 1 )
 script = ExtResource( 2 )
 __meta__ = {
@@ -48,14 +67,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Node2D" type="Node2D" parent="."]
-
-[node name="Test" parent="Node2D" instance=ExtResource( 3 )]
-margin_left = 7.5636
-margin_top = 7.1272
-margin_right = 900.564
-margin_bottom = 497.127
-
 [node name="close" type="Button" parent="."]
 margin_left = 816.649
 margin_top = 3.43414
@@ -72,4 +83,139 @@ scale = Vector2( 0.365533, 0.336689 )
 frames = SubResource( 4 )
 centered = false
 
+[node name="BackGroud" type="Sprite" parent="."]
+visible = false
+modulate = Color( 1, 1, 1, 0.588235 )
+position = Vector2( 450, 250 )
+scale = Vector2( 2.8458, 3.09422 )
+texture = ExtResource( 3 )
+
+[node name="InventoryFocused" type="Sprite" parent="."]
+position = Vector2( 253.4, 129.527 )
+scale = Vector2( 1.519, 1.464 )
+texture = ExtResource( 6 )
+
+[node name="InventoryChosen" type="Sprite" parent="."]
+position = Vector2( 133.4, 129.527 )
+scale = Vector2( 1.519, 1.464 )
+texture = ExtResource( 5 )
+
+[node name="InventoryList" type="Node2D" parent="."]
+
+[node name="Inventory1" parent="InventoryList" instance=ExtResource( 4 )]
+position = Vector2( 134.814, 129.527 )
+
+[node name="Inventory2" parent="InventoryList" instance=ExtResource( 4 )]
+position = Vector2( 254.814, 129.527 )
+
+[node name="Inventory3" parent="InventoryList" instance=ExtResource( 4 )]
+position = Vector2( 374.814, 129.527 )
+
+[node name="Inventory4" parent="InventoryList" instance=ExtResource( 4 )]
+position = Vector2( 134.189, 249.735 )
+
+[node name="Inventory5" parent="InventoryList" instance=ExtResource( 4 )]
+position = Vector2( 253.608, 249.527 )
+
+[node name="Inventory6" parent="InventoryList" instance=ExtResource( 4 )]
+position = Vector2( 375.022, 249.527 )
+
+[node name="Inventory7" parent="InventoryList" instance=ExtResource( 4 )]
+position = Vector2( 132.983, 372.563 )
+
+[node name="Inventory8" parent="InventoryList" instance=ExtResource( 4 )]
+position = Vector2( 251.569, 371.149 )
+
+[node name="Inventory9" parent="InventoryList" instance=ExtResource( 4 )]
+position = Vector2( 375.23, 369.527 )
+
+[node name="ItemDetail" type="Node2D" parent="."]
+
+[node name="Background" type="Sprite" parent="ItemDetail"]
+position = Vector2( 687.16, 252.337 )
+scale = Vector2( 1.07813, 1.1719 )
+texture = ExtResource( 11 )
+
+[node name="ItemSprite" type="AnimatedSprite" parent="ItemDetail"]
+position = Vector2( 598.205, 236.274 )
+scale = Vector2( 1.5, 1.5 )
+frames = ExtResource( 10 )
+
+[node name="ItemName" type="Label" parent="ItemDetail"]
+margin_left = 499.185
+margin_top = 358.258
+margin_right = 704.185
+margin_bottom = 408.258
+custom_fonts/font = SubResource( 5 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "物品名称"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ItemNeed" type="Label" parent="ItemDetail"]
+margin_left = 711.959
+margin_top = 126.674
+margin_right = 863.959
+margin_bottom = 320.674
+custom_fonts/font = SubResource( 6 )
+text = "所需材料"
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Buttons" type="Node2D" parent="."]
+
+[node name="PreviousPage" type="TextureButton" parent="Buttons"]
+margin_left = 95.2256
+margin_top = 435.588
+margin_right = 163.226
+margin_bottom = 475.588
+rect_scale = Vector2( 1.5, 1.5 )
+texture_normal = ExtResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NextPage" type="TextureButton" parent="Buttons"]
+margin_left = 295.226
+margin_top = 435.588
+margin_right = 364.226
+margin_bottom = 475.588
+rect_scale = Vector2( 1.5, 1.5 )
+texture_normal = ExtResource( 7 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Craft" type="TextureButton" parent="Buttons"]
+margin_left = 640.0
+margin_top = 425.0
+margin_right = 709.0
+margin_bottom = 464.0
+rect_scale = Vector2( 1.5, 1.5 )
+texture_normal = ExtResource( 12 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CannotCraft" type="TextureButton" parent="Buttons"]
+margin_left = 641.061
+margin_top = 425.182
+margin_right = 709.061
+margin_bottom = 465.182
+rect_scale = Vector2( 1.5, 1.5 )
+texture_normal = ExtResource( 13 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [connection signal="pressed" from="close" to="." method="_on_close_pressed"]
+[connection signal="pressed" from="Buttons/PreviousPage" to="." method="_on_PreviousPage_pressed"]
+[connection signal="pressed" from="Buttons/NextPage" to="." method="_on_NextPage_pressed"]
+[connection signal="pressed" from="Buttons/Craft" to="." method="_on_Craft_pressed"]

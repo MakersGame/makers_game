@@ -12,6 +12,8 @@ var GameStatus:String                   #游戏状态
 #"Paused"：玩家暂停游戏
 var GoodInHome:Dictionary={}            #家中的物品
 var GoodInBackpack:Dictionary={}        #背包中的物品
+var InCraftTable = false
+
 
 onready var PlayerCamera=$PlayerCamera  #游戏镜头对象实例
 onready var SceneChanger=$PlayerCamera/SceneChanger
@@ -26,7 +28,7 @@ func _ready():#游戏最开始会执行一次，之后就不会了
     $PauseWindow/Backpack.update_items_in_backpack()
 
 func _input(event):
-    if event.is_action_pressed("ui_pause"):
+    if event.is_action_pressed("ui_pause") && !InCraftTable:
         if GameStatus=="Paused":
             get_tree().paused=false
             GameStatus="PlayerControl"
@@ -66,11 +68,15 @@ func change_scene(path):#切换场景
 
 # 用于打开合成面板
 func open_synthesis():
-    var SynthesisTablePanel=load("res://Synthesis_table/Synthesis_table_panel.tscn").instance()
+    InCraftTable = true
+    get_tree().paused=true
+    var SynthesisTablePanel=preload("res://Synthesis_table/VirtualNodeForCrafting.tscn").instance()
     var middle_position=Global.PlayerCamera.global_position
     SynthesisTablePanel.set_global_position(Vector2(middle_position.x - 450, middle_position.y - 250))
     CurrentScene.add_child(SynthesisTablePanel)
     
 # 关闭合成面板
 func close_synthesis():
-    CurrentScene.get_node("Synthesis_table_panel").queue_free()
+    CurrentScene.get_node("VirtualNodeForCrafting").queue_free()
+    get_tree().paused=false
+    InCraftTable = false
