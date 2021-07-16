@@ -127,4 +127,6 @@ func _draw():
     z_index=999
     visible=true
     if temp.size()>1 and temp[0]!=temp[1]:
-        draw_multiline(temp,Color.black,5) 
+        for i in range(temp.size()-1):
+            draw_line(temp[i],temp[i+1],Color.blue,10)
+        #draw_multiline(temp,Color.blue,10) 
