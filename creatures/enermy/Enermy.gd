@@ -34,7 +34,7 @@ func init(_Name:String,_FaceDirection:Vector2):
     FaceDirection=_FaceDirection
     match Name:
         "test_enermy":
-            CreatureStatus.init(100,100,0,[3,5,5],"Enermy",$CollisionShape2D.shape,[1,1,1,1]) 
+            CreatureStatus.init(100,100,10,[3,5,5],"Enermy",$CollisionShape2D.shape,[1,1,1,1]) 
             SightAngle=90
             SightRange=400
             $AttackColdTimer.wait_time=1
@@ -125,8 +125,11 @@ func AIFunction():#AI切换以及不同AI的行动
                 SightRange/=1.5
         "attacking":#冲突模式，追踪目标进行攻击
             detect()
-            if Target==null and GuardingPosition.z<=0:
-                AImode="backtracking"#失去目标，则进入回溯模式 
+            if Target==null :
+                if GuardingPosition.z<=0:
+                    AImode="backtracking"#失去目标，则进入回溯模式 
+                else:
+                    AImode="guarding"
         "backtracking":#回溯模式，回到出生点
             if Target!=null:
                 AImode="attacking"
