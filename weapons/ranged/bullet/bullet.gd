@@ -29,7 +29,7 @@ func init(_Name,_Position,_Attack,_Direction,_MaxRange,_Owner,_KnockBack):
         _:
             print("Invalid bullet name \"",Name,"\"!")
             queue_free() 
-            
+    z_index=100        
             
 func _physics_process(delta):
     move_and_detect()

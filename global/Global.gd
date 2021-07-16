@@ -15,6 +15,7 @@ var GoodInBackpack:Dictionary={}        #背包中的物品
 
 onready var PlayerCamera=$PlayerCamera  #游戏镜头对象实例
 onready var SceneChanger=$PlayerCamera/SceneChanger
+onready var OverworldUIs=$OverWorldUIs
 
 func _ready():#游戏最开始会执行一次，之后就不会了
     Root=get_tree().get_root()
@@ -24,6 +25,7 @@ func _ready():#游戏最开始会执行一次，之后就不会了
     set_scnene_info()
     FileManager.load_data()
     $PauseWindow/Backpack.update_items_in_backpack()
+
 
 func _input(event):
     if event.is_action_pressed("ui_pause"):

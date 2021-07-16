@@ -2,6 +2,10 @@ extends KinematicBody2D
 
 var Identifier="Player"
 var Speed:float                             #即creature_status中的Speed[SpeedType]
+var Energy:float                            #精力值
+var MaxEnergy:float                         #精力值上限
+var SpeedUp:bool=false                      #是否加速跑
+var TiredOut:bool=false                     #是否力竭
 var KeyboardPressState:Array=[0,0,0,0]      #运动方向按键情况
 var PlayerMoveState:Vector2=Vector2()       #当前运动向量
 var Weight                                  #当前负重值,在背包物品变化时要重新计算
@@ -14,7 +18,9 @@ onready var RangedWeapon=$RangedWeapon
 onready var MeleeWeapon=$MeleeWeapon
 
 func _ready():#暂时留着，之后会被init取代
-    CreatureStatus.init(0,0,0,[5,5,5],"Player",$CollisionShape2D.shape,[1,1,1,1])
+    Energy=100
+    MaxEnergy=100
+    CreatureStatus.init(100,100,1,[3,5,5],"Player",$CollisionShape2D.shape,[1,1,1,1])
     RangedWeapon.init("test_ranged_weapon",self,CreatureStatus.Ability["ranged_damage"],1,1)
     RangedWeapon.set_bullet_num(200)
     MeleeWeapon.init("test_melee_weapon",self,CreatureStatus.Ability["melee_damage"],1)
@@ -22,7 +28,9 @@ func _ready():#暂时留着，之后会被init取代
     $ChangeWeaponTimer.wait_time=0.5
 
 func init():
-    CreatureStatus.init(0,0,0,[5,5,5],"Player",$CollisionShape2D.shape,[1,1,1,1])
+    Energy=100
+    MaxEnergy=100
+    CreatureStatus.init(100,100,1,[5,5,5],"Player",$CollisionShape2D.shape,[1,1,1,1])
     RangedWeapon.init("test_ranged_weapon",self,CreatureStatus.Ability["ranged_damage"],1,1)
     RangedWeapon.set_bullet_num(200)
     MeleeWeapon.init("test_melee_weapon",self,CreatureStatus.Ability["melee_damage"],1,1)
@@ -33,6 +41,10 @@ func _physics_process(delta):
     Global.PlayerCamera.set_camera(global_position)
     Speed=CreatureStatus.Speed[CreatureStatus.SpeedType]
     direction_action()
+    energy_recover()
+    if SpeedUp and PlayerMoveState!=Vector2(0,0):
+        energy_consume(1.03333)
+    Global.OverworldUIs.update_energy(Energy)
     move()
 
 func _input(event):
@@ -55,7 +67,7 @@ func _input(event):
             if RangedWeapon.AllBulletNum>0 and RangedWeapon.BulletNum<=0:
                 RangedWeapon.Attackable=false
                 RangedWeapon.reload()
-    elif event.is_action("ui_focus_next"):
+    elif event.is_action_pressed("ui_focus_next"):
         #鼠标滚轮下滚，切换近战/远程武器。如果远程武器没有弹药，则重新装弹
         if $ChangeWeaponTimer.time_left:
             return
@@ -66,6 +78,13 @@ func _input(event):
         elif WeaponChoice=="melee":
             WeaponChoice="ranged"
         $ChangeWeaponTimer.start()
+    elif event.is_action_pressed("ui_speed_up"):
+        if !TiredOut:
+            SpeedUp=true
+            CreatureStatus.SpeedType=1
+    elif event.is_action_released("ui_speed_up"):
+        SpeedUp=false
+        CreatureStatus.SpeedType=0
     
 func direction_action():
     #根据按键情况，决定移动方向
@@ -116,3 +135,20 @@ func move():
 
 func _on_RangedWeapon_bullet_consume(num):
     pass #远程武器使用的子弹被消耗，进行扣减，在有实际的子弹物品之后编辑
+
+func energy_recover():
+    if !TiredOut:
+        Energy+=0.66667
+    else:
+        Energy+=0.41667
+    if Energy>MaxEnergy:
+        Energy=MaxEnergy
+        TiredOut=false
+        
+func energy_consume(value:float):
+    Energy-=value
+    if Energy<=0:
+        Energy=0
+        TiredOut=true
+        CreatureStatus.SpeedType=0
+        SpeedUp=false
