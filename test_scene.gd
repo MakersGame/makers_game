@@ -11,4 +11,5 @@ func _ready():
     $Enermies/Enermy.init("test_enermy",Vector2(-1,0))
     $Enermies/Enermy2.init("test_enermy",Vector2(-1,0))
     $Enermies/Enermy3.init("test_enermy",Vector2(0,-1))
+    Global.OverworldUIs.set_ui()    
 

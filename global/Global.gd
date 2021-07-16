@@ -17,6 +17,7 @@ var InCraftTable = false
 
 onready var PlayerCamera=$PlayerCamera  #游戏镜头对象实例
 onready var SceneChanger=$PlayerCamera/SceneChanger
+onready var OverworldUIs=$OverWorldUIs
 
 func _ready():#游戏最开始会执行一次，之后就不会了
     Root=get_tree().get_root()
@@ -26,6 +27,7 @@ func _ready():#游戏最开始会执行一次，之后就不会了
     set_scnene_info()
     FileManager.load_data()
     $PauseWindow/Backpack.update_items_in_backpack()
+
 
 func _input(event):
     if event.is_action_pressed("ui_pause") && !InCraftTable:
@@ -41,7 +43,9 @@ func _input(event):
 func set_scnene_info():#在进入新场景的时候，记录场景中的所有玩家和NPC，供敌人查看
     PlayerAndNPCs=[]
     PlayerAndNPCs.push_back(CurrentScene.get_node("Player"))
-    PlayerAndNPCs+=CurrentScene.get_node("NPCs").get_children()
+    var NPCs=CurrentScene.get_node("NPCs").get_children()
+    if NPCs!=null:
+        PlayerAndNPCs+=CurrentScene.get_node("NPCs").get_children()
 
 func set_navigation():#给所有生物初始化navigation，用于导航
     get_tree().call_group("creature","set_navigation",CurrentScene.navigation)

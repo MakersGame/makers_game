@@ -1,7 +1,6 @@
 extends KinematicBody2D
 
 var TargetPath=null
-var temp
 var Identifier="Creature"
 var Health:float            #当前生命值
 var MaxHealth:float         #生命上限
@@ -34,15 +33,18 @@ func alive():
     return Health>0
 
 func get_hurt(DMG:float,DMG_kind:String,src:Object):#此处的src为攻击的对象实例
+    if !Health:
+        return
     var hurt
     if DMG_kind=="melee_damage":
         hurt=DMG/Ability["melee_defense"]
     elif DMG_kind=="ranged_damage":
         hurt=DMG/Ability["ranged_defense"]
     Health-=hurt
-    if Health<0:
+    if Health<=0:
         Health=0
-        return
+    if get_parent().Identifier=="Player":
+        Global.OverworldUIs.update_health(Health)    
     add_aggro(hurt*10,src)#受到伤害会增加自身对于攻击者的仇恨
 
 func add_aggro(value:int,src:Object):#增加仇恨值
@@ -113,18 +115,13 @@ func find_way(target:Vector2):#寻路算法，并且在拐弯处修正移动，�
     return movement
 
 func _process(delta):
-    temp=TargetPath
-    if TargetPath==null:
-        return
-    if temp.size()>1 and temp[0]!=temp[1]:
-        for i in range(temp.size()):
-            temp[i]-=global_position
     update()
 
 func _draw():
     if TargetPath==null:
         return
-    z_index=999
+    z_index=1
     visible=true
-    if temp.size()>1 and temp[0]!=temp[1]:
-        draw_multiline(temp,Color.black,5) 
+    if TargetPath.size()>1 and TargetPath[0]!=TargetPath[1]:
+        for i in range(TargetPath.size()-1):
+            draw_line(TargetPath[i]-global_position,TargetPath[i+1]-global_position,Color.yellow,10)
