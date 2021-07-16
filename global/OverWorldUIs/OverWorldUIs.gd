@@ -36,7 +36,7 @@ func update_energy(NewValue:float):
     if NewValue<=0:
         $EnergyBar/TiredOutBar.show()
         $EnergyBar/Bar.hide()
-    elif NewValue>=MaxEnergy:
+    elif NewValue>=MaxEnergy and !$EnergyBar/Bar.visible:
         $EnergyBar/TiredOutBar.hide()
         $EnergyBar/Bar.show()
 

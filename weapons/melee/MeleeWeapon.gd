@@ -8,9 +8,10 @@ var Direction:Vector2           #武器对准的方向，也决定攻击和动�
 var Attack:float                #攻击力
 var MaxRange:float              #攻击距离，仅供参考，在AI处理时作为指标
 var KnockBack:float             #击退能力，单位为像素
+var EnergyNeed:float            #进行一次攻击需要消耗的体力
+var GuardingValue:float         #攻击造成的警戒值
 var Owner                       #武器的使用者
 var AttackType:String           #范围攻击的类型
-var GuardingValue:float         #攻击造成的警戒值
 var DamageArea=preload("res://weapons/melee/damage_area/DamageArea.tscn")
 
 func init(_Name:String,_Owner:Object,_AttackAbility:float,_KnockBackAbility:float):
@@ -23,6 +24,7 @@ func init(_Name:String,_Owner:Object,_AttackAbility:float,_KnockBackAbility:floa
             MaxRange=80
             KnockBack=100
             GuardingValue=600
+            EnergyNeed=20
             AttackType="test_damage_area"
         _:
             print("Invalid melee weapon name \"",Name,"\"!")

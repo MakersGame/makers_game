@@ -59,7 +59,9 @@ func _input(event):
             RangedWeapon.Shooting=true
             RangedWeapon.shoot()
         elif WeaponChoice=="melee":
-            MeleeWeapon.attack()
+            if !TiredOut and MeleeWeapon.Enable and MeleeWeapon.Attackable:
+                MeleeWeapon.attack()
+                energy_consume(MeleeWeapon.EnergyNeed)
     elif event is InputEventMouseButton and event.button_index == BUTTON_LEFT and !event.pressed:
         #放开鼠标左键，如果装备远程武器且需要换弹，则重新装弹
         if WeaponChoice=="ranged":

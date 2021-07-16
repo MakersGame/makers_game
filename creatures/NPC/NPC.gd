@@ -3,6 +3,9 @@ extends KinematicBody2D
 var Identifier="NPC"
 var Name:String                     #NPC名字，之后应在Global中有相应的查找表，以及避免某些名字
 var Speed:float                     #即creature_status中的Speed[SpeedType]
+var Energy:float                    #精力值
+var MaxEnergy:float                 #精力值上限
+var TiredOut:bool=false             #是否力竭
 var Target:Object                   #追踪中的目标
 var DistanceToTarget:float          #自身到目标的距离
 var EnermyInArea=[]                 #检测范围内的敌人
@@ -29,7 +32,9 @@ func init(_Name:String,_AImode:String):
     AImode=_AImode
     match Name:
         "test_NPC":
-            CreatureStatus.init(100,100,0,[5,5,5],"Player",$CollisionShape2D.shape,[1,1,1,1])
+            Energy=100
+            MaxEnergy=100
+            CreatureStatus.init(100,100,0,[3,5,5],"Player",$CollisionShape2D.shape,[1,1,1,1])
             RangedWeapon.init("test_ranged_weapon",self,CreatureStatus.Ability["ranged_damage"],1,1)
             RangedWeapon.set_bullet_num(2000)
             MeleeWeapon.init("test_melee_weapon",self,CreatureStatus.Ability["melee_damage"],1)
@@ -45,6 +50,10 @@ func _physics_process(delta):
     update_enermy_in_area()
     AIFunction()
     var movement=CreatureStatus.find_way(TargetPosition)
+    move_mode_function()
+    energy_recover()
+    if CreatureStatus.SpeedType==1 and movement!=Vector2(0,0) and (TargetPosition-global_position).length()>Speed*0.5:
+        energy_consume(1.03333)
     move(movement)
     
 func move(movement):#移动策略
@@ -111,7 +120,7 @@ func AIFunction():#进行AI间的切换，以及执行不同的AI操作
                         RangedWeapon.shoot()
             #如果敌人在近战武器范围内，则用近战武器攻击（不需要花时间切换）
             MeleeWeapon.Direction=(Target.global_position-global_position).normalized()
-            if DistanceToTarget<=MeleeWeapon.MaxRange:
+            if DistanceToTarget<=MeleeWeapon.MaxRange and MeleeWeapon.Enable and MeleeWeapon.Attackable and Energy>MeleeWeapon.EnergyNeed:
                 MeleeWeapon.attack()
             #如果敌人与自身距离小于远程武器射程的一半（暂定），则试图远离敌人
             if DistanceToTarget<=RangedWeapon.MaxRange/2:
@@ -184,3 +193,26 @@ func calc_aim_position(v1:Vector2,v2:Vector2,k:float):
 func heal_finish():
     #加血，消耗药物
     pass # Replace with function body.
+
+func move_mode_function():
+    if Energy>=MaxEnergy*2/3:
+        CreatureStatus.SpeedType=1
+    elif Energy<MaxEnergy/3:
+        CreatureStatus.SpeedType=0
+
+func energy_recover():
+    if !TiredOut:
+        Energy+=0.66667
+    else:
+        Energy+=0.41667
+    if Energy>MaxEnergy:
+        Energy=MaxEnergy
+        TiredOut=false
+        
+func energy_consume(value:float):
+    Energy-=value
+    if Energy<=0:
+        Energy=0
+        TiredOut=true
+        CreatureStatus.SpeedType=0
+
