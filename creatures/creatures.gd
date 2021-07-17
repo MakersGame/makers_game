@@ -125,3 +125,11 @@ func _draw():
     if TargetPath.size()>1 and TargetPath[0]!=TargetPath[1]:
         for i in range(TargetPath.size()-1):
             draw_line(TargetPath[i]-global_position,TargetPath[i+1]-global_position,Color.yellow,10)
+
+func _on_creature_mouse_entered():
+    if Camp=="Enermy":
+        Global.OverworldUIs.enable_creature_info(self)
+
+func _on_creature_mouse_exited():
+    if Camp=="Enermy":
+        Global.OverworldUIs.disable_creature_info(self)

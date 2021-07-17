@@ -77,8 +77,10 @@ func _input(event):
             RangedWeapon.reload()
         if WeaponChoice=="ranged":
             WeaponChoice="melee"
+            Global.OverworldUIs.update_weapon_choice("melee")
         elif WeaponChoice=="melee":
             WeaponChoice="ranged"
+            Global.OverworldUIs.update_weapon_choice("ranged")
         $ChangeWeaponTimer.start()
     elif event.is_action_pressed("ui_speed_up"):
         if !TiredOut:
