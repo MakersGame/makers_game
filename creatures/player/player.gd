@@ -25,7 +25,7 @@ func _ready():#暂时留着，之后会被init取代
     RangedWeapon.set_bullet_num(200)
     MeleeWeapon.init("test_melee_weapon",self,CreatureStatus.Ability["melee_damage"],1)
     WeaponChoice="melee"
-    $ChangeWeaponTimer.wait_time=0.5
+    $ChangeWeaponTimer.wait_time=0.1
 
 func init():
     Energy=100
@@ -35,7 +35,7 @@ func init():
     RangedWeapon.set_bullet_num(200)
     MeleeWeapon.init("test_melee_weapon",self,CreatureStatus.Ability["melee_damage"],1,1)
     WeaponChoice="melee"
-    $ChangeWeaponTimer.wait_time=0.5
+    $ChangeWeaponTimer.wait_time=0.1
 
 func _physics_process(delta):
     Global.PlayerCamera.set_camera(global_position)
@@ -58,9 +58,11 @@ func _input(event):
         if WeaponChoice=="ranged":
             RangedWeapon.Shooting=true
             RangedWeapon.shoot()
+            Global.send_message("Ranged Weapon Attack!")
         elif WeaponChoice=="melee":
             if !TiredOut and MeleeWeapon.Enable and MeleeWeapon.Attackable:
                 MeleeWeapon.attack()
+                Global.send_message("Melee Weapon Attack!")
                 energy_consume(MeleeWeapon.EnergyNeed)
     elif event is InputEventMouseButton and event.button_index == BUTTON_LEFT and !event.pressed:
         #放开鼠标左键，如果装备远程武器且需要换弹，则重新装弹
@@ -69,8 +71,8 @@ func _input(event):
             if RangedWeapon.AllBulletNum>0 and RangedWeapon.BulletNum<=0:
                 RangedWeapon.Attackable=false
                 RangedWeapon.reload()
-    elif event.is_action_pressed("ui_focus_next"):
-        #鼠标滚轮下滚，切换近战/远程武器。如果远程武器没有弹药，则重新装弹
+    elif event.is_action_pressed("ui_focus_prev"):
+        #鼠标滚轮上滚，切换近战/远程武器。如果远程武器没有弹药，则重新装弹
         if $ChangeWeaponTimer.time_left:
             return
         if RangedWeapon.BulletNum<=0:
@@ -82,6 +84,9 @@ func _input(event):
             WeaponChoice="ranged"
             Global.OverworldUIs.update_weapon_choice("ranged")
         $ChangeWeaponTimer.start()
+    elif event.is_action_pressed("ui_focus_next"):
+        Global.QuickUseItemChoice=(Global.QuickUseItemChoice+1)%5
+        Global.OverworldUIs.update_quick_item()
     elif event.is_action_pressed("ui_speed_up"):
         if !TiredOut:
             SpeedUp=true
@@ -156,3 +161,5 @@ func energy_consume(value:float):
         TiredOut=true
         CreatureStatus.SpeedType=0
         SpeedUp=false
+
+

@@ -31,6 +31,8 @@ func set_ui():
         $WeaponChoice/MeleeWeapon/AnimatedSprite.animation=MeleeWeapon.Name
     else:
         $WeaponChoice/MeleeWeapon/AnimatedSprite.animation="default"
+        
+    update_quick_item()
     
 func _process(delta):
     global_position=Global.PlayerCamera.global_position-Vector2(640,360)
@@ -85,3 +87,43 @@ func update_weapon_choice(type):
     elif type=="melee":
         $WeaponChoice/WeaponChangeAnimation.play_backwards("MeleeToRanged")
 
+func update_quick_item():
+    $QuickUseItem/QucikItemChoice.global_position=$QuickUseItem/Inventories.get_node("Inventory"+String(Global.QuickUseItemChoice+1)).global_position
+
+func send_message(Message:String):
+    if $Message/Message1.text=="":
+        $Message/Message1.text=Message
+        $Message/Message1/Messager1Timer.start()
+    elif $Message/Message2.text=="":
+        $Message/Message2.text=Message
+        $Message/Message2/Messager2Timer.start()
+    else:
+        if  $Message/Message3.text!="":
+            _on_Messager1Timer_timeout()
+        $Message/Message3.text=Message
+        $Message/Message3/Messager3Timer.start()
+
+func _on_Messager1Timer_timeout():
+    $Message/Message1.text=$Message/Message2.text
+    $Message/Message1/Messager1Timer.stop()
+    if $Message/Message1.text=="":
+        $Message/Message1/Messager1Timer.wait_time=3
+    else:
+        $Message/Message1/Messager1Timer.wait_time=$Message/Message2/Messager2Timer.time_left
+        $Message/Message1/Messager1Timer.start()
+        _on_Messager2Timer_timeout()
+
+func _on_Messager2Timer_timeout():
+    $Message/Message2.text=$Message/Message3.text
+    $Message/Message2/Messager2Timer.stop()
+    if $Message/Message2.text=="":
+        $Message/Message2/Messager2Timer.wait_time=3
+    else:
+        $Message/Message2/Messager2Timer.wait_time=$Message/Message3/Messager3Timer.time_left
+        $Message/Message2/Messager2Timer.start()
+        _on_Messager3Timer_timeout()
+
+func _on_Messager3Timer_timeout():
+    $Message/Message3.text=""
+    $Message/Message3/Messager3Timer.wait_time=3
+    $Message/Message3/Messager3Timer.stop()

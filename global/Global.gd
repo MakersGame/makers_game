@@ -12,6 +12,8 @@ var GameStatus:String                   #游戏状态
 #"Paused"：玩家暂停游戏
 var GoodInHome:Dictionary={}            #家中的物品
 var GoodInBackpack:Dictionary={}        #背包中的物品
+var QuickUseItem:Array=[null,null,null,null,null]   #快捷栏物品
+var QuickUseItemChoice:int=0                        #选中的快捷栏物品
 var InCraftTable = false
 
 
@@ -84,3 +86,6 @@ func close_synthesis():
     CurrentScene.get_node("VirtualNodeForCrafting").queue_free()
     get_tree().paused=false
     InCraftTable = false
+
+func send_message(Message:String):
+    OverworldUIs.send_message(Message)
