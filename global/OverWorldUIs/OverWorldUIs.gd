@@ -75,7 +75,6 @@ func enable_creature_info(creature):
     
 func disable_creature_info(creature):
     if FocusCreature==creature:
-        FocusCreature=null
         $CreatureInfo/MaintainTimer.start()
     
 func _on_MaintainTimer_timeout():

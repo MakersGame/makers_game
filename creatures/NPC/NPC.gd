@@ -6,6 +6,7 @@ var Speed:float                     #即creature_status中的Speed[SpeedType]
 var Energy:float                    #精力值
 var MaxEnergy:float                 #精力值上限
 var TiredOut:bool=false             #是否力竭
+var LoadLimit:float                 #负重上限
 var Target:Object                   #追踪中的目标
 var DistanceToTarget:float          #自身到目标的距离
 var EnermyInArea=[]                 #检测范围内的敌人
@@ -34,6 +35,7 @@ func init(_Name:String,_AImode:String):
         "test_NPC":
             Energy=100
             MaxEnergy=100
+            LoadLimit=50
             CreatureStatus.init(100,100,0,[3,5,5],"Player",$CollisionShape2D.shape,[1,1,1,1])
             RangedWeapon.init("test_ranged_weapon",self,CreatureStatus.Ability["ranged_damage"],1,1)
             RangedWeapon.set_bullet_num(2000)

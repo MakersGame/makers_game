@@ -8,8 +8,7 @@ var SpeedUp:bool=false                      #是否加速跑
 var TiredOut:bool=false                     #是否力竭
 var KeyboardPressState:Array=[0,0,0,0]      #运动方向按键情况
 var PlayerMoveState:Vector2=Vector2()       #当前运动向量
-var Weight                                  #当前负重值,在背包物品变化时要重新计算
-var WeightLimit                             #主角的最大负重值
+var LoadLimit:float                         #主角的最大负重值
 var KnockBack:Vector3                       #被击退值，三维向量，xy表示方向，z表示剩余击退距离，每一帧击退距离呈二次函数
 var WeaponChoice:String                     #"ranged"或"melee"，代表当前选中远程或近战武器
 
@@ -20,6 +19,7 @@ onready var MeleeWeapon=$MeleeWeapon
 func _ready():#暂时留着，之后会被init取代
     Energy=100
     MaxEnergy=100
+    LoadLimit=50
     CreatureStatus.init(100,100,1,[3,5,5],"Player",$CollisionShape2D.shape,[1,1,1,1])
     RangedWeapon.init("test_ranged_weapon",self,CreatureStatus.Ability["ranged_damage"],1,1)
     RangedWeapon.set_bullet_num(200)
@@ -30,6 +30,7 @@ func _ready():#暂时留着，之后会被init取代
 func init():
     Energy=100
     MaxEnergy=100
+    LoadLimit=50
     CreatureStatus.init(100,100,1,[5,5,5],"Player",$CollisionShape2D.shape,[1,1,1,1])
     RangedWeapon.init("test_ranged_weapon",self,CreatureStatus.Ability["ranged_damage"],1,1)
     RangedWeapon.set_bullet_num(200)

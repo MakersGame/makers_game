@@ -28,9 +28,7 @@ func _ready():#游戏最开始会执行一次，之后就不会了
     $PlayerCamera.current=true
     set_scnene_info()
     FileManager.load_data()
-    $PauseWindow/Backpack.update_items_in_backpack()
-
-
+    
 func _input(event):
     if event.is_action_pressed("ui_pause") && !InCraftTable:
         if GameStatus=="Paused":
@@ -86,6 +84,9 @@ func close_synthesis():
     CurrentScene.get_node("VirtualNodeForCrafting").queue_free()
     get_tree().paused=false
     InCraftTable = false
+
+func update_items_in_backpack():
+    $PauseWindow/Backpack.update_items_in_backpack()
 
 func send_message(Message:String):
     OverworldUIs.send_message(Message)

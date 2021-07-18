@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/PlayerButton.png-6e49b8e53c76cdb9e62df15d54df1290.stex"
+path="res://.import/TechnologyTree.png-0247c84fc739e2cabab2f5cbd6cdf641.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://art/temp/PauseWindow/PlayerButton.png"
-dest_files=[ "res://.import/PlayerButton.png-6e49b8e53c76cdb9e62df15d54df1290.stex" ]
+source_file="res://art/temp/PauseWindow/TechnologyTree.png"
+dest_files=[ "res://.import/TechnologyTree.png-0247c84fc739e2cabab2f5cbd6cdf641.stex" ]
 
 [params]
 
