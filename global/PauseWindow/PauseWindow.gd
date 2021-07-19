@@ -2,7 +2,7 @@ extends Node2D
 
 func _ready():
     hide_all()
-    $Backpack.hide()
+    $Backpack.show()
     hide()
 
 func _physics_process(delta):
@@ -47,3 +47,5 @@ func _on_HomeButton_pressed():
 func _on_MapButton_pressed():
     hide_all()
     $Map.show()
+
+

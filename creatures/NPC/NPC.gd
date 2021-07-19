@@ -12,6 +12,7 @@ var DistanceToTarget:float          #自身到目标的距离
 var EnermyInArea=[]                 #检测范围内的敌人
 var TargetPosition:Vector2          #目标坐标
 var WeightLimit                     #NPC的最大负重值
+var InTeam:bool=true                #是否在队伍里
 var AImode:String                   #NPC的AI模式，“home"，"defenive"，"following","fighting"，"healing"
 #分别为家园模式、防御模式、跟随模式（未爆发冲突）、冲突模式、撤退模式
 var TracingPlayer:bool              #是否处于离玩家过远、正在追踪玩家的状态

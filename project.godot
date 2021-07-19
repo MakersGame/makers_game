@@ -12,6 +12,7 @@ config_version=4
 
 config/name="Makers Game 2021"
 run/main_scene="res://test_scene.tscn"
+boot_splash/use_filter=false
 config/icon="res://icon.png"
 
 [autoload]
@@ -28,7 +29,31 @@ window/size/resizable=false
 window/size/always_on_top=true
 window/size/test_width=1280
 window/size/test_height=720
+window/stretch/mode="2d"
 window/stretch/aspect="keep"
+
+[importer_defaults]
+
+texture={
+"compress/bptc_ldr": 0,
+"compress/hdr_mode": 0,
+"compress/lossy_quality": 0.7,
+"compress/mode": 0,
+"compress/normal_map": 0,
+"detect_3d": true,
+"flags/anisotropic": false,
+"flags/filter": false,
+"flags/mipmaps": false,
+"flags/repeat": 0,
+"flags/srgb": 2,
+"process/HDR_as_SRGB": false,
+"process/fix_alpha_border": true,
+"process/invert_color": false,
+"process/premult_alpha": false,
+"size_limit": 0,
+"stream": false,
+"svg/scale": 1.0
+}
 
 [input]
 
@@ -94,4 +119,6 @@ common/enable_pause_aware_picking=true
 
 [rendering]
 
+quality/shadows/filter_mode=0
+quality/filters/anisotropic_filter_level=1
 environment/default_environment="res://default_env.tres"

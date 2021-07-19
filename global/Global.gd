@@ -3,7 +3,8 @@ extends Node2D
 #全局任意代码段可以通过Global来访问此实例，调用全局函数。
 var Root                                #场景根节点
 var CurrentScene                        #当前场景，很明显只会存在一个（全局场景之外的）
-var PlayerAndNPCs=[]                    #当前场景中的玩家和NPC对象
+var PlayerAndNPCs=[]                    #当前中的玩家和NPC对象
+var Team=[]                             #当前队伍中的玩家和NPC
 var GameStatus:String                   #游戏状态
 #不同状态对应的情况：（暂定）
 #“MainMenu"：在主菜单界面
@@ -43,10 +44,14 @@ func _input(event):
 func set_scnene_info():#在进入新场景的时候，记录场景中的所有玩家和NPC，供敌人查看
     PlayerAndNPCs=[]
     PlayerAndNPCs.push_back(CurrentScene.get_node("Player"))
+    Team.push_back(CurrentScene.get_node("Player"))
     var NPCs=CurrentScene.get_node("NPCs").get_children()
     if NPCs!=null:
         PlayerAndNPCs+=CurrentScene.get_node("NPCs").get_children()
-
+        for i in CurrentScene.get_node("NPCs").get_children():
+            if i.InTeam:
+                Team.push_back(i)
+    
 func set_navigation():#给所有生物初始化navigation，用于导航
     get_tree().call_group("creature","set_navigation",CurrentScene.navigation)
 
@@ -90,3 +95,6 @@ func update_items_in_backpack():
 
 func send_message(Message:String):
     OverworldUIs.send_message(Message)
+
+func update_team_info():
+    $PauseWindow/TeamInfo.update_team()

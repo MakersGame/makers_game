@@ -1,18 +1,10 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://creatures/creatures.tscn" type="PackedScene" id=1]
 [ext_resource path="res://creatures/NPC/NPC.gd" type="Script" id=2]
-[ext_resource path="res://art/temp/NPC.png" type="Texture" id=3]
+[ext_resource path="res://creatures/NPC/NPCsprites.tres" type="SpriteFrames" id=3]
 [ext_resource path="res://weapons/ranged/RangedWeapon.tscn" type="PackedScene" id=4]
 [ext_resource path="res://weapons/melee/MeleeWeapon.tscn" type="PackedScene" id=5]
-
-[sub_resource type="SpriteFrames" id=1]
-animations = [ {
-"frames": [ ExtResource( 3 ) ],
-"loop": true,
-"name": "default",
-"speed": 5.0
-} ]
 
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 25, 25 )
@@ -25,7 +17,7 @@ collision_layer = 2
 script = ExtResource( 2 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-frames = SubResource( 1 )
+frames = ExtResource( 3 )
 
 [node name="creature_status" parent="." instance=ExtResource( 1 )]
 

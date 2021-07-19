@@ -1,6 +1,7 @@
 extends KinematicBody2D
 
 var Identifier="Player"
+var Name="玩家"                              #之后再说
 var Speed:float                             #即creature_status中的Speed[SpeedType]
 var Energy:float                            #精力值
 var MaxEnergy:float                         #精力值上限
@@ -8,6 +9,7 @@ var SpeedUp:bool=false                      #是否加速跑
 var TiredOut:bool=false                     #是否力竭
 var KeyboardPressState:Array=[0,0,0,0]      #运动方向按键情况
 var PlayerMoveState:Vector2=Vector2()       #当前运动向量
+var FaceDirection:Vector2                   #面朝方向，即鼠标方向
 var LoadLimit:float                         #主角的最大负重值
 var KnockBack:Vector3                       #被击退值，三维向量，xy表示方向，z表示剩余击退距离，每一帧击退距离呈二次函数
 var WeaponChoice:String                     #"ranged"或"melee"，代表当前选中远程或近战武器
@@ -47,13 +49,15 @@ func _physics_process(delta):
         energy_consume(1.03333)
     Global.OverworldUIs.update_energy(Energy)
     move()
+    animation_function()
 
 func _input(event):
     if Global.GameStatus!="PlayerControl":
         return
     if event is InputEventMouseMotion:
-        RangedWeapon.Direction=(event.global_position+Global.PlayerCamera.global_position-Vector2(640,360)-global_position).normalized()
-        MeleeWeapon.Direction=(event.global_position+Global.PlayerCamera.global_position-Vector2(640,360)-global_position).normalized()
+        FaceDirection=(event.global_position+Global.PlayerCamera.global_position-Vector2(640,360)-global_position).normalized()
+        RangedWeapon.Direction=FaceDirection
+        MeleeWeapon.Direction=FaceDirection
     elif event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
         #按下鼠标左键，使用当前武器攻击
         if WeaponChoice=="ranged":
@@ -163,4 +167,26 @@ func energy_consume(value:float):
         CreatureStatus.SpeedType=0
         SpeedUp=false
 
-
+func animation_function():
+    var ani
+    $PlayerAnimation.speed_scale=0.7
+    if PlayerMoveState==Vector2(0,0):
+        ani="stand" 
+    else:
+        ani="walk"
+        if SpeedUp:
+            $PlayerAnimation.speed_scale=1
+    if FaceDirection.x>0.5:
+        ani+="_right"
+    elif FaceDirection.x<-0.5:
+        ani+="_left"
+    if FaceDirection.y>0:
+        ani+="_down"
+    elif FaceDirection.y<0:
+        ani+="_up"
+    if $PlayerAnimation.animation==ani:
+        return
+    if abs(PlayerMoveState.angle_to(FaceDirection))>PI/2:
+        $PlayerAnimation.play(ani,true)
+    else:
+        $PlayerAnimation.play(ani,false)
