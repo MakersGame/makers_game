@@ -18,3 +18,37 @@ var ItemRference={
         "Description":"0.5毫米子弹，常用于冲锋枪。"
        }
    }
+
+var WeaponReference={
+    "test_melee_weapon":{
+        "ID":-1,
+        "Type":"MeleeWeapon",
+        "Weight":3,
+        "MaxDurability":100,
+        "Attack":1,
+        "MaxRange":80,
+        "KnockBack":100,
+        "EnergyNeed":20,
+        "GuardingValue":600,
+        "AttackType":"test_damage_area",
+        "Description":"测试用近战武器。\n攻击力：10\n攻速：较慢\n击退力：中等"
+       },
+    "test_ranged_weapon":{
+        "ID":-2,
+        "Type":"RangedWeapom",
+        "Weight":4,
+        "MaxDurability":1000,
+        "Attack":1,
+        "AutoAttack":true,
+        "BulletType":"test_bullet",
+        "MagazineCapacity":50,
+        "ColdTime":0.2,
+        "ReloadTime":3,
+        "RandomAngle":2,
+        "MaxRange":500,
+        "KnockBack":10,
+        "BulletSpeed":15,
+        "GuardingValue":1200,
+        "Description":"测试用远程武器。\n攻击力：1\n使用子弹：test_bullet\n攻速：快\n击退力：低"
+       }
+   }

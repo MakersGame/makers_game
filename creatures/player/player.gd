@@ -23,9 +23,9 @@ func _ready():#暂时留着，之后会被init取代
     MaxEnergy=100
     LoadLimit=50
     CreatureStatus.init(100,100,1,[3,5,5],"Player",$CollisionShape2D.shape,[1,1,1,1])
-    RangedWeapon.init("test_ranged_weapon",self,CreatureStatus.Ability["ranged_damage"],1,1)
+    RangedWeapon.init("test_ranged_weapon",-1,self,CreatureStatus.Ability["ranged_damage"],1,1)
     RangedWeapon.set_bullet_num(200)
-    MeleeWeapon.init("test_melee_weapon",self,CreatureStatus.Ability["melee_damage"],1)
+    MeleeWeapon.init("test_melee_weapon",-1,self,CreatureStatus.Ability["melee_damage"],1)
     WeaponChoice="melee"
     $ChangeWeaponTimer.wait_time=0.1
 
@@ -34,9 +34,9 @@ func init():
     MaxEnergy=100
     LoadLimit=50
     CreatureStatus.init(100,100,1,[5,5,5],"Player",$CollisionShape2D.shape,[1,1,1,1])
-    RangedWeapon.init("test_ranged_weapon",self,CreatureStatus.Ability["ranged_damage"],1,1)
+    RangedWeapon.init("test_ranged_weapon",-1,self,CreatureStatus.Ability["ranged_damage"],1,1)
     RangedWeapon.set_bullet_num(200)
-    MeleeWeapon.init("test_melee_weapon",self,CreatureStatus.Ability["melee_damage"],1,1)
+    MeleeWeapon.init("test_melee_weapon",-1,self,CreatureStatus.Ability["melee_damage"],1,1)
     WeaponChoice="melee"
     $ChangeWeaponTimer.wait_time=0.1
 

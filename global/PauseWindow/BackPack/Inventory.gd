@@ -10,9 +10,9 @@ func _ready():
 
 func update_sprite(ItemName):
     $AnimatedSprite.animation=ItemName
-    if ItemName=="null" or Global.GoodInBackpack[ItemName]<=1:
+    if ItemName=="null" or ReferenceList.ItemRference.get(ItemName)==null:
         $ItemNumber.text=""
-    else:
+    elif ReferenceList.ItemRference.get(ItemName)!=null:
         $ItemNumber.text=String(Global.GoodInBackpack[ItemName])
 
 func _on_Inventory_mouse_entered():

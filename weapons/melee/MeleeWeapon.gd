@@ -2,6 +2,9 @@ extends Node2D
 
 var Identifier="MeleeWeapon"
 var Name:String                 #武器名称
+var Weight:float                #武器重量
+var Durability:float            #武器耐久度
+var MaxDurability:float         #武器耐久度上限
 var Enable:bool=true            #是否处于战斗状态
 var Attackable:bool=false       #是否可以进行攻击
 var Direction:Vector2           #武器对准的方向，也决定攻击和动画的方向
@@ -14,21 +17,28 @@ var Owner                       #武器的使用者
 var AttackType:String           #范围攻击的类型
 var DamageArea=preload("res://weapons/melee/damage_area/DamageArea.tscn")
 
-func init(_Name:String,_Owner:Object,_AttackAbility:float,_KnockBackAbility:float):
+func init(_Name:String,_Durability,_Owner:Object,_AttackAbility:float,_KnockBackAbility:float):
     Name=_Name
     Attackable=true
     Owner=_Owner
-    match(Name):
-        "test_melee_weapon":
-            Attack=10
-            MaxRange=80
-            KnockBack=100
-            GuardingValue=600
-            EnergyNeed=20
-            AttackType="test_damage_area"
-        _:
-            print("Invalid melee weapon name \"",Name,"\"!")
-            queue_free()    
+    if ReferenceList.WeaponReference.get(Name)==null:
+        print("Invalid melee weapon name \"",Name,"\"!")
+        queue_free() 
+        return
+    var WeaponInfo=ReferenceList.WeaponReference[Name]
+    MaxDurability=WeaponInfo["MaxDurability"]
+    if _Durability==-1:
+        Durability=MaxDurability
+    else:
+        Durability=_Durability
+    Weight=WeaponInfo["Weight"]
+    Attack=WeaponInfo["Attack"]
+    MaxRange=WeaponInfo["MaxRange"]
+    KnockBack=WeaponInfo["KnockBack"]
+    GuardingValue=WeaponInfo["GuardingValue"]
+    EnergyNeed=WeaponInfo["EnergyNeed"]
+    AttackType=WeaponInfo["AttackType"]
+
     Attack*=_AttackAbility
     KnockBack*=_KnockBackAbility
 

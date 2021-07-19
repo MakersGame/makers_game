@@ -17,7 +17,7 @@ script = ExtResource( 2 )
 scale = Vector2( 3, 3 )
 frames = ExtResource( 3 )
 animation = "walk_right_down"
-frame = 3
+frame = 1
 playing = true
 
 [node name="creature_status" parent="." instance=ExtResource( 1 )]

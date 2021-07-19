@@ -2,6 +2,9 @@ extends Node2D
 
 var Identifier="RangedWeapon"
 var Name:String
+var Weight:float                #装备重量
+var Durability:float            #武器耐久度
+var MaxDurability:float         #武器耐久度上限
 var Enable:bool=false           #是否处于战斗状态
 var Attackable:bool=true        #是否可以发射子弹，要考虑到发射冷却和换弹
 var Direction:Vector2           #武器对准的方向，也决定子弹和动画的方向
@@ -23,27 +26,34 @@ var Bullet=preload("res://weapons/ranged/bullet/bullet.tscn")
 
 signal bullet_consume
 
-func init(_Name:String,_Owner,_AttackAbility:float,_ReloadAbility:float,_KnockBackAbility:float):
+func init(_Name:String,_Durability:float,_Owner,_AttackAbility:float,_ReloadAbility:float,_KnockBackAbility:float):
     Name=_Name
     Owner=_Owner
     Enable=true
-    match(Name):
-        "test_ranged_weapon":
-            Attack=1
-            AutoAttack=true
-            BulletType="test_bullet"
-            MagazineCapacity=50
-            BulletNum=MagazineCapacity              #暂定
-            $ColdTimer.wait_time=0.2
-            $ReloadTimer.wait_time=3
-            RandomAngle=2
-            MaxRange=500
-            KnockBack=10
-            BulletSpeed=15
-            GuardingValue=1200
-        _:
-            print("Invalid ranged weapon name \"",Name,"\"!")
-            queue_free()    
+    if ReferenceList.WeaponReference.get(Name)==null:
+        print("Invalid ranged weapon name \"",Name,"\"!")
+        queue_free() 
+        return
+    var WeaponInfo=ReferenceList.WeaponReference[Name]
+    MaxDurability=WeaponInfo["MaxDurability"]
+    if _Durability==-1:
+        Durability=MaxDurability
+    else:
+        Durability=_Durability
+    Weight=WeaponInfo["Weight"]
+    Attack=WeaponInfo["Attack"]
+    AutoAttack=WeaponInfo["AutoAttack"]
+    BulletType=WeaponInfo["BulletType"]
+    MagazineCapacity=WeaponInfo["MagazineCapacity"]
+    BulletNum=0              #暂定
+    $ColdTimer.wait_time=WeaponInfo["ColdTime"]
+    $ReloadTimer.wait_time=WeaponInfo["ReloadTime"]
+    RandomAngle=WeaponInfo["RandomAngle"]
+    MaxRange=WeaponInfo["MaxRange"]
+    KnockBack=WeaponInfo["KnockBack"]
+    BulletSpeed=WeaponInfo["BulletSpeed"]
+    GuardingValue=WeaponInfo["GuardingValue"]
+             
     Attack*=_AttackAbility
     $ReloadTimer.wait_time*=_ReloadAbility
     KnockBack*=_KnockBackAbility

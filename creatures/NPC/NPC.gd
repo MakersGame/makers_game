@@ -38,9 +38,9 @@ func init(_Name:String,_AImode:String):
             MaxEnergy=100
             LoadLimit=50
             CreatureStatus.init(100,100,0,[3,5,5],"Player",$CollisionShape2D.shape,[1,1,1,1])
-            RangedWeapon.init("test_ranged_weapon",self,CreatureStatus.Ability["ranged_damage"],1,1)
+            RangedWeapon.init("test_ranged_weapon",-1,self,CreatureStatus.Ability["ranged_damage"],1,1)
             RangedWeapon.set_bullet_num(2000)
-            MeleeWeapon.init("test_melee_weapon",self,CreatureStatus.Ability["melee_damage"],1)
+            MeleeWeapon.init("test_melee_weapon",-1,self,CreatureStatus.Ability["melee_damage"],1)
             FollowDistance=Vector2(200,100)
             FightingFollowDistance=Vector2(400,300)
         _:
