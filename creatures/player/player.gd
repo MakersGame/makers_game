@@ -36,9 +36,19 @@ func init():
     CreatureStatus.init(100,100,1,[5,5,5],"Player",$CollisionShape2D.shape,[1,1,1,1])
     RangedWeapon.init("test_ranged_weapon",-1,self,CreatureStatus.Ability["ranged_damage"],1,1)
     RangedWeapon.set_bullet_num(200)
-    MeleeWeapon.init("test_melee_weapon",-1,self,CreatureStatus.Ability["melee_damage"],1,1)
+    MeleeWeapon.init("test_melee_weapon",-1,self,CreatureStatus.Ability["melee_damage"],1)
     WeaponChoice="melee"
     $ChangeWeaponTimer.wait_time=0.1
+
+func change_weapon(Type:String,NumInBackpack:int):
+    if NumInBackpack<0 or Type=="null":
+        get_node(Type).Enable=false
+        return
+    if Type=="MeleeWeapon":
+        MeleeWeapon.init(Global.WeaponInBackpack[NumInBackpack]["Name"],Global.WeaponInBackpack[NumInBackpack]["Durability"],self,CreatureStatus.Ability["melee_damage"],1)
+    elif Type=="RangedWeapon":
+        RangedWeapon.init(Global.WeaponInBackpack[NumInBackpack]["Name"],Global.WeaponInBackpack[NumInBackpack]["Durability"],self,CreatureStatus.Ability["ranged_damage"],1,1)    
+    
 
 func _physics_process(delta):
     Global.PlayerCamera.set_camera(global_position)

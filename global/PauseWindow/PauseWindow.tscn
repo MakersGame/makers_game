@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=2]
+[gd_scene load_steps=42 format=2]
 
 [ext_resource path="res://art/temp/PauseWindow/quick_use_button.png" type="Texture" id=1]
 [ext_resource path="res://art/temp/PauseWindow/close_button.png" type="Texture" id=2]
@@ -22,7 +22,7 @@
 [ext_resource path="res://art/temp/PauseWindow/TechnologyTree.png" type="Texture" id=20]
 [ext_resource path="res://art/temp/PauseWindow/Map.png" type="Texture" id=21]
 [ext_resource path="res://art/temp/PauseWindow/Dialog.png" type="Texture" id=22]
-[ext_resource path="res://global/PauseWindow/TeamInfo.gd" type="Script" id=23]
+[ext_resource path="res://global/PauseWindow/TeamInfo/TeamInfo.gd" type="Script" id=23]
 [ext_resource path="res://creatures/player/PlayerSprites.tres" type="SpriteFrames" id=24]
 [ext_resource path="res://creatures/NPC/NPCsprites.tres" type="SpriteFrames" id=25]
 [ext_resource path="res://art/temp/OverworldUIs/HealthBar/HealthBar_empty.png" type="Texture" id=26]
@@ -31,6 +31,8 @@
 [ext_resource path="res://art/temp/OverworldUIs/EnergyBar/EnergyBar_fill.png" type="Texture" id=29]
 [ext_resource path="res://art/temp/PauseWindow/ItemDetailSprite_background.png" type="Texture" id=30]
 [ext_resource path="res://global/ReferenceList/WeaponSprite.tres" type="SpriteFrames" id=31]
+[ext_resource path="res://art/temp/PauseWindow/WeaponChoiceWindow.png" type="Texture" id=32]
+[ext_resource path="res://global/PauseWindow/WeaponChoiceWindow.gd" type="Script" id=33]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
@@ -75,6 +77,7 @@ scale = Vector2( 1.3, 1.2 )
 texture = ExtResource( 4 )
 
 [node name="Backpack" type="Node2D" parent="."]
+visible = false
 position = Vector2( 0, 40 )
 script = ExtResource( 7 )
 
@@ -280,7 +283,6 @@ __meta__ = {
 }
 
 [node name="TeamInfo" type="Node2D" parent="."]
-visible = false
 script = ExtResource( 23 )
 
 [node name="Members" type="Node2D" parent="TeamInfo"]
@@ -364,9 +366,10 @@ __meta__ = {
 
 [node name="HealthBar" type="TextureProgress" parent="TeamInfo/Detail"]
 margin_left = -80.0
-margin_top = 24.357
-margin_right = 207.0
-margin_bottom = 113.357
+margin_top = 24.0
+margin_right = 63.0
+margin_bottom = 43.0
+mouse_filter = 2
 value = 10.0
 texture_under = ExtResource( 26 )
 texture_progress = ExtResource( 27 )
@@ -406,8 +409,9 @@ offset = Vector2( -3, -3 )
 [node name="EnergyBar" type="TextureProgress" parent="TeamInfo/Detail"]
 margin_left = -80.0
 margin_top = 70.0
-margin_right = 207.0
-margin_bottom = 159.0
+margin_right = 63.0
+margin_bottom = 89.0
+mouse_filter = 2
 value = 10.0
 texture_under = ExtResource( 26 )
 texture_progress = ExtResource( 29 )
@@ -447,6 +451,15 @@ offset = Vector2( -3, -3 )
 [node name="MeleeWeapon" type="Node2D" parent="TeamInfo/Detail"]
 position = Vector2( -100, 230 )
 
+[node name="Button" type="Button" parent="TeamInfo/Detail/MeleeWeapon"]
+margin_left = -50.0
+margin_top = -50.0
+margin_right = 50.0
+margin_bottom = 50.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Background" type="Sprite" parent="TeamInfo/Detail/MeleeWeapon"]
 texture = ExtResource( 30 )
 
@@ -465,8 +478,49 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="DurabilityBar" type="TextureProgress" parent="TeamInfo/Detail/MeleeWeapon"]
+margin_left = -43.0
+margin_top = 33.0
+margin_right = 100.0
+margin_bottom = 52.0
+rect_scale = Vector2( 0.6, 0.6 )
+mouse_filter = 2
+value = 10.0
+texture_under = ExtResource( 26 )
+texture_progress = ExtResource( 29 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DurabilityValue" type="Label" parent="TeamInfo/Detail/MeleeWeapon/DurabilityBar"]
+margin_left = -10.0
+margin_top = -3.0
+margin_right = 154.0
+margin_bottom = 23.0
+custom_fonts/font = SubResource( 6 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Background" type="Sprite" parent="TeamInfo/Detail/MeleeWeapon/DurabilityBar"]
+texture = ExtResource( 28 )
+centered = false
+offset = Vector2( -3, -3 )
+
 [node name="RangedWeapon" type="Node2D" parent="TeamInfo/Detail"]
 position = Vector2( 100, 230 )
+
+[node name="Button" type="Button" parent="TeamInfo/Detail/RangedWeapon"]
+margin_left = -50.0
+margin_top = -50.0
+margin_right = 50.0
+margin_bottom = 50.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Background" type="Sprite" parent="TeamInfo/Detail/RangedWeapon"]
 texture = ExtResource( 30 )
@@ -486,6 +540,37 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="DurabilityBar" type="TextureProgress" parent="TeamInfo/Detail/RangedWeapon"]
+margin_left = -43.0
+margin_top = 33.0
+margin_right = 100.0
+margin_bottom = 52.0
+rect_scale = Vector2( 0.6, 0.6 )
+mouse_filter = 2
+value = 10.0
+texture_under = ExtResource( 26 )
+texture_progress = ExtResource( 29 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DurabilityValue" type="Label" parent="TeamInfo/Detail/RangedWeapon/DurabilityBar"]
+margin_left = -10.0
+margin_top = -3.0
+margin_right = 154.0
+margin_bottom = 23.0
+custom_fonts/font = SubResource( 6 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Background" type="Sprite" parent="TeamInfo/Detail/RangedWeapon/DurabilityBar"]
+texture = ExtResource( 28 )
+centered = false
+offset = Vector2( -3, -3 )
+
 [node name="Ability" type="Node2D" parent="TeamInfo/Detail"]
 position = Vector2( 250, 50 )
 
@@ -498,6 +583,58 @@ text = "能力值"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="WeaponChoiceWindow" type="Node2D" parent="TeamInfo"]
+visible = false
+z_index = 1
+script = ExtResource( 33 )
+
+[node name="Background" type="Sprite" parent="TeamInfo/WeaponChoiceWindow"]
+position = Vector2( 72.0814, 24.0271 )
+texture = ExtResource( 32 )
+
+[node name="InventoryFocused" type="Sprite" parent="TeamInfo/WeaponChoiceWindow"]
+position = Vector2( -110, -50 )
+scale = Vector2( 1.375, 1.313 )
+texture = ExtResource( 15 )
+
+[node name="InventoryList" type="Node2D" parent="TeamInfo/WeaponChoiceWindow"]
+
+[node name="Inventory1" parent="TeamInfo/WeaponChoiceWindow/InventoryList" instance=ExtResource( 10 )]
+position = Vector2( -110, -50 )
+
+[node name="Inventory2" parent="TeamInfo/WeaponChoiceWindow/InventoryList" instance=ExtResource( 10 )]
+position = Vector2( 0, -50 )
+
+[node name="Inventory3" parent="TeamInfo/WeaponChoiceWindow/InventoryList" instance=ExtResource( 10 )]
+position = Vector2( 110, -50 )
+
+[node name="Inventory4" parent="TeamInfo/WeaponChoiceWindow/InventoryList" instance=ExtResource( 10 )]
+position = Vector2( 220, -50 )
+
+[node name="Inventory5" parent="TeamInfo/WeaponChoiceWindow/InventoryList" instance=ExtResource( 10 )]
+position = Vector2( -110, 70 )
+
+[node name="Inventory6" parent="TeamInfo/WeaponChoiceWindow/InventoryList" instance=ExtResource( 10 )]
+position = Vector2( 0, 70 )
+
+[node name="Inventory7" parent="TeamInfo/WeaponChoiceWindow/InventoryList" instance=ExtResource( 10 )]
+position = Vector2( 110, 70 )
+
+[node name="Inventory8" parent="TeamInfo/WeaponChoiceWindow/InventoryList" instance=ExtResource( 10 )]
+position = Vector2( 220, 70 )
+
+[node name="ScrollBar" type="Node2D" parent="TeamInfo/WeaponChoiceWindow"]
+position = Vector2( 290, 10 )
+z_index = 2
+
+[node name="Background" type="Sprite" parent="TeamInfo/WeaponChoiceWindow/ScrollBar"]
+texture = ExtResource( 16 )
+
+[node name="Bar" type="Sprite" parent="TeamInfo/WeaponChoiceWindow/ScrollBar"]
+position = Vector2( -4.5, -122 )
+texture = ExtResource( 17 )
+centered = false
 
 [node name="Diary" type="Node2D" parent="."]
 visible = false
@@ -622,6 +759,8 @@ __meta__ = {
 [connection signal="pressed" from="TeamInfo/Members/NPC1" to="TeamInfo" method="_on_NPC1_pressed"]
 [connection signal="pressed" from="TeamInfo/Members/NPC2" to="TeamInfo" method="_on_NPC2_pressed"]
 [connection signal="pressed" from="TeamInfo/Members/NPC3" to="TeamInfo" method="_on_NPC3_pressed"]
+[connection signal="pressed" from="TeamInfo/Detail/MeleeWeapon/Button" to="TeamInfo" method="_on_change_melee_weapon"]
+[connection signal="pressed" from="TeamInfo/Detail/RangedWeapon/Button" to="TeamInfo" method="_on_change_ranged_weapon"]
 [connection signal="pressed" from="Buttons/CloseButton" to="." method="_on_CloseButton_pressed"]
 [connection signal="pressed" from="Buttons/BackpackButton" to="." method="_on_BackpackButton_pressed"]
 [connection signal="pressed" from="Buttons/TeamButton" to="." method="_on_TeamButton_pressed"]

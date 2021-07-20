@@ -1,6 +1,7 @@
 extends Node2D
 
 var DetailedMember:Object   #当前查看的详细信息的队员
+var WeaponTypeChosen:String=""
 
 func update_team():
     DetailedMember=Global.Team[0]
@@ -24,6 +25,7 @@ func update_team():
     else:
         $Members/NPC3.hide()
     update_detail()
+    $WeaponChoiceWindow.update_weapons("MeleeWeapon")
 
 func update_detail():
     $Detail/Name.text="姓名:"+DetailedMember.Name
@@ -36,10 +38,20 @@ func update_detail():
     $Detail/HealthBar/HealthValue.text=String(round(DetailedMember.CreatureStatus.Health))+"/"+String(round(DetailedMember.CreatureStatus.MaxHealth))
     if DetailedMember.get_node("MeleeWeapon")!=null:
         $Detail/MeleeWeapon/AnimatedSprite.animation=DetailedMember.get_node("MeleeWeapon").Name
+        var Durability=DetailedMember.get_node("MeleeWeapon").Durability
+        var MaxDyrability=DetailedMember.get_node("MeleeWeapon").MaxDurability
+        $Detail/MeleeWeapon/DurabilityBar.max_value=MaxDyrability
+        $Detail/MeleeWeapon/DurabilityBar.value=Durability
+        $Detail/MeleeWeapon/DurabilityBar/DurabilityValue.text=String(Durability)+"/"+String(MaxDyrability)
     else:
         $Detail/MeleeWeapon/AnimatedSprite.animation="default"
     if DetailedMember.get_node("RangedWeapon")!=null:
         $Detail/RangedWeapon/AnimatedSprite.animation=DetailedMember.get_node("RangedWeapon").Name
+        var Durability=DetailedMember.get_node("RangedWeapon").Durability
+        var MaxDyrability=DetailedMember.get_node("RangedWeapon").MaxDurability
+        $Detail/RangedWeapon/DurabilityBar.max_value=MaxDyrability
+        $Detail/RangedWeapon/DurabilityBar.value=Durability
+        $Detail/RangedWeapon/DurabilityBar/DurabilityValue.text=String(Durability)+"/"+String(MaxDyrability)
     else:
         $Detail/RangedWeapon/AnimatedSprite.animation="default"
 
@@ -64,3 +76,38 @@ func _on_NPC3_pressed():
         return
     DetailedMember=Global.Team[3]
     update_detail()
+
+func weapon_change(num:int):
+    if WeaponTypeChosen=="":
+        return
+    if DetailedMember.get_node(WeaponTypeChosen).Enable:
+        var OriginalWeapon={"Name":DetailedMember.get_node(WeaponTypeChosen).Name,"Durability":DetailedMember.get_node(WeaponTypeChosen).Durability}
+        Global.WeaponInBackpack.push_back(OriginalWeapon)
+    if num<0:
+        DetailedMember.change_weapon("null",-1)
+    else:
+        DetailedMember.change_weapon(WeaponTypeChosen,num)
+        Global.WeaponInBackpack.remove(num) 
+    WeaponTypeChosen=""
+    $WeaponChoiceWindow.hide()
+    Global.update_pause_window()   
+        
+func _on_change_melee_weapon():
+    if WeaponTypeChosen!="MeleeWeapon":
+        $WeaponChoiceWindow.position.x=0
+        $WeaponChoiceWindow.update_weapons("MeleeWeapon")
+        $WeaponChoiceWindow.show()
+        WeaponTypeChosen="MeleeWeapon"
+    elif $WeaponChoiceWindow.visible:
+        $WeaponChoiceWindow.hide()
+        WeaponTypeChosen=""
+
+func _on_change_ranged_weapon():
+    if WeaponTypeChosen!="RangedWeapon":
+        $WeaponChoiceWindow.position.x=200
+        $WeaponChoiceWindow.update_weapons("RangedWeapon")
+        $WeaponChoiceWindow.show()
+        WeaponTypeChosen="RangedWeapon"
+    elif $WeaponChoiceWindow.visible:
+        $WeaponChoiceWindow.hide()
+        WeaponTypeChosen=""

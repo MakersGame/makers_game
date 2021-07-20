@@ -46,7 +46,16 @@ func init(_Name:String,_AImode:String):
         _:
             print("Invalid NPC name \"",Name,"\"!")
             queue_free()      
-     
+   
+func change_weapon(Type:String,NumInBackpack:int):
+    if NumInBackpack<0 or Type=="null":
+        get_node(Type).Enable=false
+        return
+    if Type=="MeleeWeapon":
+        MeleeWeapon.init(Global.WeaponInBackpack[NumInBackpack]["Name"],Global.WeaponInBackpack[NumInBackpack]["Durability"],self,CreatureStatus.Ability["melee_damage"],1,1)
+    elif Type=="RangedWeapon":
+        RangedWeapon.init(Global.WeaponInBackpack[NumInBackpack]["Name"],Global.WeaponInBackpack[NumInBackpack]["Durability"],self,CreatureStatus.Ability["ranged_damage"],1,1)    
+  
 func _physics_process(delta):
     Speed=CreatureStatus.Speed[CreatureStatus.SpeedType]
     calc_distance_to_player_and_target()

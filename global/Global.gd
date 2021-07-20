@@ -92,11 +92,11 @@ func close_synthesis():
     get_tree().paused=false
     InCraftTable = false
 
-func update_items_in_backpack():
+func update_pause_window():
     $PauseWindow/Backpack.update_items_in_backpack()
+    $PauseWindow/TeamInfo.update_team()    
 
 func send_message(Message:String):
     OverworldUIs.send_message(Message)
 
-func update_team_info():
-    $PauseWindow/TeamInfo.update_team()
+

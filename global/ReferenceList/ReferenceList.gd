@@ -35,7 +35,7 @@ var WeaponReference={
        },
     "test_ranged_weapon":{
         "ID":-2,
-        "Type":"RangedWeapom",
+        "Type":"RangedWeapon",
         "Weight":4,
         "MaxDurability":1000,
         "Attack":1,

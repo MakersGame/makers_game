@@ -21,6 +21,7 @@ func update_items_in_backpack():
         LoadLimit+=i.LoadLimit
     CurrentPage=1
     SequencedItem=[]
+    SequencedWeapon=[]
     for key in Global.GoodInBackpack.keys():
         if Global.GoodInBackpack[key]>0:
             SequencedItem.push_back(key)
@@ -37,8 +38,8 @@ func update_items_in_backpack():
                 SequencedItem[j+1]=temp   
     for i in range(SequencedWeapon.size()):
         for j in range(SequencedWeapon.size()-1):
-            var ID1:int=ReferenceList.WeaponReference[Global.WeaponInBackpack[j]["Name"]]["ID"]
-            var ID2:int=ReferenceList.WeaponReference[Global.WeaponInBackpack[j+1]["Name"]]["ID"]
+            var ID1:int=ReferenceList.WeaponReference[Global.WeaponInBackpack[SequencedWeapon[j]]["Name"]]["ID"]
+            var ID2:int=ReferenceList.WeaponReference[Global.WeaponInBackpack[SequencedWeapon[j+1]]["Name"]]["ID"]
             var Durability1=Global.WeaponInBackpack[SequencedWeapon[j]]["Durability"]
             var Durability2=Global.WeaponInBackpack[SequencedWeapon[j+1]]["Durability"]
             if ID1>ID2 or (ID1==ID2 and Durability1>Durability2):

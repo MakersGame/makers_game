@@ -5,11 +5,17 @@ func _ready():
     $Backpack.show()
     hide()
 
+func update_all():
+    $Backpack.update_items_in_backpack()
+    $TeamInfo.update_team()
+
 func _physics_process(delta):
     global_position=Global.PlayerCamera.global_position
 
 func hide_all():
     $TeamInfo.hide()
+    $TeamInfo/WeaponChoiceWindow.hide()
+    $TeamInfo.WeaponTypeChosen=""
     $Backpack.hide()
     $Diary.hide()
     $Home.hide()
