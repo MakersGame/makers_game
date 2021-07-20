@@ -7,11 +7,15 @@ var InventoryChosen:int=0       #选中的物品栏
 var InventoryFocused:int=0      #鼠标聚焦的物品栏（可能没有选中） 
 var LoadValue:float             #当前负重
 var LoadLimit:float             #负重上限
+var FocusChangable:bool=true
 
 func _ready():
     $InventoryChosen.hide()
     $InventoryFocused.hide()
     $ItemDetail.hide()
+    $DropItemWindow.hide()
+    $QuickUseItem.hide()
+    $DropWeaponWindow.hide()
     #update_items_in_backpack()
 
 func update_items_in_backpack():
@@ -55,6 +59,12 @@ func update_items_in_backpack():
         $ScrollBar/Bar.scale.y=1
     $ScrollBar/Bar.position.y=-122
     
+    item_detail_change()
+    
+    $QuickUseItem.update_quick_use_item()
+    $QuickUseItem.hide()
+    FocusChangable=true
+    $ItemDetail/Buttons/Drop.mouse_filter=Control.MOUSE_FILTER_PASS
 
 func page_change_action():
     var Inventories=$InventoryList.get_children()
@@ -67,6 +77,8 @@ func page_change_action():
             Inventory.update_sprite("null",-1)
 
 func _input(event):
+    if !FocusChangable:
+        return
     if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
         if InventoryFocused!=0 and InventoryChosen!=InventoryFocused:
             InventoryChosen=InventoryFocused
@@ -83,7 +95,7 @@ func _input(event):
         page_change_action()
 
 func item_detail_change():
-    if 7*(CurrentPage-1)+InventoryChosen>SequencedItem.size()+SequencedWeapon.size():
+    if InventoryChosen==0 or 7*(CurrentPage-1)+InventoryChosen>SequencedItem.size()+SequencedWeapon.size():
         $ItemDetail.hide()
     elif 7*(CurrentPage-1)+InventoryChosen<=SequencedItem.size():
         $ItemDetail/ItemName.text=SequencedItem[7*(CurrentPage-1)+InventoryChosen-1]
@@ -92,8 +104,10 @@ func item_detail_change():
         $ItemDetail.show()
         if ReferenceList.ItemRference[SequencedItem[7*(CurrentPage-1)+InventoryChosen-1]]["Usable"]:
             $ItemDetail/Buttons/Use.show()
+            $ItemDetail/Buttons/QuickUse.show()
         else:
             $ItemDetail/Buttons/Use.hide()
+            $ItemDetail/Buttons/QuickUse.hide()
     else:
         $ItemDetail/ItemName.text=Global.WeaponInBackpack[SequencedWeapon[7*(CurrentPage-1)+InventoryChosen-1-SequencedItem.size()]]["Name"]
         $ItemDetail/ItemType.text=ReferenceList.WeaponReference[Global.WeaponInBackpack[SequencedWeapon[7*(CurrentPage-1)+InventoryChosen-1-SequencedItem.size()]]["Name"]]["Type"]
@@ -101,23 +115,82 @@ func item_detail_change():
         $ItemDetail/ItemDescription.text+="\n耐久："+String(Global.WeaponInBackpack[SequencedWeapon[7*(CurrentPage-1)+InventoryChosen-1-SequencedItem.size()]]["Durability"])+"/"
         $ItemDetail/ItemDescription.text+=String(ReferenceList.WeaponReference[Global.WeaponInBackpack[SequencedWeapon[7*(CurrentPage-1)+InventoryChosen-1-SequencedItem.size()]]["Name"]]["MaxDurability"])
         $ItemDetail.show()
+        $ItemDetail/Buttons/Use.hide()
+        $ItemDetail/Buttons/QuickUse.hide()
         
 func inventory_focus_get(Num:int):
+    if !FocusChangable:
+        return
     InventoryFocused=Num
     $InventoryFocused.global_position=$InventoryList.get_node("Inventory"+String(InventoryFocused)).global_position
     $InventoryFocused.show()
 
 func inventory_focus_lose(Num:int):
+    if !FocusChangable:
+        return
     if InventoryFocused==Num:
         InventoryFocused=0
         $InventoryFocused.hide()
 
+func reset_quick_use_item(num):
+    var ItemNumber=7*(CurrentPage-1)+InventoryChosen
+    if SequencedItem.size()<ItemNumber or !ReferenceList.ItemRference[SequencedItem[ItemNumber-1]]["Usable"]:
+        return
+    for i in range(5):
+        if Global.QuickUseItem[i]==SequencedItem[ItemNumber-1]:
+            Global.QuickUseItem[i]=null
+    Global.QuickUseItem[num]=SequencedItem[ItemNumber-1]
+    Global.update_pause_window()
+    
+
 func _on_Use_pressed():
+    if !FocusChangable:
+        return
     if ReferenceList.ItemRference[SequencedItem[7*(CurrentPage-1)+InventoryChosen-1]]["Usable"]:
         ReferenceList.use_item(Global.PlayerAndNPCs[0],SequencedItem[7*(CurrentPage-1)+InventoryChosen-1])
-
+    
 func _on_Drop_pressed():
-    pass # Replace with function body.
+    if !FocusChangable and !$DropItemWindow.visible:
+        return
+    FocusChangable=false
+    if 7*(CurrentPage-1)+InventoryChosen<=SequencedItem.size():
+        $DropItemWindow.init(Global.GoodInBackpack[SequencedItem[7*(CurrentPage-1)+InventoryChosen-1]])
+        $DropItemWindow.show()
+    else:
+        $DropWeaponWindow.show()
 
 func _on_QuickUse_pressed():
-    pass # Replace with function body.
+    if !FocusChangable and !$QuickUseItem.visible:
+        return
+    if !$QuickUseItem.visible:
+        $QuickUseItem.show()
+        FocusChangable=false
+        $ItemDetail/Buttons/Drop.mouse_filter=Control.MOUSE_FILTER_IGNORE
+    else:
+        $QuickUseItem.hide()
+        FocusChangable=true
+        $ItemDetail/Buttons/Drop.mouse_filter=Control.MOUSE_FILTER_PASS
+
+func _on_DropItemWindow_DropItem():
+    FocusChangable=true
+    Global.GoodInBackpack[SequencedItem[7*(CurrentPage-1)+InventoryChosen-1]]-=$DropItemWindow.DropNumber
+    Global.update_pause_window()
+    $DropItemWindow.DropNumber=1
+    $DropItemWindow/LineEdit.text="1"
+
+
+func _on_DropItemWindow_QuitDropItem():
+    FocusChangable=true
+    $DropItemWindow.DropNumber=1
+    $DropItemWindow/LineEdit.text="1"
+
+
+func _on_DropWeapon_OKbutton_pressed():
+    FocusChangable=true
+    Global.WeaponInBackpack.remove(SequencedWeapon[7*(CurrentPage-1)+InventoryChosen-1-SequencedItem.size()])
+    Global.update_pause_window()
+    $DropWeaponWindow.hide()
+
+func _on_DropWeapon_QuitButton_pressed():
+    FocusChangable=true
+    $DropWeaponWindow.hide()

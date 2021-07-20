@@ -17,6 +17,10 @@ func hide_all():
     $TeamInfo/WeaponChoiceWindow.hide()
     $TeamInfo.WeaponTypeChosen=""
     $Backpack.hide()
+    $Backpack/QuickUseItem.hide()
+    $Backpack/DropItemWindow.hide()
+    $Backpack/DropWeaponWindow.hide()
+    $Backpack.FocusChangable=true
     $Diary.hide()
     $Home.hide()
     $Map.hide()

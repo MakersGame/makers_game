@@ -15,7 +15,7 @@ var GoodInHome:Dictionary={}            #家中的物品
 var GoodInBackpack:Dictionary={}        #背包中的物品
 var WeaponInHome:Array=[]               #家中的武器，每个元素为字典，记录名称和耐久
 var WeaponInBackpack:Array=[]           #背包中的武器，每个元素为字典，记录名称和耐久
-var QuickUseItem:Array=[null,null,null,null,null]   #快捷栏物品
+var QuickUseItem:Array=["绷带",null,null,null,null]   #快捷栏物品
 var QuickUseItemChoice:int=0                        #选中的快捷栏物品
 var InCraftTable = false
 

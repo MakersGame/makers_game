@@ -15,7 +15,7 @@ func set_ui():
     $EnergyBar/TiredOutBar.hide()
     $EnergyBar/Bar.show()
     MaxEnergy=Global.CurrentScene.get_node("Player").MaxEnergy
-    TempEnergy==Global.CurrentScene.get_node("Player").Energy
+    #TempEnergy==Global.CurrentScene.get_node("Player").Energy
     $EnergyBar/TiredOutBar.max_value=MaxEnergy
     $EnergyBar/Bar.max_value=MaxEnergy
     
@@ -87,8 +87,21 @@ func update_weapon_choice(type):
         $WeaponChoice/WeaponChangeAnimation.play_backwards("MeleeToRanged")
 
 func update_quick_item():
-    $QuickUseItem/QucikItemChoice.global_position=$QuickUseItem/Inventories.get_node("Inventory"+String(Global.QuickUseItemChoice+1)).global_position
-
+    $QuickUseItem/QucikItemChoice.global_position=$QuickUseItem/InventoryList.get_node("Inventory"+String(Global.QuickUseItemChoice+1)).global_position
+    for i in range(5):
+        var Inventory=$QuickUseItem/InventoryList.get_node("Inventory"+String(i+1))
+        if Global.QuickUseItem[i]!=null:
+            if Global.GoodInBackpack[Global.QuickUseItem[i]]<=0:
+                Global.QuickUseItem[i]=null
+                Inventory.get_node("AnimatedSprite").animation="null"
+                Inventory.get_node("ItemNumber").text=""
+            else:
+                Inventory.get_node("AnimatedSprite").animation=Global.QuickUseItem[i]
+                Inventory.get_node("ItemNumber").text=String(Global.GoodInBackpack[Global.QuickUseItem[i]])
+        else:
+            Inventory.get_node("AnimatedSprite").animation="null"
+            Inventory.get_node("ItemNumber").text=""
+    
 func send_message(Message:String):
     if $Message/Message1.text=="":
         $Message/Message1.text=Message

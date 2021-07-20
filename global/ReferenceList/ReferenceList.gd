@@ -80,9 +80,13 @@ var WeaponReference={
    }
 
 func use_item(Target:Object,ItemName:String):
+    if Global.GoodInBackpack.get(ItemName)==null or Global.GoodInBackpack[ItemName]<=0:
+        return
+    Global.GoodInBackpack[ItemName]-=1
     match ItemName:
         "绷带":
             Target.CreatureStatus.heal(10)
+    Global.send_message(Target.Name+"使用了一个"+ItemName+"!")
     Global.update_pause_window()
     
 

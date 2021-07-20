@@ -41,14 +41,14 @@ func init():
     $ChangeWeaponTimer.wait_time=0.1
 
 func change_weapon(Type:String,NumInBackpack:int):
-    if NumInBackpack<0 or Type=="null":
+    if NumInBackpack<0 and Type!="null":
         get_node(Type).Enable=false
         return
     if Type=="MeleeWeapon":
         MeleeWeapon.init(Global.WeaponInBackpack[NumInBackpack]["Name"],Global.WeaponInBackpack[NumInBackpack]["Durability"],self,CreatureStatus.Ability["melee_damage"],1)
     elif Type=="RangedWeapon":
         RangedWeapon.init(Global.WeaponInBackpack[NumInBackpack]["Name"],Global.WeaponInBackpack[NumInBackpack]["Durability"],self,CreatureStatus.Ability["ranged_damage"],1,1)    
-    
+    get_node(Type).Enable=true
 
 func _physics_process(delta):
     Global.PlayerCamera.set_camera(global_position)
@@ -99,8 +99,13 @@ func _input(event):
             WeaponChoice="ranged"
             Global.OverworldUIs.update_weapon_choice("ranged")
         $ChangeWeaponTimer.start()
-    elif event.is_action_pressed("ui_focus_next"):
+    elif event.is_action_pressed("ui_focus_next"):#鼠标下滚切换快捷栏道具
         Global.QuickUseItemChoice=(Global.QuickUseItemChoice+1)%5
+        Global.OverworldUIs.update_quick_item()
+    elif event.is_action_pressed("quick_use_item"):
+        if Global.QuickUseItem[Global.QuickUseItemChoice]==null:
+            return
+        ReferenceList.use_item(self,Global.QuickUseItem[Global.QuickUseItemChoice])
         Global.OverworldUIs.update_quick_item()
     elif event.is_action_pressed("ui_speed_up"):
         if !TiredOut:

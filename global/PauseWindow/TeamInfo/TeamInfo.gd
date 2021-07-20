@@ -53,6 +53,8 @@ func update_detail():
         $Detail/RangedWeapon/DurabilityBar/DurabilityValue.text=String(Durability)+"/"+String(MaxDyrability)
     else:
         $Detail/RangedWeapon/AnimatedSprite.animation="default"
+    $WeaponChoiceWindow.hide()
+    WeaponTypeChosen=""
 
 func _on_Player_pressed():
     DetailedMember=Global.Team[0]
@@ -83,7 +85,7 @@ func weapon_change(num:int):
         var OriginalWeapon={"Name":DetailedMember.get_node(WeaponTypeChosen).Name,"Durability":DetailedMember.get_node(WeaponTypeChosen).Durability}
         Global.WeaponInBackpack.push_back(OriginalWeapon)
     if num<0:
-        DetailedMember.change_weapon("null",-1)
+        DetailedMember.change_weapon(WeaponTypeChosen,-1)
     else:
         DetailedMember.change_weapon(WeaponTypeChosen,num)
         Global.WeaponInBackpack.remove(num) 

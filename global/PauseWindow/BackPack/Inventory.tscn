@@ -32,6 +32,7 @@ shape = SubResource( 1 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = ExtResource( 3 )
+animation = "null"
 
 [node name="ItemNumber" type="Label" parent="."]
 margin_left = -50.0
