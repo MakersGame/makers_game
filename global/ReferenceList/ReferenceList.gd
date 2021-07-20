@@ -50,5 +50,23 @@ var WeaponReference={
         "BulletSpeed":15,
         "GuardingValue":1200,
         "Description":"测试用远程武器。\n攻击力：1\n使用子弹：test_bullet\n攻速：快\n击退力：低"
+       },
+    "test_ranged_weapon1":{
+        "ID":-3,
+        "Type":"RangedWeapon",
+        "Weight":4,
+        "MaxDurability":100,
+        "Attack":10,
+        "AutoAttack":false,
+        "BulletType":"test_bullet",
+        "MagazineCapacity":10,
+        "ColdTime":0.5,
+        "ReloadTime":3,
+        "RandomAngle":2,
+        "MaxRange":600,
+        "KnockBack":20,
+        "BulletSpeed":15,
+        "GuardingValue":1500,
+        "Description":"第二把测试用远程武器。\n攻击力：10\n使用子弹：test_bullet\n攻速：较快\n击退力：较低"
        }
    }

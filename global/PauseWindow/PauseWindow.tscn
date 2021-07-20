@@ -30,7 +30,7 @@
 [ext_resource path="res://art/temp/OverworldUIs/HealthBar/HealthBar_bg.png" type="Texture" id=28]
 [ext_resource path="res://art/temp/OverworldUIs/EnergyBar/EnergyBar_fill.png" type="Texture" id=29]
 [ext_resource path="res://art/temp/PauseWindow/ItemDetailSprite_background.png" type="Texture" id=30]
-[ext_resource path="res://global/ReferenceList/WeaponSprite.tres" type="SpriteFrames" id=31]
+[ext_resource path="res://global/ReferenceList/ItemSprite.tres" type="SpriteFrames" id=31]
 [ext_resource path="res://art/temp/PauseWindow/WeaponChoiceWindow.png" type="Texture" id=32]
 [ext_resource path="res://global/PauseWindow/WeaponChoiceWindow.gd" type="Script" id=33]
 

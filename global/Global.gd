@@ -94,7 +94,8 @@ func close_synthesis():
 
 func update_pause_window():
     $PauseWindow/Backpack.update_items_in_backpack()
-    $PauseWindow/TeamInfo.update_team()    
+    $PauseWindow/TeamInfo.update_team() 
+    $OverWorldUIs.set_ui()   
 
 func send_message(Message:String):
     OverworldUIs.send_message(Message)

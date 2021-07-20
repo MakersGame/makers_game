@@ -25,7 +25,6 @@ func update_team():
     else:
         $Members/NPC3.hide()
     update_detail()
-    $WeaponChoiceWindow.update_weapons("MeleeWeapon")
 
 func update_detail():
     $Detail/Name.text="姓名:"+DetailedMember.Name
