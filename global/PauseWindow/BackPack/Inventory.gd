@@ -7,11 +7,18 @@ onready var BackPack=get_parent().get_parent()
 
 func _ready():
     Number=int(name.right(9))
+    $DurabilityBar.hide()
 
-func update_sprite(ItemName):
+func update_sprite(ItemName,WeaponNumber:int):
     $AnimatedSprite.animation=ItemName
+    $DurabilityBar.hide()
     if ItemName=="null" or ReferenceList.ItemRference.get(ItemName)==null:
         $ItemNumber.text=""
+    if WeaponNumber>=0:
+        $DurabilityBar.max_value=ReferenceList.WeaponReference[Global.WeaponInBackpack[WeaponNumber]["Name"]]["MaxDurability"]
+        $DurabilityBar.value=Global.WeaponInBackpack[WeaponNumber]["Durability"]
+        $DurabilityBar.max_value=ReferenceList.WeaponReference[Global.WeaponInBackpack[WeaponNumber]["Name"]]["MaxDurability"]
+        $DurabilityBar.show()
     elif ReferenceList.ItemRference.get(ItemName)!=null:
         $ItemNumber.text=String(Global.GoodInBackpack[ItemName])
 

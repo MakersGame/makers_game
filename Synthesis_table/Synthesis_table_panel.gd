@@ -48,9 +48,9 @@ func update_items_in_backpack():
     var Inventories=$InventoryList.get_children()
     for Inventory in Inventories:
         if Inventory.Number<=SequencedItem.size():
-            Inventory.update_sprite(SequencedItem[9*(CurrentPage-1)+Inventory.Number-1])
+            Inventory.update_sprite(SequencedItem[9*(CurrentPage-1)+Inventory.Number-1],-1)
         else:
-            Inventory.update_sprite("null")
+            Inventory.update_sprite("null",-1)
     while (CurrentPage-1)*9>SequencedItem.size():
         CurrentPage-=1
     if CurrentPage==1:

@@ -20,9 +20,15 @@ func load_data():
                     var Contents=TempLine.split(" ")
                     Global.GoodInBackpack[Contents[0]]=int(Contents[1])
                     TempLine=SaveFile.get_line()
+            "@WeaponInBackpack":
+                Global.WeaponInBackpack=[]
+                TempLine=SaveFile.get_line()
+                while TempLine!="@end":
+                    var Contents=TempLine.split(" ")
+                    Global.WeaponInBackpack.push_back({"Name":Contents[0],"Durability":float(Contents[1])})
+                    TempLine=SaveFile.get_line()
             _:
                 continue
-
 
 func save_data():
     var SaveFile=File.new()
@@ -35,4 +41,8 @@ func save_data():
     SaveFile.store_string("@GoodInBackpack\n")
     for key in Global.GoodInBackpack:
         SaveFile.store_string(key+" "+String(Global.GoodInBackpack[key])+"\n")
+    SaveFile.store_string("@end\n")
+    SaveFile.store_string("@WeaponInBackpack\n")
+    for i in Global.WeaponInBackpack:
+        SaveFile.store_string(i["Name"]+" "+String(i["Durability"])+"\n")
     SaveFile.store_string("@end\n")

@@ -24,7 +24,7 @@ var WeaponReference={
         "ID":-1,
         "Type":"MeleeWeapon",
         "Weight":3,
-        "MaxDurability":100,
+        "MaxDurability":200,
         "Attack":1,
         "MaxRange":80,
         "KnockBack":100,

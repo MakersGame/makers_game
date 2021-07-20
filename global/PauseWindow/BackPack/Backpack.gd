@@ -37,7 +37,11 @@ func update_items_in_backpack():
                 SequencedItem[j+1]=temp   
     for i in range(SequencedWeapon.size()):
         for j in range(SequencedWeapon.size()-1):
-            if not ReferenceList.WeaponReference[Global.WeaponInBackpack[j]["Name"]]["ID"]<=ReferenceList.WeaponReference[Global.WeaponInBackpack[j+1]["Name"]]["ID"] and Global.WeaponInBackpack[i]["Durability"]<Global.WeaponInBackpack[i+1]["Durability"]:
+            var ID1:int=ReferenceList.WeaponReference[Global.WeaponInBackpack[j]["Name"]]["ID"]
+            var ID2:int=ReferenceList.WeaponReference[Global.WeaponInBackpack[j+1]["Name"]]["ID"]
+            var Durability1=Global.WeaponInBackpack[SequencedWeapon[j]]["Durability"]
+            var Durability2=Global.WeaponInBackpack[SequencedWeapon[j+1]]["Durability"]
+            if ID1>ID2 or (ID1==ID2 and Durability1>Durability2):
                 var temp=SequencedWeapon[j]
                 SequencedWeapon[j]=SequencedWeapon[j+1]
                 SequencedWeapon[j+1]=temp
@@ -45,7 +49,7 @@ func update_items_in_backpack():
     var Inventories=$InventoryList.get_children()
     page_change_action()
     if SequencedItem.size()+SequencedWeapon.size()>21:
-        $ScrollBar/Bar.scale.y=3/ceil((SequencedItem.size()+SequencedWeapon.size())/7)
+        $ScrollBar/Bar.scale.y=3/ceil(float((SequencedItem.size()+SequencedWeapon.size()))/7)
     else:
         $ScrollBar/Bar.scale.y=1
     $ScrollBar/Bar.position.y=-122
@@ -55,11 +59,11 @@ func page_change_action():
     var Inventories=$InventoryList.get_children()
     for Inventory in Inventories:
         if Inventory.Number+7*(CurrentPage-1)<=SequencedItem.size():
-            Inventory.update_sprite(SequencedItem[7*(CurrentPage-1)+Inventory.Number-1])
+            Inventory.update_sprite(SequencedItem[7*(CurrentPage-1)+Inventory.Number-1],-1)
         elif Inventory.Number+7*(CurrentPage-1)<=SequencedItem.size()+SequencedWeapon.size():
-            Inventory.update_sprite(Global.WeaponInBackpack[SequencedWeapon[7*(CurrentPage-1)+Inventory.Number-1-SequencedItem.size()]]["Name"])
+            Inventory.update_sprite(Global.WeaponInBackpack[SequencedWeapon[7*(CurrentPage-1)+Inventory.Number-1-SequencedItem.size()]]["Name"],SequencedWeapon[7*(CurrentPage-1)+Inventory.Number-1-SequencedItem.size()])
         else:
-            Inventory.update_sprite("null")
+            Inventory.update_sprite("null",-1)
 
 func _input(event):
     if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
@@ -70,17 +74,17 @@ func _input(event):
             item_detail_change()
     elif event.is_action_pressed("ui_focus_next") and SequencedItem.size()+SequencedWeapon.size()>(CurrentPage-1)*7+21:
         CurrentPage+=1
-        $ScrollBar/Bar.position.y+=122*$ScrollBar/Bar.scale.y/3
+        $ScrollBar/Bar.position.y+=122*$ScrollBar/Bar.scale.y/1.5
         page_change_action()
     elif event.is_action_pressed("ui_focus_prev") and CurrentPage>1:
         CurrentPage-=1
-        $ScrollBar/Bar.position.y-=122*$ScrollBar/Bar.scale.y/3
+        $ScrollBar/Bar.position.y-=122*$ScrollBar/Bar.scale.y/1.5
         page_change_action()
 
 func item_detail_change():
-    if 12*(CurrentPage-1)+InventoryChosen>SequencedItem.size()+SequencedWeapon.size():
+    if 7*(CurrentPage-1)+InventoryChosen>SequencedItem.size()+SequencedWeapon.size():
         $ItemDetail.hide()
-    elif 12*(CurrentPage-1)+InventoryChosen<=SequencedItem.size():
+    elif 7*(CurrentPage-1)+InventoryChosen<=SequencedItem.size():
         $ItemDetail/ItemName.text=SequencedItem[7*(CurrentPage-1)+InventoryChosen-1]
         $ItemDetail/ItemType.text=ReferenceList.ItemRference[SequencedItem[7*(CurrentPage-1)+InventoryChosen-1]]["Type"]
         $ItemDetail/ItemDescription.text=ReferenceList.ItemRference[SequencedItem[7*(CurrentPage-1)+InventoryChosen-1]]["Description"]
@@ -89,6 +93,8 @@ func item_detail_change():
         $ItemDetail/ItemName.text=Global.WeaponInBackpack[SequencedWeapon[7*(CurrentPage-1)+InventoryChosen-1-SequencedItem.size()]]["Name"]
         $ItemDetail/ItemType.text=ReferenceList.WeaponReference[Global.WeaponInBackpack[SequencedWeapon[7*(CurrentPage-1)+InventoryChosen-1-SequencedItem.size()]]["Name"]]["Type"]
         $ItemDetail/ItemDescription.text=ReferenceList.WeaponReference[Global.WeaponInBackpack[SequencedWeapon[7*(CurrentPage-1)+InventoryChosen-1-SequencedItem.size()]]["Name"]]["Description"]
+        $ItemDetail/ItemDescription.text+="\n耐久："+String(Global.WeaponInBackpack[SequencedWeapon[7*(CurrentPage-1)+InventoryChosen-1-SequencedItem.size()]]["Durability"])+"/"
+        $ItemDetail/ItemDescription.text+=String(ReferenceList.WeaponReference[Global.WeaponInBackpack[SequencedWeapon[7*(CurrentPage-1)+InventoryChosen-1-SequencedItem.size()]]["Name"]]["MaxDurability"])
         $ItemDetail.show()
         
 func inventory_focus_get(Num:int):
