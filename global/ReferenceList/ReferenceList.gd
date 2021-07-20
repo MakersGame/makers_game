@@ -16,6 +16,14 @@ var ItemRference={
         "Usable":false,
         "Price":0.5,
         "Description":"0.5毫米子弹，常用于冲锋枪。"
+       },
+    "绷带":{
+        "ID":21,
+        "Type":"Medicine",
+        "Weight":0.01,
+        "Usable":true,
+        "Price":10,
+        "Description":"紧急救治医疗物品。可以恢复10点生命。"
        }
    }
 
@@ -70,3 +78,11 @@ var WeaponReference={
         "Description":"第二把测试用远程武器。\n攻击力：10\n使用子弹：test_bullet\n攻速：较快\n击退力：较低"
        }
    }
+
+func use_item(Target:Object,ItemName:String):
+    match ItemName:
+        "绷带":
+            Target.CreatureStatus.heal(10)
+    Global.update_pause_window()
+    
+

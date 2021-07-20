@@ -47,6 +47,13 @@ func get_hurt(DMG:float,DMG_kind:String,src:Object):#此处的src为攻击的对
         Global.OverworldUIs.update_health(Health)    
     add_aggro(hurt*10,src)#受到伤害会增加自身对于攻击者的仇恨
 
+func heal(Value:float):
+    Health+=Value
+    if Health>MaxHealth:
+        Health=MaxHealth
+    if get_parent().Identifier=="Player":
+        Global.OverworldUIs.update_health(Health)  
+
 func add_aggro(value:int,src:Object):#增加仇恨值
     if src in AggroValue.keys():
         AggroValue[src]=log(exp(AggroValue[src])+value)

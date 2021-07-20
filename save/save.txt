@@ -5,6 +5,7 @@
 @GoodInBackpack
 木材 50
 9mm子弹 200
+绷带 10
 @end
 
 @WeaponInBackpack

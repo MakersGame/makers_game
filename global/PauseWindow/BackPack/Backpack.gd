@@ -90,6 +90,10 @@ func item_detail_change():
         $ItemDetail/ItemType.text=ReferenceList.ItemRference[SequencedItem[7*(CurrentPage-1)+InventoryChosen-1]]["Type"]
         $ItemDetail/ItemDescription.text=ReferenceList.ItemRference[SequencedItem[7*(CurrentPage-1)+InventoryChosen-1]]["Description"]
         $ItemDetail.show()
+        if ReferenceList.ItemRference[SequencedItem[7*(CurrentPage-1)+InventoryChosen-1]]["Usable"]:
+            $ItemDetail/Buttons/Use.show()
+        else:
+            $ItemDetail/Buttons/Use.hide()
     else:
         $ItemDetail/ItemName.text=Global.WeaponInBackpack[SequencedWeapon[7*(CurrentPage-1)+InventoryChosen-1-SequencedItem.size()]]["Name"]
         $ItemDetail/ItemType.text=ReferenceList.WeaponReference[Global.WeaponInBackpack[SequencedWeapon[7*(CurrentPage-1)+InventoryChosen-1-SequencedItem.size()]]["Name"]]["Type"]
@@ -109,7 +113,8 @@ func inventory_focus_lose(Num:int):
         $InventoryFocused.hide()
 
 func _on_Use_pressed():
-    pass #使用物品
+    if ReferenceList.ItemRference[SequencedItem[7*(CurrentPage-1)+InventoryChosen-1]]["Usable"]:
+        ReferenceList.use_item(Global.PlayerAndNPCs[0],SequencedItem[7*(CurrentPage-1)+InventoryChosen-1])
 
 func _on_Drop_pressed():
     pass # Replace with function body.
