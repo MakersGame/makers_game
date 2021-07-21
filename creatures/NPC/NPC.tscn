@@ -7,7 +7,7 @@
 [ext_resource path="res://weapons/melee/MeleeWeapon.tscn" type="PackedScene" id=5]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 25, 25 )
+extents = Vector2( 20, 20 )
 
 [sub_resource type="CircleShape2D" id=2]
 radius = 720.0
@@ -17,6 +17,7 @@ collision_layer = 2
 script = ExtResource( 2 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+scale = Vector2( 0.8, 0.8 )
 frames = ExtResource( 3 )
 
 [node name="creature_status" parent="." instance=ExtResource( 1 )]
