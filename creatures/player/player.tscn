@@ -32,4 +32,7 @@ shape = SubResource( 1 )
 [node name="ChangeWeaponTimer" type="Timer" parent="."]
 one_shot = true
 
+[node name="RigidTimer" type="Timer" parent="."]
+one_shot = true
+
 [connection signal="bullet_consume" from="RangedWeapon" to="." method="_on_RangedWeapon_bullet_consume"]

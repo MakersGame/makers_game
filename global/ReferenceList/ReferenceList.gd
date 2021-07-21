@@ -39,6 +39,7 @@ var WeaponReference={
         "EnergyNeed":20,
         "GuardingValue":600,
         "AttackType":"test_damage_area",
+        "RigidTime":0.5,
         "Description":"测试用近战武器。\n攻击力：10\n攻速：较慢\n击退力：中等"
        },
     "test_ranged_weapon":{
@@ -50,6 +51,7 @@ var WeaponReference={
         "AutoAttack":true,
         "BulletType":"test_bullet",
         "MagazineCapacity":50,
+        "RigidTime":0.2,
         "ColdTime":0.2,
         "ReloadTime":3,
         "RandomAngle":2,
@@ -68,6 +70,7 @@ var WeaponReference={
         "AutoAttack":false,
         "BulletType":"test_bullet",
         "MagazineCapacity":10,
+        "RigidTime":0.5,
         "ColdTime":0.5,
         "ReloadTime":3,
         "RandomAngle":2,

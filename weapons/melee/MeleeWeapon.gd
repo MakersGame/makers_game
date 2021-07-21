@@ -13,6 +13,7 @@ var MaxRange:float              #攻击距离，仅供参考，在AI处理时作
 var KnockBack:float             #击退能力，单位为像素
 var EnergyNeed:float            #进行一次攻击需要消耗的体力
 var GuardingValue:float         #攻击造成的警戒值
+var RigidTime:float             #使用者每次攻击后的僵直时间
 var Owner                       #武器的使用者
 var AttackType:String           #范围攻击的类型
 var DamageArea=preload("res://weapons/melee/damage_area/DamageArea.tscn")
@@ -38,6 +39,7 @@ func init(_Name:String,_Durability,_Owner:Object,_AttackAbility:float,_KnockBack
     GuardingValue=WeaponInfo["GuardingValue"]
     EnergyNeed=WeaponInfo["EnergyNeed"]
     AttackType=WeaponInfo["AttackType"]
+    RigidTime=WeaponInfo["RigidTime"]
 
     Attack*=_AttackAbility
     KnockBack*=_KnockBackAbility
@@ -51,6 +53,7 @@ func attack():#对着瞄准方向进行攻击
     self.add_child(NewDamageArea)
     Attackable=false
     $ColdTimer.start()
+    get_parent().reset_rigid_timer(RigidTime)
 
 func _on_ColdTimer_timeout():
     Attackable=true

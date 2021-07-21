@@ -156,6 +156,8 @@ func direction_action():
                 
 func move():
     var movement=(PlayerMoveState.normalized())*Speed       #算出移动距离
+    if $RigidTimer.time_left:
+        movement=Vector2(0,0)
     var OriginalPosition=global_position                    #记下移动前位置
     var collision = move_and_collide(movement)              #检测是否碰撞，并且沿碰撞方向滑动
     if collision:                                           #如果碰撞，沿着滑动方向运动直到达到一帧运动距离
@@ -185,23 +187,39 @@ func energy_consume(value:float):
 func animation_function():
     var ani
     $PlayerAnimation.speed_scale=0.7
-    if PlayerMoveState==Vector2(0,0):
+    if PlayerMoveState==Vector2(0,0) or $RigidTimer.time_left:
         ani="stand" 
+        if FaceDirection.x>0.5:
+            ani+="_right"
+        elif FaceDirection.x<-0.5:
+            ani+="_left"
+        if FaceDirection.y>0:
+            ani+="_down"
+        elif FaceDirection.y<0:
+            ani+="_up"
     else:
         ani="walk"
+        if PlayerMoveState.x>0:
+            ani+="_right"
+        elif PlayerMoveState.x<-0:
+            ani+="_left"
+        if PlayerMoveState.y>0:
+            ani+="_down"
+        elif PlayerMoveState.y<0:
+            ani+="_up"
+        else:
+            ani+="_down"
+
         if SpeedUp:
             $PlayerAnimation.speed_scale=1
-    if FaceDirection.x>0.5:
-        ani+="_right"
-    elif FaceDirection.x<-0.5:
-        ani+="_left"
-    if FaceDirection.y>0:
-        ani+="_down"
-    elif FaceDirection.y<0:
-        ani+="_up"
+    
     if $PlayerAnimation.animation==ani:
         return
     if abs(PlayerMoveState.angle_to(FaceDirection))>PI/2:
         $PlayerAnimation.play(ani,true)
     else:
         $PlayerAnimation.play(ani,false)
+
+func reset_rigid_timer(num:float):
+    $RigidTimer.wait_time=num
+    $RigidTimer.start()

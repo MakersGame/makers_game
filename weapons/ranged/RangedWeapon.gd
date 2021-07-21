@@ -19,6 +19,7 @@ var MaxRange:float              #最大射程
 var BulletSpeed:float           #子弹飞行速度，供AI计算射击方向
 var KnockBack:float             #击退能力，单位为像素
 var GuardingValue:float         #攻击造成的警戒值
+var RigidTime:float             #使用者每次攻击后的僵直时间
 var Owner                       #武器的使用者
 var BulletType:String           #子弹型号
 
@@ -53,7 +54,8 @@ func init(_Name:String,_Durability:float,_Owner,_AttackAbility:float,_ReloadAbil
     KnockBack=WeaponInfo["KnockBack"]
     BulletSpeed=WeaponInfo["BulletSpeed"]
     GuardingValue=WeaponInfo["GuardingValue"]
-             
+    RigidTime=WeaponInfo["RigidTime"] 
+            
     Attack*=_AttackAbility
     $ReloadTimer.wait_time*=_ReloadAbility
     KnockBack*=_KnockBackAbility
@@ -74,6 +76,7 @@ func shoot():#（试图）开枪
     $ColdTimer.start()
     BulletNum-=1
     Attackable=false
+    get_parent().reset_rigid_timer(RigidTime)
 
 func reload():#重新装弹
     if AllBulletNum<=0 or $ReloadTimer.time_left:

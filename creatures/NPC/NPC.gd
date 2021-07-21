@@ -228,3 +228,6 @@ func energy_consume(value:float):
         TiredOut=true
         CreatureStatus.SpeedType=0
 
+func reset_rigid_timer(num:float):
+    $RigidTimer.wait_time=num
+    $RigidTimer.start()
