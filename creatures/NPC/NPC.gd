@@ -37,9 +37,9 @@ func init(_Name:String,_AImode:String):
             Energy=100
             MaxEnergy=100
             LoadLimit=50
-            CreatureStatus.init(100,100,0,[3,5,5],"Player",$CollisionShape2D.shape,[1,1,1,1])
+            CreatureStatus.init(100,100,0,[3,5,5],"Player",$CollisionShape2D,[1,1,1,1])
             RangedWeapon.init("test_ranged_weapon",-1,self,CreatureStatus.Ability["ranged_damage"],1,1)
-            RangedWeapon.set_bullet_num(2000)
+            RangedWeapon.set_bullet_num()
             MeleeWeapon.init("test_melee_weapon",-1,self,CreatureStatus.Ability["melee_damage"],1)
             FollowDistance=Vector2(200,100)
             FightingFollowDistance=Vector2(400,300)
@@ -64,13 +64,13 @@ func _physics_process(delta):
     var movement=CreatureStatus.find_way(TargetPosition)
     move_mode_function()
     energy_recover()
-    if CreatureStatus.SpeedType==1 and movement!=Vector2(0,0) and (TargetPosition-global_position).length()>Speed*0.5:
-        energy_consume(1.03333)
     move(movement)
     
 func move(movement):#移动策略
     if (TargetPosition-global_position).length()<=Speed*0.5:#离目标位置足够近，不需要继续移动
         movement=Vector2()
+    if $RigidTimer.time_left:
+        movement=Vector2(0,0)
     if KnockBack.z:#如果自身被击退，需要往击退方向移动（向量加）
         var KnockBackDistance=sqrt(KnockBack.z)#每一帧击退距离平方递减！
         movement+=Vector2(KnockBack.x,KnockBack.y).normalized()*KnockBackDistance
@@ -78,9 +78,12 @@ func move(movement):#移动策略
         if KnockBack.z<=1:
             KnockBack.z=0
     var OriginalPosition=global_position
+    var MoveDistance=movement.length()
+    if CreatureStatus.SpeedType==1 and movement!=Vector2(0,0) and (TargetPosition-global_position).length()>Speed*0.5 and !$RigidTimer.time_left and KnockBack.z==0:
+        energy_consume(1.03333)
     var collision=move_and_collide(movement)
     if collision:
-        movement = movement.slide(collision.normal).normalized()*(Speed-(global_position-OriginalPosition).length())
+        movement = movement.slide(collision.normal).normalized()*(MoveDistance-(global_position-OriginalPosition).length())
         move_and_collide(movement)
 
 func calc_distance_to_player_and_target():#计算自身到玩家和到目标敌人的距离
@@ -121,8 +124,9 @@ func AIFunction():#进行AI间的切换，以及执行不同的AI操作
             #如果远程武器可用    
             if RangedWeapon.AllBulletNum>0 or RangedWeapon.Bullet>0:
                 if RangedWeapon.BulletNum<=0:#子弹不够自动换弹
+                    RangedWeapon.set_bullet_num()
                     RangedWeapon.reload()
-                elif RangedWeapon.Attackable:#可攻击则自动攻击
+                elif RangedWeapon.Attackable and DistanceToTarget>RangedWeapon.MaxRange/2:#可攻击则自动攻击
                     #计算射击角度（考虑敌人移动的情况下）
                     var AimPosition=Target.global_position+calc_aim_position(global_position-Target.global_position,Target.FaceDirection,$RangedWeapon.BulletSpeed/Target.Speed)
                     collision=Global.detect_collision_in_line(global_position,AimPosition,[self], 1)

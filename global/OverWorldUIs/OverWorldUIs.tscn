@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://art/temp/OverworldUIs/HealthBar/HealthBar_empty.png" type="Texture" id=1]
 [ext_resource path="res://art/temp/OverworldUIs/HealthBar/HealthBar_bg.png" type="Texture" id=2]
@@ -12,6 +12,7 @@
 [ext_resource path="res://art/temp/OverworldUIs/CreatureInfo/bg.png" type="Texture" id=10]
 [ext_resource path="res://art/temp/OverworldUIs/CreatureInfo/Attack.png" type="Texture" id=11]
 [ext_resource path="res://art/temp/OverworldUIs/WeaponChoice/bg.png" type="Texture" id=12]
+[ext_resource path="res://art/temp/OverworldUIs/ReloadBar/ReloadBar.png" type="Texture" id=13]
 [ext_resource path="res://global/ReferenceList/ItemSprite.tres" type="SpriteFrames" id=14]
 [ext_resource path="res://art/temp/PauseWindow/item_selected.png" type="Texture" id=15]
 [ext_resource path="res://art/temp/OverworldUIs/clock.png" type="Texture" id=16]
@@ -22,6 +23,10 @@ outline_color = Color( 0.298039, 0.286275, 0.286275, 1 )
 font_data = ExtResource( 6 )
 
 [sub_resource type="DynamicFont" id=2]
+size = 20
+font_data = ExtResource( 6 )
+
+[sub_resource type="DynamicFont" id=6]
 size = 20
 font_data = ExtResource( 6 )
 
@@ -273,6 +278,46 @@ texture = ExtResource( 12 )
 frames = ExtResource( 14 )
 animation = "test_melee_weapon"
 
+[node name="DurabilityBar" type="TextureProgress" parent="WeaponChoice/MeleeWeapon"]
+margin_left = -43.0
+margin_top = 35.0
+margin_right = 100.0
+margin_bottom = 54.0
+rect_scale = Vector2( 0.6, 0.5 )
+mouse_filter = 2
+value = 50.0
+texture_under = ExtResource( 1 )
+texture_progress = ExtResource( 9 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Background" type="Sprite" parent="WeaponChoice/MeleeWeapon/DurabilityBar"]
+texture = ExtResource( 2 )
+centered = false
+offset = Vector2( -3, -3 )
+
+[node name="ReloadBar" type="TextureProgress" parent="WeaponChoice/MeleeWeapon"]
+margin_left = -43.0
+margin_top = -63.0
+margin_right = 100.0
+margin_bottom = -44.0
+rect_scale = Vector2( 0.6, 0.5 )
+mouse_filter = 2
+value = 50.0
+texture_under = ExtResource( 1 )
+texture_progress = ExtResource( 13 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Background" type="Sprite" parent="WeaponChoice/MeleeWeapon/ReloadBar"]
+texture = ExtResource( 2 )
+centered = false
+offset = Vector2( -3, -3 )
+
+[node name="Tween" type="Tween" parent="WeaponChoice/MeleeWeapon"]
+
 [node name="RangedWeapon" type="Node2D" parent="WeaponChoice"]
 position = Vector2( 120, 20 )
 scale = Vector2( 0.5, 0.5 )
@@ -283,6 +328,57 @@ texture = ExtResource( 12 )
 [node name="AnimatedSprite" type="AnimatedSprite" parent="WeaponChoice/RangedWeapon"]
 frames = ExtResource( 14 )
 animation = "test_ranged_weapon"
+
+[node name="DurabilityBar" type="TextureProgress" parent="WeaponChoice/RangedWeapon"]
+margin_left = -43.0
+margin_top = 35.0
+margin_right = 100.0
+margin_bottom = 54.0
+rect_scale = Vector2( 0.6, 0.5 )
+mouse_filter = 2
+value = 50.0
+texture_under = ExtResource( 1 )
+texture_progress = ExtResource( 9 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Background" type="Sprite" parent="WeaponChoice/RangedWeapon/DurabilityBar"]
+texture = ExtResource( 2 )
+centered = false
+offset = Vector2( -3, -3 )
+
+[node name="BulletNumber" type="Label" parent="WeaponChoice/RangedWeapon"]
+margin_left = -50.0
+margin_top = 50.0
+margin_right = 51.0
+margin_bottom = 71.0
+custom_fonts/font = SubResource( 6 )
+text = "子弹 1000"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ReloadBar" type="TextureProgress" parent="WeaponChoice/RangedWeapon"]
+margin_left = -43.0
+margin_top = -63.0
+margin_right = 100.0
+margin_bottom = -44.0
+rect_scale = Vector2( 0.6, 0.5 )
+mouse_filter = 2
+value = 50.0
+texture_under = ExtResource( 1 )
+texture_progress = ExtResource( 13 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Background" type="Sprite" parent="WeaponChoice/RangedWeapon/ReloadBar"]
+texture = ExtResource( 2 )
+centered = false
+offset = Vector2( -3, -3 )
+
+[node name="Tween" type="Tween" parent="WeaponChoice/RangedWeapon"]
 
 [node name="WeaponChangeAnimation" type="AnimationPlayer" parent="WeaponChoice"]
 playback_speed = 5.0

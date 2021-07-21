@@ -14,13 +14,13 @@ var Ability={"melee_damage":1 , "ranged_damage":1 , "melee_defense":1 , "ranged_
 #近战伤害、远程伤害、近战抗性、远程抗性倍率、击退抗性，默认为1
 var navigation:Navigation2D #由Gloabl传入此参数，为当前地图的导航
 
-func init(_Health:float,_MaxHealth:float,_Attack:float,_Speed:Array,_Camp:String,_CollisionShape,_Ablity:Array):#并非是默认的_init()函数！是自己写的一个设置各种参数的函数。。。
+func init(_Health:float,_MaxHealth:float,_Attack:float,_Speed:Array,_Camp:String,_CollisionShape:Object,_Ablity:Array):#并非是默认的_init()函数！是自己写的一个设置各种参数的函数。。。
     Health=_Health
     MaxHealth=_MaxHealth
     Attack=_Attack
     Speed=_Speed
     Camp=_Camp
-    $CollisionShape2D.shape=_CollisionShape
+    $CollisionShape2D.shape=_CollisionShape.shape
     Ability["melee_damage"]=_Ablity[0]
     Ability["ranged_damage"]=_Ablity[1]
     Ability["melee_defense"]=_Ablity[2]

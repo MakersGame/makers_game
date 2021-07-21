@@ -22,9 +22,9 @@ func _ready():#暂时留着，之后会被init取代
     Energy=100
     MaxEnergy=100
     LoadLimit=50
-    CreatureStatus.init(100,100,1,[3,5,5],"Player",$CollisionShape2D.shape,[1,1,1,1])
+    CreatureStatus.init(100,100,1,[3,5,5],"Player",$CollisionShape2D,[1,1,1,1])
     RangedWeapon.init("test_ranged_weapon",-1,self,CreatureStatus.Ability["ranged_damage"],1,1)
-    RangedWeapon.set_bullet_num(200)
+    RangedWeapon.set_bullet_num()
     MeleeWeapon.init("test_melee_weapon",-1,self,CreatureStatus.Ability["melee_damage"],1)
     WeaponChoice="melee"
     $ChangeWeaponTimer.wait_time=0.1
@@ -33,7 +33,7 @@ func init():
     Energy=100
     MaxEnergy=100
     LoadLimit=50
-    CreatureStatus.init(100,100,1,[5,5,5],"Player",$CollisionShape2D.shape,[1,1,1,1])
+    CreatureStatus.init(100,100,1,[5,5,5],"Player",$CollisionShape2D,[1,1,1,1])
     RangedWeapon.init("test_ranged_weapon",-1,self,CreatureStatus.Ability["ranged_damage"],1,1)
     RangedWeapon.set_bullet_num(200)
     MeleeWeapon.init("test_melee_weapon",-1,self,CreatureStatus.Ability["melee_damage"],1)
@@ -55,10 +55,8 @@ func _physics_process(delta):
     Speed=CreatureStatus.Speed[CreatureStatus.SpeedType]
     direction_action()
     energy_recover()
-    if SpeedUp and PlayerMoveState!=Vector2(0,0):
-        energy_consume(1.03333)
-    Global.OverworldUIs.update_energy(Energy)
     move()
+    Global.OverworldUIs.update_energy(Energy)
     animation_function()
 
 func _input(event):
@@ -79,10 +77,18 @@ func _input(event):
                 MeleeWeapon.attack()
                 Global.send_message("Melee Weapon Attack!")
                 energy_consume(MeleeWeapon.EnergyNeed)
+    elif event is InputEventMouseButton and event.button_index == BUTTON_RIGHT and event.pressed:
+        if WeaponChoice=="ranged" and RangedWeapon.BulletNum<RangedWeapon.MagazineCapacity:
+            RangedWeapon.set_bullet_num()
+            if RangedWeapon.AllBulletNum>0:
+                RangedWeapon.Shooting=false
+                RangedWeapon.Attackable=false
+                RangedWeapon.reload()
     elif event is InputEventMouseButton and event.button_index == BUTTON_LEFT and !event.pressed:
         #放开鼠标左键，如果装备远程武器且需要换弹，则重新装弹
         if WeaponChoice=="ranged":
             RangedWeapon.Shooting=false
+            RangedWeapon.set_bullet_num()
             if RangedWeapon.AllBulletNum>0 and RangedWeapon.BulletNum<=0:
                 RangedWeapon.Attackable=false
                 RangedWeapon.reload()
@@ -94,10 +100,10 @@ func _input(event):
             RangedWeapon.reload()
         if WeaponChoice=="ranged":
             WeaponChoice="melee"
-            Global.OverworldUIs.update_weapon_choice("melee")
+            Global.OverworldUIs.change_weapon_choice("melee")
         elif WeaponChoice=="melee":
             WeaponChoice="ranged"
-            Global.OverworldUIs.update_weapon_choice("ranged")
+            Global.OverworldUIs.change_weapon_choice("ranged")
         $ChangeWeaponTimer.start()
     elif event.is_action_pressed("ui_focus_next"):#鼠标下滚切换快捷栏道具
         Global.QuickUseItemChoice=(Global.QuickUseItemChoice+1)%5
@@ -155,15 +161,24 @@ func direction_action():
             PlayerMoveState.x=0
                 
 func move():
+    var OriginPosition=global_position
     var movement=(PlayerMoveState.normalized())*Speed       #算出移动距离
     if $RigidTimer.time_left:
         movement=Vector2(0,0)
+    if KnockBack.z:#如果自身被击退，需要往击退方向移动（向量加）
+        var KnockBackDistance=sqrt(KnockBack.z)#每一帧击退距离平方递减！
+        movement+=Vector2(KnockBack.x,KnockBack.y).normalized()*KnockBackDistance
+        KnockBack.z-=KnockBackDistance
+        if KnockBack.z<=1:
+            KnockBack.z=0    
     var OriginalPosition=global_position                    #记下移动前位置
     var collision = move_and_collide(movement)              #检测是否碰撞，并且沿碰撞方向滑动
     if collision:                                           #如果碰撞，沿着滑动方向运动直到达到一帧运动距离
             movement = movement.slide(collision.normal).normalized()*(Speed-(global_position-OriginalPosition).length())
             move_and_collide(movement)
-
+    if global_position!=OriginPosition and SpeedUp and !$RigidTimer.time_left and KnockBack.z==0:
+        energy_consume(1.03333)
+    
 func _on_RangedWeapon_bullet_consume(num):
     pass #远程武器使用的子弹被消耗，进行扣减，在有实际的子弹物品之后编辑
 

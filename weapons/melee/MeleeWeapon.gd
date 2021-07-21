@@ -44,6 +44,7 @@ func init(_Name:String,_Durability,_Owner:Object,_AttackAbility:float,_KnockBack
     Attack*=_AttackAbility
     KnockBack*=_KnockBackAbility
 
+
 func attack():#对着瞄准方向进行攻击
     if !Enable or !Attackable:
         return
@@ -51,9 +52,19 @@ func attack():#对着瞄准方向进行攻击
     var NewDamageArea=DamageArea.instance()
     NewDamageArea.init("test_damage_area",Attack,Direction,Owner,Owner.CreatureStatus.Camp,KnockBack)
     self.add_child(NewDamageArea)
+    Durability-=1
+    if Durability<=0:
+        Durability=0
     Attackable=false
     $ColdTimer.start()
-    get_parent().reset_rigid_timer(RigidTime)
+    Owner.reset_rigid_timer(RigidTime)
+    if Owner.Identifier=="Player":
+        Global.OverworldUIs.update_weapon_choice()
+        Global.OverworldUIs.weapon_reload_change("MeleeWeapon")
 
 func _on_ColdTimer_timeout():
-    Attackable=true
+    if Durability:
+        Attackable=true
+    if Owner.Identifier=="Player":
+        Global.OverworldUIs.weapon_reload_change("MeleeWeapon")
+    

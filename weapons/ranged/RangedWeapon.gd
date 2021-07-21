@@ -72,31 +72,52 @@ func shoot():#（试图）开枪
     Global.CurrentScene.add_child(NewBullet)
     var TempAngle=(randf()-0.5)*RandomAngle*PI/180
     var RandomDirection=Vector2(Direction.x*cos(TempAngle)+Direction.y*sin(TempAngle),-Direction.x*sin(TempAngle)+Direction.y*cos(TempAngle))
-    NewBullet.init("test_bullet",global_position,Attack,RandomDirection,MaxRange,Owner,KnockBack)
+    NewBullet.init(BulletType,global_position,Attack,RandomDirection,MaxRange,Owner,KnockBack)
     $ColdTimer.start()
     BulletNum-=1
+    Durability-=1
+    if Durability<0:
+        Durability=0
     Attackable=false
-    get_parent().reset_rigid_timer(RigidTime)
+    Owner.reset_rigid_timer(RigidTime)
+    if Owner.Identifier=="Player":
+        Global.OverworldUIs.update_weapon_choice()
 
 func reload():#重新装弹
     if AllBulletNum<=0 or $ReloadTimer.time_left:
         return
+    Attackable=false
     $ReloadTimer.start()
+    if Owner.Identifier=="Player":
+        Global.OverworldUIs.weapon_reload_change("RangedWeapon")
 
-func set_bullet_num(_AllBulletNum:int):#初始化此武器需要的子弹的背包数量，中途增加的话也通过此函数更改
-    AllBulletNum=_AllBulletNum
+func set_bullet_num():#初始化此武器需要的子弹的背包数量，中途增加的话也通过此函数更改
+    if Global.GoodInBackpack.get(BulletType)!=null:
+        AllBulletNum=Global.GoodInBackpack[BulletType]
+    else:
+        AllBulletNum=0
+
+func consume_bullet(num:int):
+    if Global.GoodInBackpack.get(BulletType)!=null:
+        Global.GoodInBackpack[BulletType]-=num
+        if Global.GoodInBackpack[BulletType]<0:
+            Global.GoodInBackpack[BulletType]=0
+        Global.update_pause_window()
 
 func _on_ColdTimer_timeout():
-    if BulletNum>0:
+    if BulletNum>0 and Durability:
         Attackable=true
 
 func _on_ReloadTimer_timeout():#重新装弹完成
-    if AllBulletNum>=MagazineCapacity:
-        AllBulletNum-=MagazineCapacity
+    set_bullet_num()
+    if AllBulletNum>=MagazineCapacity-BulletNum:
+        consume_bullet(MagazineCapacity-BulletNum)
         BulletNum=MagazineCapacity
     else:
-        BulletNum=AllBulletNum
-        AllBulletNum=0
-    emit_signal("bullet_consume",BulletNum)
-    if $ColdTimer.time_left==0:
+        consume_bullet(AllBulletNum)
+        BulletNum+=AllBulletNum
+    if $ColdTimer.time_left==0 and Durability:
         Attackable=true
+    if Owner.Identifier=="Player":
+        Global.OverworldUIs.update_weapon_choice() 
+        Global.OverworldUIs.weapon_reload_change("RangedWeapon") 

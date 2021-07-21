@@ -34,7 +34,7 @@ func init(_Name:String,_FaceDirection:Vector2):
     FaceDirection=_FaceDirection
     match Name:
         "test_enermy":
-            CreatureStatus.init(100,100,10,[3,5,5],"Enermy",$CollisionShape2D.shape,[1,1,1,1]) 
+            CreatureStatus.init(100,100,10,[3,5,5],"Enermy",$CollisionShape2D,[1,1,1,1]) 
             SightAngle=90
             SightRange=400
             $AttackColdTimer.wait_time=1

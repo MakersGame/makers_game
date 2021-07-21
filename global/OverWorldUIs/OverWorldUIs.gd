@@ -5,6 +5,8 @@ var TempHealth:float
 var MaxEnergy:int
 var TempEnergy:float
 var FocusCreature:Object=null
+var TempRangedWeaponReloadTime:float=0
+var TempMeleeWeaponReloadTime:float=0
 
 func set_ui():   
     MaxHealth=Global.CurrentScene.get_node("Player").CreatureStatus.MaxHealth
@@ -21,16 +23,7 @@ func set_ui():
     
     $CreatureInfo.hide()
     
-    var RangedWeapon=Global.CurrentScene.get_node("Player").get_node("RangedWeapon")
-    var MeleeWeapon=Global.CurrentScene.get_node("Player").get_node("MeleeWeapon")
-    if RangedWeapon!=null:
-        $WeaponChoice/RangedWeapon/AnimatedSprite.animation=RangedWeapon.Name
-    else:
-        $WeaponChoice/RangedWeapon/AnimatedSprite.animation="default"
-    if MeleeWeapon!=null:
-        $WeaponChoice/MeleeWeapon/AnimatedSprite.animation=MeleeWeapon.Name
-    else:
-        $WeaponChoice/MeleeWeapon/AnimatedSprite.animation="default"
+    update_weapon_choice()
         
     update_quick_item()
     
@@ -49,6 +42,13 @@ func _process(delta):
         $CreatureInfo/CreatureHealth.text="0/"+String(FocusCreature.MaxHealth)
         FocusCreature=null
         $CreatureInfo/MaintainTimer.start()
+    
+    $WeaponChoice/MeleeWeapon/ReloadBar.value=TempMeleeWeaponReloadTime
+    if TempMeleeWeaponReloadTime<=0:
+        $WeaponChoice/MeleeWeapon/ReloadBar.hide()
+    $WeaponChoice/RangedWeapon/ReloadBar.value=TempRangedWeaponReloadTime
+    if TempRangedWeaponReloadTime<=0:
+        $WeaponChoice/RangedWeapon/ReloadBar.hide()
         
 func update_health(NewValue:float):
     $HealthBar/Tween.interpolate_property(self,"TempHealth",TempHealth,NewValue,0.5)
@@ -80,7 +80,53 @@ func disable_creature_info(creature):
 func _on_MaintainTimer_timeout():
     $CreatureInfo.hide()
 
-func update_weapon_choice(type):
+func update_weapon_choice():
+    var RangedWeapon=Global.CurrentScene.get_node("Player").get_node("RangedWeapon")
+    var MeleeWeapon=Global.CurrentScene.get_node("Player").get_node("MeleeWeapon")
+    if RangedWeapon==null or !RangedWeapon.Enable:
+        $WeaponChoice/RangedWeapon/AnimatedSprite.animation="default"
+        $WeaponChoice/RangedWeapon/DurabilityBar.hide()
+        $WeaponChoice/RangedWeapon/BulletNumber.hide()
+    else:
+        $WeaponChoice/RangedWeapon/AnimatedSprite.animation=RangedWeapon.Name
+        $WeaponChoice/RangedWeapon/DurabilityBar.max_value=RangedWeapon.MaxDurability
+        $WeaponChoice/RangedWeapon/DurabilityBar.value=RangedWeapon.Durability
+        $WeaponChoice/RangedWeapon/BulletNumber.text="子弹 "+String(RangedWeapon.BulletNum)
+    if MeleeWeapon==null or !MeleeWeapon.Enable:
+        $WeaponChoice/MeleeWeapon/AnimatedSprite.animation="default"
+        $WeaponChoice/MeleeWeapon/DurabilityBar.hide()
+    else:
+        $WeaponChoice/MeleeWeapon/AnimatedSprite.animation=MeleeWeapon.Name
+        $WeaponChoice/MeleeWeapon/DurabilityBar.max_value=MeleeWeapon.MaxDurability
+        $WeaponChoice/MeleeWeapon/DurabilityBar.value=MeleeWeapon.Durability
+
+func weapon_reload_change(Type:String):
+    if Type=="RangedWeapon":
+        var RangedWeapon=Global.CurrentScene.get_node("Player").get_node("RangedWeapon")
+        if  RangedWeapon==null or !RangedWeapon.Enable:
+            $WeaponChoice/RangedWeapon/ReloadBar.hide()
+        elif RangedWeapon.get_node("ReloadTimer").time_left:
+            TempRangedWeaponReloadTime=100
+            $WeaponChoice/RangedWeapon/Tween.interpolate_property(self,"TempRangedWeaponReloadTime",TempRangedWeaponReloadTime,0,RangedWeapon.get_node("ReloadTimer").time_left)
+            if not $WeaponChoice/RangedWeapon/Tween.is_active():
+                $WeaponChoice/RangedWeapon/Tween.start()
+            $WeaponChoice/RangedWeapon/ReloadBar.show()
+        else:
+            $WeaponChoice/RangedWeapon/ReloadBar.hide()
+    elif Type=="MeleeWeapon":
+        var MeleeWeapon=Global.CurrentScene.get_node("Player").get_node("MeleeWeapon")
+        if  MeleeWeapon==null or !MeleeWeapon.Enable:
+            $WeaponChoice/MeleeWeapon/ReloadBar.hide()
+        elif MeleeWeapon.get_node("ColdTimer").time_left:
+            TempMeleeWeaponReloadTime=100
+            $WeaponChoice/MeleeWeapon/Tween.interpolate_property(self,"TempMeleeWeaponReloadTime",TempMeleeWeaponReloadTime,0,MeleeWeapon.get_node("ColdTimer").time_left)
+            $WeaponChoice/MeleeWeapon/ReloadBar.show()
+            if not $WeaponChoice/MeleeWeapon/Tween.is_active():
+                $WeaponChoice/MeleeWeapon/Tween.start()
+        else:
+            $WeaponChoice/MeleeWeapon/ReloadBar.hide()
+    
+func change_weapon_choice(type):
     if type=="ranged":
         $WeaponChoice/WeaponChangeAnimation.play("MeleeToRanged")   
     elif type=="melee":
@@ -101,6 +147,9 @@ func update_quick_item():
         else:
             Inventory.get_node("AnimatedSprite").animation="null"
             Inventory.get_node("ItemNumber").text=""
+
+
+    
     
 func send_message(Message:String):
     if $Message/Message1.text=="":

@@ -24,7 +24,7 @@ func init(_Name,_Position,_Attack,_Direction,_MaxRange,_Owner,_KnockBack):
     KnockBack=_KnockBack
     Exist=true
     match(Name):
-        "test_bullet":
+        "9mm子弹":
             Speed=15#别看现在只有一个speed，还要考虑动画和碰撞呢
         _:
             print("Invalid bullet name \"",Name,"\"!")

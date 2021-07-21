@@ -49,27 +49,27 @@ font_data = ExtResource( 19 )
 size = 24
 font_data = ExtResource( 19 )
 
-[sub_resource type="DynamicFont" id=9]
-size = 40
-font_data = ExtResource( 19 )
-
 [sub_resource type="DynamicFont" id=4]
 size = 40
 font_data = ExtResource( 19 )
 
 [sub_resource type="DynamicFont" id=5]
-size = 30
+size = 40
 font_data = ExtResource( 19 )
 
 [sub_resource type="DynamicFont" id=6]
-size = 24
+size = 30
 font_data = ExtResource( 19 )
 
 [sub_resource type="DynamicFont" id=7]
-size = 36
+size = 24
 font_data = ExtResource( 19 )
 
 [sub_resource type="DynamicFont" id=8]
+size = 36
+font_data = ExtResource( 19 )
+
+[sub_resource type="DynamicFont" id=9]
 size = 40
 font_data = ExtResource( 19 )
 
@@ -345,7 +345,7 @@ margin_left = -180.0
 margin_top = 20.0
 margin_right = -30.0
 margin_bottom = 80.0
-custom_fonts/font = SubResource( 9 )
+custom_fonts/font = SubResource( 4 )
 text = "确定"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -356,7 +356,7 @@ margin_left = 30.0
 margin_top = 20.0
 margin_right = 180.0
 margin_bottom = 80.0
-custom_fonts/font = SubResource( 9 )
+custom_fonts/font = SubResource( 4 )
 text = "取消"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -427,7 +427,7 @@ margin_left = -190.0
 margin_top = -60.0
 margin_right = -110.0
 margin_bottom = -18.0
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
 text = "姓名"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -438,7 +438,7 @@ margin_left = 150.0
 margin_top = -60.0
 margin_right = 230.0
 margin_bottom = -18.0
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
 custom_colors/font_color = Color( 0, 0.0196078, 1, 1 )
 text = "等级"
 __meta__ = {
@@ -463,7 +463,7 @@ margin_left = -110.0
 margin_top = -5.0
 margin_right = -20.0
 margin_bottom = 27.0
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 6 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "生命值"
 __meta__ = {
@@ -475,7 +475,7 @@ margin_left = 25.0
 margin_top = -2.0
 margin_right = 119.0
 margin_bottom = 30.0
-custom_fonts/font = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "20/100"
 __meta__ = {
@@ -505,7 +505,7 @@ margin_left = -110.0
 margin_top = -5.0
 margin_right = -20.0
 margin_bottom = 27.0
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 6 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "体力值"
 __meta__ = {
@@ -517,7 +517,7 @@ margin_left = 25.0
 margin_top = -2.0
 margin_right = 119.0
 margin_bottom = 30.0
-custom_fonts/font = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "20/100"
 __meta__ = {
@@ -553,7 +553,7 @@ margin_left = -70.0
 margin_top = -90.0
 margin_right = 74.0
 margin_bottom = -52.0
-custom_fonts/font = SubResource( 7 )
+custom_fonts/font = SubResource( 8 )
 text = "近战武器"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -578,7 +578,7 @@ margin_left = -10.0
 margin_top = -3.0
 margin_right = 154.0
 margin_bottom = 23.0
-custom_fonts/font = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 align = 1
 valign = 1
@@ -615,7 +615,7 @@ margin_left = -70.0
 margin_top = -90.0
 margin_right = 74.0
 margin_bottom = -52.0
-custom_fonts/font = SubResource( 7 )
+custom_fonts/font = SubResource( 8 )
 text = "远程武器"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -640,7 +640,7 @@ margin_left = -10.0
 margin_top = -3.0
 margin_right = 154.0
 margin_bottom = 23.0
-custom_fonts/font = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 align = 1
 __meta__ = {
@@ -658,7 +658,7 @@ position = Vector2( 250, 50 )
 [node name="Title" type="Label" parent="TeamInfo/Detail/Ability"]
 margin_right = 120.0
 margin_bottom = 42.0
-custom_fonts/font = SubResource( 8 )
+custom_fonts/font = SubResource( 9 )
 custom_colors/font_color = Color( 0.207843, 1, 0, 1 )
 text = "能力值"
 __meta__ = {
