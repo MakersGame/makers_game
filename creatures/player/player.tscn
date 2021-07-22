@@ -7,17 +7,18 @@
 [ext_resource path="res://weapons/melee/MeleeWeapon.tscn" type="PackedScene" id=5]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 20, 20 )
+extents = Vector2( 30, 30 )
 
 [node name="player" type="KinematicBody2D"]
+z_as_relative = false
 collision_layer = 2
 script = ExtResource( 2 )
 
 [node name="PlayerAnimation" type="AnimatedSprite" parent="."]
-position = Vector2( 0, -25 )
-scale = Vector2( 3, 3 )
+position = Vector2( -2, -22 )
+scale = Vector2( 4, 4 )
 frames = ExtResource( 3 )
-animation = "walk_right_down"
+animation = "stand_down"
 playing = true
 
 [node name="creature_status" parent="." instance=ExtResource( 1 )]
@@ -26,6 +27,7 @@ playing = true
 shape = SubResource( 1 )
 
 [node name="RangedWeapon" parent="." instance=ExtResource( 4 )]
+rotation = 0.647517
 
 [node name="MeleeWeapon" parent="." instance=ExtResource( 5 )]
 

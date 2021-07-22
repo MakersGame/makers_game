@@ -9,10 +9,11 @@
 [ext_resource path="res://art/temp/PauseWindow/NextPageButton.png" type="Texture" id=7]
 [ext_resource path="res://art/temp/PauseWindow/PreviousPageButton.png" type="Texture" id=8]
 [ext_resource path="res://art/fonts/STXINWEI.TTF" type="DynamicFontData" id=9]
-[ext_resource path="res://global/ReferenceList/ItemSprite.tres" type="SpriteFrames" id=10]
+[ext_resource path="res://global/ReferenceList/Sprites/ItemSprite.tres" type="SpriteFrames" id=10]
 [ext_resource path="res://art/temp/PauseWindow/ItemDetail_background.png" type="Texture" id=11]
 [ext_resource path="res://art/temp/SynthesisTable/hecheng.png" type="Texture" id=12]
 [ext_resource path="res://art/temp/SynthesisTable/cannothecheng.png" type="Texture" id=13]
+
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.196078, 0.196078, 0.196078, 0.462745 )

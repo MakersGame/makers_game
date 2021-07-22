@@ -13,6 +13,7 @@ extents = Vector2( 20, 20 )
 radius = 720.0
 
 [node name="NPC" type="KinematicBody2D"]
+z_as_relative = false
 collision_layer = 2
 script = ExtResource( 2 )
 

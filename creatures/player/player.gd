@@ -14,6 +14,8 @@ var LoadLimit:float                         #主角的最大负重值
 var KnockBack:Vector3                       #被击退值，三维向量，xy表示方向，z表示剩余击退距离，每一帧击退距离呈二次函数
 var WeaponChoice:String                     #"ranged"或"melee"，代表当前选中远程或近战武器
 
+var CurrentAreaCenter                       #当前区块中心，决定玩家图层
+
 onready var CreatureStatus=$creature_status
 onready var RangedWeapon=$RangedWeapon
 onready var MeleeWeapon=$MeleeWeapon
@@ -50,7 +52,19 @@ func change_weapon(Type:String,NumInBackpack:int):
         RangedWeapon.init(Global.WeaponInBackpack[NumInBackpack]["Name"],Global.WeaponInBackpack[NumInBackpack]["Durability"],self,CreatureStatus.Ability["ranged_damage"],1,1)    
     get_node(Type).Enable=true
 
+func update_area_center(Pos):
+    if Pos==null:
+        CurrentAreaCenter=null
+    else:
+        CurrentAreaCenter=Pos
+
 func _physics_process(delta):
+    
+    if CurrentAreaCenter==null:
+        z_index=100
+    else:
+        z_index=floor(((global_position-CurrentAreaCenter).y)/20)+4
+    
     Global.PlayerCamera.set_camera(global_position)
     Speed=CreatureStatus.Speed[CreatureStatus.SpeedType]
     direction_action()

@@ -13,7 +13,7 @@
 [ext_resource path="res://art/temp/OverworldUIs/CreatureInfo/Attack.png" type="Texture" id=11]
 [ext_resource path="res://art/temp/OverworldUIs/WeaponChoice/bg.png" type="Texture" id=12]
 [ext_resource path="res://art/temp/OverworldUIs/ReloadBar/ReloadBar.png" type="Texture" id=13]
-[ext_resource path="res://global/ReferenceList/ItemSprite.tres" type="SpriteFrames" id=14]
+[ext_resource path="res://global/ReferenceList/Sprites/ItemSprite.tres" type="SpriteFrames" id=14]
 [ext_resource path="res://art/temp/PauseWindow/item_selected.png" type="Texture" id=15]
 [ext_resource path="res://art/temp/OverworldUIs/clock.png" type="Texture" id=16]
 

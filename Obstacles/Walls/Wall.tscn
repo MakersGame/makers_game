@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Obstacles/Walls/Wall.gd" type="Script" id=1]
+[ext_resource path="res://global/ReferenceList/TileSets/Wall1.tres" type="TileSet" id=2]
+
+[node name="WallSprites" type="TileMap"]
+scale = Vector2( 4, 4 )
+z_index = 10
+z_as_relative = false
+tile_set = ExtResource( 2 )
+cell_size = Vector2( 20, 20 )
+format = 1
+script = ExtResource( 1 )

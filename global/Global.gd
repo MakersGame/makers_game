@@ -100,4 +100,10 @@ func update_pause_window():
 func send_message(Message:String):
     OverworldUIs.send_message(Message)
 
-
+func area_block_change(area):
+    if area==null:
+        for i in PlayerAndNPCs:
+            i.update_area_center(null)
+    else:
+        for i in PlayerAndNPCs:
+            i.update_area_center(area.global_position)

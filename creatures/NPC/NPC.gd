@@ -23,6 +23,8 @@ var FollowDistance:Vector2          #跟随模式和撤退模式下，x代表离
 var FightingFollowDistance:Vector2  #冲突模式下跟随玩家的距离
 var DistanceToPlayer:float=0        #距离玩家的距离，动态更新
 
+var CurrentAreaCenter               #当前区块中心，决定NPC图层
+
 onready var CreatureStatus=$creature_status
 onready var Player=Global.CurrentScene.get_node("Player") 
 onready var RangedWeapon=$RangedWeapon
@@ -56,7 +58,19 @@ func change_weapon(Type:String,NumInBackpack:int):
     elif Type=="RangedWeapon":
         RangedWeapon.init(Global.WeaponInBackpack[NumInBackpack]["Name"],Global.WeaponInBackpack[NumInBackpack]["Durability"],self,CreatureStatus.Ability["ranged_damage"],1,1)    
   
+func update_area_center(Pos):
+    if Pos==null:
+        CurrentAreaCenter=null
+    else:
+        CurrentAreaCenter=Pos
+
 func _physics_process(delta):
+    
+    if CurrentAreaCenter==null:
+        z_index=100
+    else:
+        z_index=floor((global_position-CurrentAreaCenter).y/20)
+    
     Speed=CreatureStatus.Speed[CreatureStatus.SpeedType]
     calc_distance_to_player_and_target()
     update_enermy_in_area()
