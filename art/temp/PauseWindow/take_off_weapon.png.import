@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Enermy.png-18bf0320ec125171f8e8c8cb3dcce2e7.stex"
+path="res://.import/take_off_weapon.png-939821466835ad385cb10c6d9a737a1d.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://art/temp/Enermy.png"
-dest_files=[ "res://.import/Enermy.png-18bf0320ec125171f8e8c8cb3dcce2e7.stex" ]
+source_file="res://art/temp/PauseWindow/take_off_weapon.png"
+dest_files=[ "res://.import/take_off_weapon.png-939821466835ad385cb10c6d9a737a1d.stex" ]
 
 [params]
 

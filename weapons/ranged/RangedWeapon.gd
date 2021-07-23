@@ -63,6 +63,15 @@ func init(_Name:String,_Durability:float,_Owner,_AttackAbility:float,_ReloadAbil
 func _physics_process(delta):
     if AutoAttack and Shooting:
         shoot()
+    rotation=Direction.angle()
+    if rotation<-PI/2 or rotation>PI/2:
+        $AnimatedSprite.flip_v=true
+    else:
+        $AnimatedSprite.flip_v=false
+    if rotation>=0:
+        z_index=0
+    else:
+        z_index=-1
 
 func shoot():#（试图）开枪
     if !Enable or !Attackable:

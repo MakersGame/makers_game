@@ -33,7 +33,7 @@ var WeaponReference={
         "Type":"MeleeWeapon",
         "Weight":3,
         "MaxDurability":200,
-        "Attack":1,
+        "Attack":20,
         "MaxRange":80,
         "KnockBack":100,
         "EnergyNeed":20,
@@ -79,6 +79,25 @@ var WeaponReference={
         "BulletSpeed":15,
         "GuardingValue":1500,
         "Description":"第二把测试用远程武器。\n攻击力：10\n使用子弹：test_bullet\n攻速：较快\n击退力：较低"
+       }
+   }
+
+var EnermyReference={
+    "test_enermy":{
+        "ID":-1,
+        "Type":"Enermy",
+        "MaxHealth":100,
+        "Attack":10,
+        "AttackRange":100,
+        "Speed":[3,3,3],
+        "CollisionSize":Vector2(25,25),
+        "AnimationOffset":Vector2(0,0),
+        "Ability":[1,1,1,1],
+        "SightAngle":90,
+        "SightRange":400,
+        "BeforeAttackTime":0.5,
+        "AfterAttackTime":0.5,
+        "AttackColdTime":2
        }
    }
 

@@ -15,6 +15,7 @@ var KnockBack:Vector3                       #被击退值，三维向量，xy表
 var WeaponChoice:String                     #"ranged"或"melee"，代表当前选中远程或近战武器
 
 var CurrentAreaCenter                       #当前区块中心，决定玩家图层
+var E_Actions=[]
 
 onready var CreatureStatus=$creature_status
 onready var RangedWeapon=$RangedWeapon
@@ -72,6 +73,8 @@ func _physics_process(delta):
     move()
     Global.OverworldUIs.update_energy(Energy)
     animation_function()
+    
+    action_ui_function()
 
 func _input(event):
     if Global.GameStatus!="PlayerControl":
@@ -82,7 +85,7 @@ func _input(event):
         MeleeWeapon.Direction=FaceDirection
     elif event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
         #按下鼠标左键，使用当前武器攻击
-        if WeaponChoice=="ranged":
+        if WeaponChoice=="ranged" and RangedWeapon.Enable:
             RangedWeapon.Shooting=true
             RangedWeapon.shoot()
             Global.send_message("Ranged Weapon Attack!")
@@ -134,6 +137,8 @@ func _input(event):
     elif event.is_action_released("ui_speed_up"):
         SpeedUp=false
         CreatureStatus.SpeedType=0
+    elif event.is_action_pressed("E_action"):
+        E_action()
     
 func direction_action():
     #根据按键情况，决定移动方向
@@ -190,11 +195,8 @@ func move():
     if collision:                                           #如果碰撞，沿着滑动方向运动直到达到一帧运动距离
             movement = movement.slide(collision.normal).normalized()*(Speed-(global_position-OriginalPosition).length())
             move_and_collide(movement)
-    if global_position!=OriginPosition and SpeedUp and !$RigidTimer.time_left and KnockBack.z==0:
+    if (global_position-OriginalPosition).length()>Speed/2 and SpeedUp and !$RigidTimer.time_left and KnockBack.z==0:
         energy_consume(1.03333)
-    
-func _on_RangedWeapon_bullet_consume(num):
-    pass #远程武器使用的子弹被消耗，进行扣减，在有实际的子弹物品之后编辑
 
 func energy_recover():
     if !TiredOut:
@@ -252,3 +254,40 @@ func animation_function():
 func reset_rigid_timer(num:float):
     $RigidTimer.wait_time=num
     $RigidTimer.start()
+
+func action_ui_function():
+    var i =0
+    while i<E_Actions.size():
+        if E_Actions[i]["Type"]=="Assassinate" and (E_Actions[i]["Target"].AImode=="attacking" or !E_Actions[i]["Target"].CreatureStatus.alive()):
+            E_Actions.remove(i)
+            i-=1
+        i+=1
+    for key in E_Actions:
+        var Collision=Global.detect_collision_in_line(global_position,key["Target"].global_position,[self,key["Target"]],1)
+        if Collision:
+            $E_ActionUI.hide()
+            key["Enable"]=false
+            continue
+        else:
+            $E_ActionUI.show()  
+            $E_ActionUI.global_position=key["Target"].global_position
+            key["Enable"]=true
+            return
+    $E_ActionUI.hide()      
+
+func _on_ActionArea_body_entered(body):
+    if body.Identifier=="Enermy" and body.AImode!="Attacking":
+        E_Actions.push_back({"Type":"Assassinate","Target":body,"Enable":false})
+
+
+func _on_ActionArea_body_exited(body):
+    for i in range(E_Actions.size()):
+        if E_Actions[i]["Target"]==body:
+            E_Actions.remove(i)
+
+func E_action():
+    for i in E_Actions:
+        if i["Enable"]:
+            if i["Type"]=="Assassinate":
+                i["Target"].CreatureStatus.get_hurt(9999,"real",self)
+            return    

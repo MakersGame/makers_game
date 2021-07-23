@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Enermy.png-18bf0320ec125171f8e8c8cb3dcce2e7.stex"
+path="res://.import/wall1.png-d1602580ae979112b817c33273b55713.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://art/temp/Enermy.png"
-dest_files=[ "res://.import/Enermy.png-18bf0320ec125171f8e8c8cb3dcce2e7.stex" ]
+source_file="res://art/Rooms/walls/wall1.png"
+dest_files=[ "res://.import/wall1.png-d1602580ae979112b817c33273b55713.stex" ]
 
 [params]
 

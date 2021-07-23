@@ -1,13 +1,17 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://creatures/creatures.tscn" type="PackedScene" id=1]
 [ext_resource path="res://creatures/player/player.gd" type="Script" id=2]
 [ext_resource path="res://creatures/player/PlayerSprites.tres" type="SpriteFrames" id=3]
 [ext_resource path="res://weapons/ranged/RangedWeapon.tscn" type="PackedScene" id=4]
 [ext_resource path="res://weapons/melee/MeleeWeapon.tscn" type="PackedScene" id=5]
+[ext_resource path="res://art/temp/E_action.png" type="Texture" id=6]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 30, 30 )
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 60.0
 
 [node name="player" type="KinematicBody2D"]
 z_as_relative = false
@@ -27,7 +31,6 @@ playing = true
 shape = SubResource( 1 )
 
 [node name="RangedWeapon" parent="." instance=ExtResource( 4 )]
-rotation = 0.647517
 
 [node name="MeleeWeapon" parent="." instance=ExtResource( 5 )]
 
@@ -37,4 +40,19 @@ one_shot = true
 [node name="RigidTimer" type="Timer" parent="."]
 one_shot = true
 
+[node name="E_ActionUI" type="Sprite" parent="."]
+visible = false
+scale = Vector2( 2, 2 )
+texture = ExtResource( 6 )
+offset = Vector2( 0, -40 )
+
+[node name="ActionArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ActionArea"]
+shape = SubResource( 2 )
+
 [connection signal="bullet_consume" from="RangedWeapon" to="." method="_on_RangedWeapon_bullet_consume"]
+[connection signal="body_entered" from="ActionArea" to="." method="_on_ActionArea_body_entered"]
+[connection signal="body_exited" from="ActionArea" to="." method="_on_ActionArea_body_exited"]

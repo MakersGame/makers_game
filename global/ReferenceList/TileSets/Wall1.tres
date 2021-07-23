@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" load_steps=55 format=2]
+[gd_resource type="TileSet" load_steps=56 format=2]
 
 [ext_resource path="res://art/Rooms/walls/wall1/walls_pattern_37.png" type="Texture" id=1]
 [ext_resource path="res://art/Rooms/walls/wall1/walls_pattern_79.png" type="Texture" id=2]
@@ -54,6 +54,7 @@
 [ext_resource path="res://art/Rooms/walls/wall1/walls_pattern_test2.png" type="Texture" id=52]
 [ext_resource path="res://art/Rooms/walls/wall1/walls_pattern_test4.png" type="Texture" id=53]
 [ext_resource path="res://art/Rooms/walls/wall1/walls_pattern_test3.png" type="Texture" id=54]
+[ext_resource path="res://art/Rooms/walls/walls.png" type="Texture" id=55]
 
 [resource]
 0/name = "walls_pattern_01.png 0"
@@ -812,3 +813,24 @@
 53/shape_one_way_margin = 0.0
 53/shapes = [  ]
 53/z_index = 0
+54/name = "walls.png 54"
+54/texture = ExtResource( 55 )
+54/tex_offset = Vector2( 0, 0 )
+54/modulate = Color( 1, 1, 1, 1 )
+54/region = Rect2( 0, 0, 200, 200 )
+54/tile_mode = 2
+54/autotile/icon_coordinate = Vector2( 0, 0 )
+54/autotile/tile_size = Vector2( 20, 40 )
+54/autotile/spacing = 0
+54/autotile/occluder_map = [  ]
+54/autotile/navpoly_map = [  ]
+54/autotile/priority_map = [  ]
+54/autotile/z_index_map = [  ]
+54/occluder_offset = Vector2( 0, 0 )
+54/navigation_offset = Vector2( 0, 0 )
+54/shape_offset = Vector2( 0, 0 )
+54/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+54/shape_one_way = false
+54/shape_one_way_margin = 0.0
+54/shapes = [  ]
+54/z_index = 0

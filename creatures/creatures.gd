@@ -40,6 +40,8 @@ func get_hurt(DMG:float,DMG_kind:String,src:Object):#此处的src为攻击的对
         hurt=DMG/Ability["melee_defense"]
     elif DMG_kind=="ranged_damage":
         hurt=DMG/Ability["ranged_defense"]
+    elif DMG_kind=="real":
+        hurt=DMG
     Health-=hurt
     if Health<=0:
         Health=0

@@ -15,6 +15,8 @@ var BattleMod:String                    #值为“common"或”defense"，对应
 var KnockBack:Vector3                   #被击退值，三维向量，xy表示方向，z表示剩余击退距离，每一帧击退距离呈二次函数
 var Attackable:bool=true                #是否可以进行攻击
 var AttackRange:float                   #攻击距离，单位为像素
+var BeforeAttackTime:float              #攻击前摇
+var AfterAttackTime:float               #攻击后摇
 var FaceDirection:Vector2               #面朝方向，决定视野范围
 var SightRange:float                    #扇形视野的半径
 var SightAngle:float                    #扇形视野的夹角，采用角度制
@@ -26,26 +28,32 @@ var DamageArea=preload("res://weapons/melee/damage_area/DamageArea.tscn")
 onready var CreatureStatus=$CreatureStatus
 
 
-func init(_Name:String,_FaceDirection:Vector2):
+func init(_Name:String,_FaceDirection:Vector2,_TempHealth:float):
     Name=_Name
     TargetPosition=global_position
     BirthPosition=global_position
     AImode="default"
     FaceDirection=_FaceDirection
-    match Name:
-        "test_enermy":
-            CreatureStatus.init(100,100,10,[3,5,5],"Enermy",$CollisionShape2D,[1,1,1,1]) 
-            SightAngle=90
-            SightRange=400
-            $AttackColdTimer.wait_time=1
-        _:
-            print("Invalid enermy name \"",Name,"\"!")
-            queue_free()   
+    if ReferenceList.EnermyReference.get(Name)==null:
+        print("Invalid enermy name \"",Name,"\"!")
+        queue_free()
+    $CollisionShape2D.shape.extents=ReferenceList.EnermyReference[Name]["CollisionSize"]
+    if _TempHealth<0:
+        CreatureStatus.init(ReferenceList.EnermyReference[Name]["MaxHealth"],ReferenceList.EnermyReference[Name]["MaxHealth"],ReferenceList.EnermyReference[Name]["Attack"],ReferenceList.EnermyReference[Name]["Speed"],"Enermy",$CollisionShape2D,ReferenceList.EnermyReference[Name]["Ability"]) 
+    else:
+        CreatureStatus.init(_TempHealth,ReferenceList.EnermyReference[Name]["MaxHealth"],ReferenceList.EnermyReference[Name]["Attack"],ReferenceList.EnermyReference[Name]["Speed"],"Enermy",$CollisionShape2D,ReferenceList.EnermyReference[Name]["Ability"]) 
+    AttackRange=ReferenceList.EnermyReference[Name]["AttackRange"]
+    SightAngle=ReferenceList.EnermyReference[Name]["SightAngle"]
+    SightRange=ReferenceList.EnermyReference[Name]["SightRange"]
+    $AttackColdTimer.wait_time=ReferenceList.EnermyReference[Name]["AttackColdTime"]
+    BeforeAttackTime=ReferenceList.EnermyReference[Name]["BeforeAttackTime"]
+    AfterAttackTime=ReferenceList.EnermyReference[Name]["AfterAttackTime"]
+              
+    Attackable=true 
         
 func _physics_process(delta):
     if !Exist:
         return
-    attack()
     if !CreatureStatus.alive():
         die()#死了，但不会立刻消失。动画会持续一小段时间
     Target=CreatureStatus.TargetEnermy
@@ -82,6 +90,8 @@ func move(movement:Vector2):#移动策略，同NPC的
         FaceDirection=movement.normalized()#移动方向决定面朝方向
     if (TargetPosition-global_position).length()<=Speed*0.5: 
         movement=Vector2()
+    if $RigidTimer.time_left:
+        movement=Vector2(0,0)
     if KnockBack.z:
         var KnockBackDistance=sqrt(KnockBack.z)
         movement+=Vector2(KnockBack.x,KnockBack.y).normalized()*KnockBackDistance
@@ -130,6 +140,10 @@ func AIFunction():#AI切换以及不同AI的行动
                     AImode="backtracking"#失去目标，则进入回溯模式 
                 else:
                     AImode="guarding"
+            else:
+                if !$RigidTimer.time_left and !$AttackColdTimer.time_left and Attackable and (Target.global_position-global_position).length()<=AttackRange:
+                    $RigidTimer.wait_time=BeforeAttackTime
+                    $RigidTimer.start()                             #准备攻击
         "backtracking":#回溯模式，回到出生点
             if Target!=null:
                 AImode="attacking"
@@ -150,13 +164,23 @@ func attack():#攻击
     if !Attackable:
         return
     var NewDamageArea=DamageArea.instance()
-    NewDamageArea.init("test_damage_area",$CreatureStatus.Attack,FaceDirection.normalized(),self,CreatureStatus.Camp,0)
+    NewDamageArea.init("test_damage_area",$CreatureStatus.Attack,FaceDirection.normalized(),self,CreatureStatus.Camp,100)
     self.add_child(NewDamageArea)
     Attackable=false
     $AttackColdTimer.start()
+    $RigidTimer.wait_time=AfterAttackTime
+    $RigidTimer.start()
 
 func _on_AttackColdTimer_timeout():
-    Attackable=true
+    if !$RigidTimer.time_left:
+        Attackable=true
+
+func _on_RigidTimer_timeout():
+    if Attackable and !$AttackColdTimer.time_left:
+        $AttackColdTimer.start()
+        attack()
+    elif !$AttackColdTimer.time_left:
+        Attackable=true
 
 func raise_guard(pos:Vector2,value:float):
     if GuardingPosition.z<value and (global_position-pos).length()<=value:

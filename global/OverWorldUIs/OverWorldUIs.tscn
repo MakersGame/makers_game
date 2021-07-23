@@ -26,12 +26,11 @@ font_data = ExtResource( 6 )
 size = 20
 font_data = ExtResource( 6 )
 
-[sub_resource type="DynamicFont" id=6]
+[sub_resource type="DynamicFont" id=3]
 size = 20
 font_data = ExtResource( 6 )
 
-[sub_resource type="Animation" id=3]
-resource_name = "MeleeToRanged"
+[sub_resource type="Animation" id=4]
 tracks/0/type = "value"
 tracks/0/path = NodePath("RangedWeapon:position")
 tracks/0/interp = 1
@@ -81,11 +80,11 @@ tracks/3/keys = {
 "values": [ Vector2( 1, 1 ), Vector2( 0.5, 0.5 ) ]
 }
 
-[sub_resource type="DynamicFont" id=4]
+[sub_resource type="DynamicFont" id=5]
 size = 30
 font_data = ExtResource( 6 )
 
-[sub_resource type="DynamicFont" id=5]
+[sub_resource type="DynamicFont" id=6]
 size = 32
 font_data = ExtResource( 6 )
 
@@ -353,7 +352,7 @@ margin_left = -50.0
 margin_top = 50.0
 margin_right = 51.0
 margin_bottom = 71.0
-custom_fonts/font = SubResource( 6 )
+custom_fonts/font = SubResource( 3 )
 text = "子弹 1000"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -382,7 +381,7 @@ offset = Vector2( -3, -3 )
 
 [node name="WeaponChangeAnimation" type="AnimationPlayer" parent="WeaponChoice"]
 playback_speed = 5.0
-anims/MeleeToRanged = SubResource( 3 )
+anims/MeleeToRanged = SubResource( 4 )
 
 [node name="QuickUseItem" type="Node2D" parent="."]
 position = Vector2( 640, 690 )
@@ -404,7 +403,7 @@ margin_left = -76.0
 margin_top = 12.0
 margin_right = 44.0
 margin_bottom = 44.0
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
 align = 2
 autowrap = true
 __meta__ = {
@@ -425,7 +424,7 @@ margin_left = -76.0
 margin_top = 12.0
 margin_right = 44.0
 margin_bottom = 44.0
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
 align = 2
 autowrap = true
 __meta__ = {
@@ -445,7 +444,7 @@ margin_left = -76.0
 margin_top = 12.0
 margin_right = 44.0
 margin_bottom = 44.0
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
 align = 2
 autowrap = true
 __meta__ = {
@@ -466,7 +465,7 @@ margin_left = -76.0
 margin_top = 12.0
 margin_right = 44.0
 margin_bottom = 44.0
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
 align = 2
 autowrap = true
 __meta__ = {
@@ -487,7 +486,7 @@ margin_left = -76.0
 margin_top = 12.0
 margin_right = 44.0
 margin_bottom = 44.0
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
 align = 2
 autowrap = true
 __meta__ = {
@@ -504,7 +503,7 @@ position = Vector2( 640, 0 )
 [node name="Message1" type="Label" parent="Message"]
 margin_bottom = 34.0
 grow_horizontal = 2
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 6 )
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false
@@ -516,7 +515,7 @@ __meta__ = {
 margin_top = 35.0
 margin_bottom = 69.0
 grow_horizontal = 2
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 6 )
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false
@@ -528,7 +527,7 @@ __meta__ = {
 margin_top = 70.0
 margin_bottom = 104.0
 grow_horizontal = 2
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 6 )
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false

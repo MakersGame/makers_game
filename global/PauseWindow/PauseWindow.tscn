@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=2]
+[gd_scene load_steps=47 format=2]
 
 [ext_resource path="res://art/temp/PauseWindow/quick_use_button.png" type="Texture" id=1]
 [ext_resource path="res://art/temp/PauseWindow/close_button.png" type="Texture" id=2]
@@ -36,6 +36,7 @@
 [ext_resource path="res://global/PauseWindow/BackPack/QuickUseItem.gd" type="Script" id=34]
 [ext_resource path="res://global/PauseWindow/BackPack/DropItemWindow.tscn" type="PackedScene" id=35]
 [ext_resource path="res://art/temp/PauseWindow/DropWeaponWindow.png" type="Texture" id=36]
+[ext_resource path="res://art/temp/PauseWindow/take_off_weapon.png" type="Texture" id=37]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
@@ -84,6 +85,7 @@ scale = Vector2( 1.3, 1.2 )
 texture = ExtResource( 4 )
 
 [node name="Backpack" type="Node2D" parent="."]
+visible = false
 position = Vector2( 0, 40 )
 script = ExtResource( 7 )
 
@@ -363,7 +365,6 @@ __meta__ = {
 }
 
 [node name="TeamInfo" type="Node2D" parent="."]
-visible = false
 script = ExtResource( 23 )
 
 [node name="Members" type="Node2D" parent="TeamInfo"]
@@ -717,6 +718,30 @@ position = Vector2( -4.5, -122 )
 texture = ExtResource( 17 )
 centered = false
 
+[node name="Buttons" type="Node2D" parent="TeamInfo"]
+
+[node name="TakeOffMeleeWeaponButton" type="TextureButton" parent="TeamInfo/Buttons"]
+margin_left = -146.0
+margin_top = 285.0
+margin_right = 310.0
+margin_bottom = 407.0
+rect_scale = Vector2( 0.2, 0.2 )
+texture_normal = ExtResource( 37 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TakeOffRangedWeaponButton" type="TextureButton" parent="TeamInfo/Buttons"]
+margin_left = 55.0
+margin_top = 285.0
+margin_right = 511.0
+margin_bottom = 407.0
+rect_scale = Vector2( 0.2, 0.2 )
+texture_normal = ExtResource( 37 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Diary" type="Node2D" parent="."]
 visible = false
 
@@ -846,6 +871,8 @@ __meta__ = {
 [connection signal="pressed" from="TeamInfo/Members/NPC3" to="TeamInfo" method="_on_NPC3_pressed"]
 [connection signal="pressed" from="TeamInfo/Detail/MeleeWeapon/Button" to="TeamInfo" method="_on_change_melee_weapon"]
 [connection signal="pressed" from="TeamInfo/Detail/RangedWeapon/Button" to="TeamInfo" method="_on_change_ranged_weapon"]
+[connection signal="pressed" from="TeamInfo/Buttons/TakeOffMeleeWeaponButton" to="TeamInfo" method="_on_TakeOffMeleeWeaponButton_pressed"]
+[connection signal="pressed" from="TeamInfo/Buttons/TakeOffRangedWeaponButton" to="TeamInfo" method="_on_TakeOffRangedWeaponButton_pressed"]
 [connection signal="pressed" from="Buttons/CloseButton" to="." method="_on_CloseButton_pressed"]
 [connection signal="pressed" from="Buttons/BackpackButton" to="." method="_on_BackpackButton_pressed"]
 [connection signal="pressed" from="Buttons/TeamButton" to="." method="_on_TeamButton_pressed"]

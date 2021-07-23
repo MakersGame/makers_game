@@ -14,11 +14,10 @@ wait_time = 3.0
 one_shot = true
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-visible = false
 scale = Vector2( 3, 3 )
 frames = ExtResource( 2 )
-animation = "weapon3"
-offset = Vector2( 10, 0 )
+animation = "weapon2"
+offset = Vector2( 6.5, 0 )
 
 [connection signal="timeout" from="ColdTimer" to="." method="_on_ColdTimer_timeout"]
 [connection signal="timeout" from="ReloadTimer" to="." method="_on_ReloadTimer_timeout"]

@@ -84,21 +84,23 @@ func update_weapon_choice():
     var RangedWeapon=Global.CurrentScene.get_node("Player").get_node("RangedWeapon")
     var MeleeWeapon=Global.CurrentScene.get_node("Player").get_node("MeleeWeapon")
     if RangedWeapon==null or !RangedWeapon.Enable:
-        $WeaponChoice/RangedWeapon/AnimatedSprite.animation="default"
+        $WeaponChoice/RangedWeapon/AnimatedSprite.animation="null"
         $WeaponChoice/RangedWeapon/DurabilityBar.hide()
         $WeaponChoice/RangedWeapon/BulletNumber.hide()
     else:
         $WeaponChoice/RangedWeapon/AnimatedSprite.animation=RangedWeapon.Name
         $WeaponChoice/RangedWeapon/DurabilityBar.max_value=RangedWeapon.MaxDurability
         $WeaponChoice/RangedWeapon/DurabilityBar.value=RangedWeapon.Durability
+        $WeaponChoice/MeleeWeapon/DurabilityBar.show()
         $WeaponChoice/RangedWeapon/BulletNumber.text="子弹 "+String(RangedWeapon.BulletNum)
     if MeleeWeapon==null or !MeleeWeapon.Enable:
-        $WeaponChoice/MeleeWeapon/AnimatedSprite.animation="default"
+        $WeaponChoice/MeleeWeapon/AnimatedSprite.animation="null"
         $WeaponChoice/MeleeWeapon/DurabilityBar.hide()
     else:
         $WeaponChoice/MeleeWeapon/AnimatedSprite.animation=MeleeWeapon.Name
         $WeaponChoice/MeleeWeapon/DurabilityBar.max_value=MeleeWeapon.MaxDurability
         $WeaponChoice/MeleeWeapon/DurabilityBar.value=MeleeWeapon.Durability
+        $WeaponChoice/MeleeWeapon/DurabilityBar.show()
 
 func weapon_reload_change(Type:String):
     if Type=="RangedWeapon":

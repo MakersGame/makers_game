@@ -4,7 +4,8 @@ var DetailedMember:Object   #当前查看的详细信息的队员
 var WeaponTypeChosen:String=""
 
 func update_team():
-    DetailedMember=Global.Team[0]
+    if !DetailedMember in Global.Team:
+        DetailedMember=Global.Team[0]
     $Members/Player/AnimatedSprite.animation="info"
     if Global.Team.size()>1:
         $Members/NPC1/AnimatedSprite.frames=Global.Team[1].get_node("AnimatedSprite").frames
@@ -35,24 +36,32 @@ func update_detail():
     $Detail/HealthBar.max_value=DetailedMember.CreatureStatus.MaxHealth
     $Detail/HealthBar.value=DetailedMember.CreatureStatus.Health
     $Detail/HealthBar/HealthValue.text=String(round(DetailedMember.CreatureStatus.Health))+"/"+String(round(DetailedMember.CreatureStatus.MaxHealth))
-    if DetailedMember.get_node("MeleeWeapon")!=null:
+    if DetailedMember.get_node("MeleeWeapon").Enable:
         $Detail/MeleeWeapon/AnimatedSprite.animation=DetailedMember.get_node("MeleeWeapon").Name
         var Durability=DetailedMember.get_node("MeleeWeapon").Durability
         var MaxDyrability=DetailedMember.get_node("MeleeWeapon").MaxDurability
         $Detail/MeleeWeapon/DurabilityBar.max_value=MaxDyrability
         $Detail/MeleeWeapon/DurabilityBar.value=Durability
         $Detail/MeleeWeapon/DurabilityBar/DurabilityValue.text=String(Durability)+"/"+String(MaxDyrability)
+        $Detail/MeleeWeapon/DurabilityBar.show()
+        $Buttons/TakeOffMeleeWeaponButton.show()
     else:
-        $Detail/MeleeWeapon/AnimatedSprite.animation="default"
-    if DetailedMember.get_node("RangedWeapon")!=null:
+        $Detail/MeleeWeapon/AnimatedSprite.animation="null"
+        $Detail/MeleeWeapon/DurabilityBar.hide()
+        $Buttons/TakeOffMeleeWeaponButton.hide()
+    if DetailedMember.get_node("RangedWeapon").Enable:
         $Detail/RangedWeapon/AnimatedSprite.animation=DetailedMember.get_node("RangedWeapon").Name
         var Durability=DetailedMember.get_node("RangedWeapon").Durability
         var MaxDyrability=DetailedMember.get_node("RangedWeapon").MaxDurability
         $Detail/RangedWeapon/DurabilityBar.max_value=MaxDyrability
         $Detail/RangedWeapon/DurabilityBar.value=Durability
         $Detail/RangedWeapon/DurabilityBar/DurabilityValue.text=String(Durability)+"/"+String(MaxDyrability)
+        $Detail/RangedWeapon/DurabilityBar.show()
+        $Buttons/TakeOffRangedWeaponButton.show()
     else:
-        $Detail/RangedWeapon/AnimatedSprite.animation="default"
+        $Detail/RangedWeapon/AnimatedSprite.animation="null"
+        $Detail/RangedWeapon/DurabilityBar.hide()
+        $Buttons/TakeOffRangedWeaponButton.hide()
     $WeaponChoiceWindow.hide()
     WeaponTypeChosen=""
 
@@ -112,3 +121,21 @@ func _on_change_ranged_weapon():
     elif $WeaponChoiceWindow.visible:
         $WeaponChoiceWindow.hide()
         WeaponTypeChosen=""
+
+func _on_TakeOffMeleeWeaponButton_pressed():
+    if DetailedMember.get_node("MeleeWeapon").Enable:
+        var OriginalWeapon={"Name":DetailedMember.get_node("MeleeWeapon").Name,"Durability":DetailedMember.get_node("MeleeWeapon").Durability}
+        Global.WeaponInBackpack.push_back(OriginalWeapon)
+        DetailedMember.change_weapon("MeleeWeapon",-1)
+    WeaponTypeChosen=""
+    $WeaponChoiceWindow.hide()
+    Global.update_pause_window() 
+        
+func _on_TakeOffRangedWeaponButton_pressed():
+    if DetailedMember.get_node("RangedWeapon").Enable:
+        var OriginalWeapon={"Name":DetailedMember.get_node("RangedWeapon").Name,"Durability":DetailedMember.get_node("RangedWeapon").Durability}
+        Global.WeaponInBackpack.push_back(OriginalWeapon)
+        DetailedMember.change_weapon("RangedWeapon",-1)
+    WeaponTypeChosen=""
+    $WeaponChoiceWindow.hide()
+    Global.update_pause_window() 
