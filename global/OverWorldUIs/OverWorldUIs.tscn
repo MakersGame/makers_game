@@ -378,6 +378,7 @@ centered = false
 offset = Vector2( -3, -3 )
 
 [node name="Tween" type="Tween" parent="WeaponChoice/RangedWeapon"]
+pause_mode = 1
 
 [node name="WeaponChangeAnimation" type="AnimationPlayer" parent="WeaponChoice"]
 playback_speed = 5.0

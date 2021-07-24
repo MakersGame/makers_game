@@ -26,10 +26,12 @@ func _ready():#暂时留着，之后会被init取代
     MaxEnergy=100
     LoadLimit=50
     CreatureStatus.init(100,100,1,[3,5,5],"Player",$CollisionShape2D,[1,1,1,1])
-    RangedWeapon.init("test_ranged_weapon",-1,self,CreatureStatus.Ability["ranged_damage"],1,1)
+    RangedWeapon.init("9mm手枪",-1,self,CreatureStatus.Ability["ranged_damage"],1,1)
     RangedWeapon.set_bullet_num()
-    MeleeWeapon.init("test_melee_weapon",-1,self,CreatureStatus.Ability["melee_damage"],1)
+    MeleeWeapon.init("马桶橛子",-1,self,CreatureStatus.Ability["melee_damage"],1)
     WeaponChoice="melee"
+    MeleeWeapon.show()
+    RangedWeapon.hide()
     $ChangeWeaponTimer.wait_time=0.1
 
 func init():
@@ -40,10 +42,17 @@ func init():
     RangedWeapon.init("test_ranged_weapon",-1,self,CreatureStatus.Ability["ranged_damage"],1,1)
     RangedWeapon.set_bullet_num(200)
     MeleeWeapon.init("test_melee_weapon",-1,self,CreatureStatus.Ability["melee_damage"],1)
-    WeaponChoice="melee"
     $ChangeWeaponTimer.wait_time=0.1
 
 func change_weapon(Type:String,NumInBackpack:int):
+    if Type=="RangedWeapon":
+        if RangedWeapon.BulletNum>0:
+            if Global.GoodInBackpack.get(RangedWeapon.BulletType)==null:
+                Global.GoodInBackpack[RangedWeapon.BulletType]=RangedWeapon.BulletNum
+            else:
+                Global.GoodInBackpack[RangedWeapon.BulletType]+=RangedWeapon.BulletNum
+        RangedWeapon.get_node("ReloadTimer").stop()
+        Global.OverworldUIs.get_node("WeaponChoice/RangedWeapon/ReloadBar").hide()
     if NumInBackpack<0 and Type!="null":
         get_node(Type).Enable=false
         return
@@ -64,7 +73,7 @@ func _physics_process(delta):
     if CurrentAreaCenter==null:
         z_index=100
     else:
-        z_index=floor(((global_position-CurrentAreaCenter).y)/20)+4
+        z_index=floor(((global_position-CurrentAreaCenter).y)/20)+3
     
     Global.PlayerCamera.set_camera(global_position)
     Speed=CreatureStatus.Speed[CreatureStatus.SpeedType]
@@ -79,13 +88,15 @@ func _physics_process(delta):
 func _input(event):
     if Global.GameStatus!="PlayerControl":
         return
-    if event is InputEventMouseMotion:
+    if event is InputEventMouseMotion or (event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed):
         FaceDirection=(event.global_position+Global.PlayerCamera.global_position-Vector2(640,360)-global_position).normalized()
-        RangedWeapon.Direction=FaceDirection
+        RangedWeapon.TargetPosition=event.global_position+Global.PlayerCamera.global_position-Vector2(640,360)
         MeleeWeapon.Direction=FaceDirection
-    elif event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
+    if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
         #按下鼠标左键，使用当前武器攻击
         if WeaponChoice=="ranged" and RangedWeapon.Enable:
+            RangedWeapon.ForceDirection=Vector2()
+            RangedWeapon.direction_function()
             RangedWeapon.Shooting=true
             RangedWeapon.shoot()
             Global.send_message("Ranged Weapon Attack!")
@@ -117,9 +128,13 @@ func _input(event):
             RangedWeapon.reload()
         if WeaponChoice=="ranged":
             WeaponChoice="melee"
+            RangedWeapon.hide()
+            MeleeWeapon.show()
             Global.OverworldUIs.change_weapon_choice("melee")
         elif WeaponChoice=="melee":
             WeaponChoice="ranged"
+            MeleeWeapon.hide()
+            RangedWeapon.show()
             Global.OverworldUIs.change_weapon_choice("ranged")
         $ChangeWeaponTimer.start()
     elif event.is_action_pressed("ui_focus_next"):#鼠标下滚切换快捷栏道具
@@ -217,43 +232,109 @@ func energy_consume(value:float):
 
 func animation_function():
     var ani
-    $PlayerAnimation.speed_scale=0.7
+    $Animations/PlayerAnimation.speed_scale=0.7
+    if (WeaponChoice=="ranged" and !RangedWeapon.Enable) or (WeaponChoice=="melee" and !MeleeWeapon.Enable):
+        ani="unarmed"
+        $Animations/left_hand.hide()
+        $Animations/right_hand.hide()
+    else:
+        ani="armed"
+        $Animations/left_hand.show()
+        $Animations/right_hand.show()
+    var Direction
     if PlayerMoveState==Vector2(0,0) or $RigidTimer.time_left:
-        ani="stand" 
-        if FaceDirection.x>0.5:
-            ani+="_right"
-        elif FaceDirection.x<-0.5:
-            ani+="_left"
-        if FaceDirection.y>0:
-            ani+="_down"
-        elif FaceDirection.y<0:
-            ani+="_up"
+        ani+="_stand" 
+        Direction=FaceDirection.normalized()
     else:
-        ani="walk"
-        if PlayerMoveState.x>0:
-            ani+="_right"
-        elif PlayerMoveState.x<-0:
-            ani+="_left"
-        if PlayerMoveState.y>0:
-            ani+="_down"
-        elif PlayerMoveState.y<0:
-            ani+="_up"
-        else:
-            ani+="_down"
-
+        ani+="_walk"
+        Direction=PlayerMoveState.normalized()
+    if Direction.x>0.5:
+        ani+="_right"
+    elif Direction.x<-0.5:
+        ani+="_left"
+    if Direction.y>=-0.2:
+        ani+="_down"
+    elif Direction.y<0.2:
+        ani+="_up"
         if SpeedUp:
-            $PlayerAnimation.speed_scale=1
+            $Animations/PlayerAnimation.speed_scale=1
+    $Animations/PlayerAnimation.animation=ani
     
-    if $PlayerAnimation.animation==ani:
+    var Weapon=null
+    if WeaponChoice=="melee":
+        Weapon=MeleeWeapon
+    elif WeaponChoice=="ranged":
+        Weapon=RangedWeapon
+    if Weapon==null or !Weapon.Enable:
         return
-    if abs(PlayerMoveState.angle_to(FaceDirection))>PI/2:
-        $PlayerAnimation.play(ani,true)
+    Weapon.rotation=Direction.angle()
+    if Direction.x>=0 and Direction.x<=0.5 and Direction.y<-0.2:
+        $Animations/left_hand.z_index=-1
+        $Animations/left_hand.position=Vector2(-28,-8)
+        $Animations/right_hand.z_index=-1
+        $Animations/right_hand.position=Vector2(28,8)
+        Weapon.global_position=$Animations/left_hand.global_position
+        Weapon.z_index=-2
+    elif Direction.x>0.5 and  Direction.y<-0.2:
+        $Animations/left_hand.z_index=-1
+        $Animations/left_hand.position=Vector2(-24,-12)
+        $Animations/right_hand.z_index=-1
+        $Animations/right_hand.position=Vector2(28,4)
+        Weapon.global_position=$Animations/left_hand.global_position
+        Weapon.z_index=-2
+    elif Direction.x>=0.5 and  Direction.y>=-0.2:
+        $Animations/left_hand.z_index=-1
+        $Animations/left_hand.position=Vector2(24,4)
+        $Animations/right_hand.z_index=1
+        $Animations/right_hand.position=Vector2(-12,4)
+        Weapon.global_position=$Animations/right_hand.global_position
+        Weapon.z_index=0
+    elif Direction.x>=0 and Direction.x<0.5 and  Direction.y>-0.2:
+        $Animations/left_hand.z_index=-1
+        $Animations/left_hand.position=Vector2(24,8)
+        $Animations/right_hand.z_index=1
+        $Animations/right_hand.position=Vector2(-24,8)
+        Weapon.global_position=$Animations/right_hand.global_position
+        Weapon.z_index=0
+    elif Direction.x>=-0.5 and Direction.x<=0 and Direction.y<-0.2:
+        $Animations/left_hand.z_index=-1
+        $Animations/left_hand.position=Vector2(-28,8)
+        $Animations/right_hand.z_index=-1
+        $Animations/right_hand.position=Vector2(28,-8)
+        Weapon.global_position=$Animations/right_hand.global_position
+        Weapon.z_index=-2
+    elif Direction.x<=-0.5 and  Direction.y<-0.2:
+        $Animations/left_hand.z_index=-1
+        $Animations/left_hand.position=Vector2(-28,4)
+        $Animations/right_hand.z_index=-1
+        $Animations/right_hand.position=Vector2(24,-12)
+        Weapon.global_position=$Animations/right_hand.global_position
+        Weapon.z_index=-2
+    elif Direction.x<=-0.5 and  Direction.y>=-0.2:
+        $Animations/left_hand.z_index=1
+        $Animations/left_hand.position=Vector2(12,4)
+        $Animations/right_hand.z_index=-1
+        $Animations/right_hand.position=Vector2(-24,4)
+        Weapon.global_position=$Animations/left_hand.global_position
+        Weapon.z_index=0
+    elif Direction.x>-0.5 and Direction.x<0 and  Direction.y>-0.2:
+        $Animations/left_hand.z_index=1
+        $Animations/left_hand.position=Vector2(24,8)
+        $Animations/right_hand.z_index=-1
+        $Animations/right_hand.position=Vector2(-24,8)
+        Weapon.global_position=$Animations/left_hand.global_position
+        Weapon.z_index=0
+    
+    if PlayerMoveState==Vector2(0,0) or $RigidTimer.time_left:
+        RangedWeapon.ForceDirection=Vector2()
     else:
-        $PlayerAnimation.play(ani,false)
+        RangedWeapon.ForceDirection=Direction
+    
 
 func reset_rigid_timer(num:float):
     $RigidTimer.wait_time=num
     $RigidTimer.start()
+    RangedWeapon.ForceDirection=Vector2()
 
 func action_ui_function():
     var i =0

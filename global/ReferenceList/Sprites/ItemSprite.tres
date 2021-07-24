@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=7 format=2]
+[gd_resource type="SpriteFrames" load_steps=12 format=2]
 
 [ext_resource path="res://art/temp/bandage.png" type="Texture" id=1]
 [ext_resource path="res://art/temp/OverworldUIs/WeaponChoice/gun.png" type="Texture" id=2]
@@ -6,6 +6,11 @@
 [ext_resource path="res://art/temp/items/wood.png" type="Texture" id=4]
 [ext_resource path="res://art/temp/items/9mm_bullet.png" type="Texture" id=5]
 [ext_resource path="res://art/temp/OverworldUIs/WeaponChoice/biggun.png" type="Texture" id=6]
+[ext_resource path="res://art/weapons/weapon3.png" type="Texture" id=7]
+[ext_resource path="res://art/weapons/weapon4.png" type="Texture" id=8]
+[ext_resource path="res://art/temp/Bullet2.png" type="Texture" id=9]
+[ext_resource path="res://art/weapons/MeleeWeapon1.png" type="Texture" id=10]
+[ext_resource path="res://art/weapons/weapon1.png" type="Texture" id=11]
 
 [resource]
 animations = [ {
@@ -14,19 +19,34 @@ animations = [ {
 "name": "绷带",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 2 ) ],
+"frames": [ ExtResource( 9 ) ],
 "loop": true,
-"name": "test_ranged_weapon",
+"name": "雷明顿16号弹",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 3 ) ],
+"frames": [ ExtResource( 5 ) ],
 "loop": true,
-"name": "test_melee_weapon",
+"name": "9mm子弹",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 7 ) ],
+"loop": true,
+"name": "9mm手枪",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 6 ) ],
 "loop": true,
 "name": "test_ranged_weapon1",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 10 ) ],
+"loop": true,
+"name": "马桶橛子",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 3 ) ],
+"loop": true,
+"name": "test_melee_weapon",
 "speed": 5.0
 }, {
 "frames": [  ],
@@ -39,8 +59,18 @@ animations = [ {
 "name": "木材",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 5 ) ],
+"frames": [ ExtResource( 2 ) ],
 "loop": true,
-"name": "9mm子弹",
+"name": "test_ranged_weapon",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 8 ) ],
+"loop": true,
+"name": "老式霰弹枪",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 11 ) ],
+"loop": true,
+"name": "EX咖喱棒",
 "speed": 5.0
 } ]

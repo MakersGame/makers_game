@@ -9,6 +9,8 @@ var Enable:bool=true            #是否处于战斗状态
 var Attackable:bool=false       #是否可以进行攻击
 var Direction:Vector2           #武器对准的方向，也决定攻击和动画的方向
 var Attack:float                #攻击力
+var SingleTarget:bool           #是否为单体伤害
+var AttackExistTime:float       #攻击存在的时间
 var MaxRange:float              #攻击距离，仅供参考，在AI处理时作为指标
 var KnockBack:float             #击退能力，单位为像素
 var EnergyNeed:float            #进行一次攻击需要消耗的体力
@@ -16,6 +18,8 @@ var GuardingValue:float         #攻击造成的警戒值
 var RigidTime:float             #使用者每次攻击后的僵直时间
 var Owner                       #武器的使用者
 var AttackType:String           #范围攻击的类型
+var DamageAreaOffset:Vector2    #伤害范围的相对位置
+var DamageAreaRect:Vector2      
 var DamageArea=preload("res://weapons/melee/damage_area/DamageArea.tscn")
 
 func init(_Name:String,_Durability,_Owner:Object,_AttackAbility:float,_KnockBackAbility:float):
@@ -34,12 +38,19 @@ func init(_Name:String,_Durability,_Owner:Object,_AttackAbility:float,_KnockBack
         Durability=_Durability
     Weight=WeaponInfo["Weight"]
     Attack=WeaponInfo["Attack"]
+    AttackExistTime=WeaponInfo["AttackExistTime"]
+    SingleTarget=WeaponInfo["SingleTarget"]
     MaxRange=WeaponInfo["MaxRange"]
     KnockBack=WeaponInfo["KnockBack"]
     GuardingValue=WeaponInfo["GuardingValue"]
     EnergyNeed=WeaponInfo["EnergyNeed"]
-    AttackType=WeaponInfo["AttackType"]
+    #AttackType=WeaponInfo["AttackType"]
     RigidTime=WeaponInfo["RigidTime"]
+    $WeaponBody/AnimatedSprite.offset=WeaponInfo["CenterOffset"]
+    $WeaponBody/AnimatedSprite.animation=Name
+    DamageAreaRect=WeaponInfo["DamageAreaRect"]
+    DamageAreaOffset=WeaponInfo["DamageAreaOffset"]
+    $ColdTimer.wait_time=WeaponInfo["ColdTime"]
 
     Attack*=_AttackAbility
     KnockBack*=_KnockBackAbility
@@ -50,8 +61,11 @@ func attack():#对着瞄准方向进行攻击
         return
     get_tree().call_group("enermy","raise_guard",global_position,GuardingValue)
     var NewDamageArea=DamageArea.instance()
-    NewDamageArea.init("test_damage_area",Attack,Direction,Owner,Owner.CreatureStatus.Camp,KnockBack)
-    self.add_child(NewDamageArea)
+    NewDamageArea.init(Attack,SingleTarget,AttackExistTime,Direction,Owner,Owner.CreatureStatus.Camp,KnockBack)
+    $WeaponBody.add_child(NewDamageArea)
+    NewDamageArea.get_node("CollisionShape2D").shape.extents=DamageAreaRect
+    NewDamageArea.position=DamageAreaOffset
+    NewDamageArea.get_node("CollisionShape2D").scale=$WeaponBody/AnimatedSprite.scale
     Durability-=1
     if Durability<=0:
         Durability=0
@@ -61,6 +75,7 @@ func attack():#对着瞄准方向进行攻击
     if Owner.Identifier=="Player":
         Global.OverworldUIs.update_weapon_choice()
         Global.OverworldUIs.weapon_reload_change("MeleeWeapon")
+    $AnimationPlayer.play(Name)
 
 func _on_ColdTimer_timeout():
     if Durability:

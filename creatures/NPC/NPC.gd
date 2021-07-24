@@ -40,15 +40,16 @@ func init(_Name:String,_AImode:String):
             MaxEnergy=100
             LoadLimit=50
             CreatureStatus.init(100,100,0,[3,5,5],"Player",$CollisionShape2D,[1,1,1,1])
-            RangedWeapon.init("test_ranged_weapon",-1,self,CreatureStatus.Ability["ranged_damage"],1,1)
+            RangedWeapon.init("9mm手枪",-1,self,CreatureStatus.Ability["ranged_damage"],1,1)
             RangedWeapon.set_bullet_num()
-            MeleeWeapon.init("test_melee_weapon",-1,self,CreatureStatus.Ability["melee_damage"],1)
+            MeleeWeapon.init("马桶橛子",-1,self,CreatureStatus.Ability["melee_damage"],1)
             FollowDistance=Vector2(200,100)
             FightingFollowDistance=Vector2(400,300)
         _:
             print("Invalid NPC name \"",Name,"\"!")
             queue_free()      
-   
+
+
 func change_weapon(Type:String,NumInBackpack:int):
     if NumInBackpack<0 or Type=="null":
         get_node(Type).Enable=false
@@ -146,7 +147,8 @@ func AIFunction():#进行AI间的切换，以及执行不同的AI操作
                     collision=Global.detect_collision_in_line(global_position,AimPosition,[self], 1)
                     #如果不会碰到障碍物，则射击
                     if !collision and (AimPosition-global_position).length()<=RangedWeapon.MaxRange:
-                        RangedWeapon.Direction=(AimPosition-global_position).normalized()
+                        RangedWeapon.TargetPosition=AimPosition
+                        RangedWeapon.direction_function()
                         RangedWeapon.shoot()
             #如果敌人在近战武器范围内，则用近战武器攻击（不需要花时间切换）
             MeleeWeapon.Direction=(Target.global_position-global_position).normalized()

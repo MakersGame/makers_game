@@ -7,7 +7,9 @@ var Durability:float            #武器耐久度
 var MaxDurability:float         #武器耐久度上限
 var Enable:bool=false           #是否处于战斗状态
 var Attackable:bool=true        #是否可以发射子弹，要考虑到发射冷却和换弹
+var TargetPosition:Vector2      #目标坐标
 var Direction:Vector2           #武器对准的方向，也决定子弹和动画的方向
+var ForceDirection:Vector2      #强制瞄准方向
 var Attack:float                #攻击力
 var AutoAttack:bool             #是否可以连射
 var Shooting:bool=false         #是否按住攻击键，连射的武器在按住时持续攻击
@@ -22,6 +24,8 @@ var GuardingValue:float         #攻击造成的警戒值
 var RigidTime:float             #使用者每次攻击后的僵直时间
 var Owner                       #武器的使用者
 var BulletType:String           #子弹型号
+var BulletOffset:Vector2
+
 
 var Bullet=preload("res://weapons/ranged/bullet/bullet.tscn")
 
@@ -33,9 +37,12 @@ func init(_Name:String,_Durability:float,_Owner,_AttackAbility:float,_ReloadAbil
     Enable=true
     if ReferenceList.WeaponReference.get(Name)==null:
         print("Invalid ranged weapon name \"",Name,"\"!")
-        queue_free() 
+        queue_free()
         return
     var WeaponInfo=ReferenceList.WeaponReference[Name]
+    $AnimatedSprite.animation=Name
+    $AnimatedSprite.offset=WeaponInfo["CenterOffset"]
+    $AnimatedSprite/BulletPosition.position=WeaponInfo["BulletOffset"]
     MaxDurability=WeaponInfo["MaxDurability"]
     if _Durability==-1:
         Durability=MaxDurability
@@ -54,41 +61,59 @@ func init(_Name:String,_Durability:float,_Owner,_AttackAbility:float,_ReloadAbil
     KnockBack=WeaponInfo["KnockBack"]
     BulletSpeed=WeaponInfo["BulletSpeed"]
     GuardingValue=WeaponInfo["GuardingValue"]
-    RigidTime=WeaponInfo["RigidTime"] 
+    RigidTime=WeaponInfo["RigidTime"]
             
     Attack*=_AttackAbility
     $ReloadTimer.wait_time*=_ReloadAbility
     KnockBack*=_KnockBackAbility
     
 func _physics_process(delta):
+    direction_function()
     if AutoAttack and Shooting:
         shoot()
+
+
+func direction_function():
+    var DirectionAngle
+    if $AnimatedSprite.flip_v:
+        DirectionAngle=(TargetPosition-global_position).angle()+asin($AnimatedSprite/BulletPosition.position.y*$AnimatedSprite.scale.y/(TargetPosition-global_position).length())
+    else:
+        DirectionAngle=(TargetPosition-global_position).angle()-asin($AnimatedSprite/BulletPosition.position.y*$AnimatedSprite.scale.y/(TargetPosition-global_position).length())
+    if ForceDirection==Vector2(0,0):
+        Direction=Vector2(cos(DirectionAngle),sin(DirectionAngle))
+    else:
+        Direction=ForceDirection
     rotation=Direction.angle()
     if rotation<-PI/2 or rotation>PI/2:
         $AnimatedSprite.flip_v=true
     else:
         $AnimatedSprite.flip_v=false
-    if rotation>=0:
-        z_index=0
-    else:
-        z_index=-1
 
+    
+    if $AnimatedSprite.flip_v:
+        $AnimatedSprite/BulletPosition.position.y*=-1
+        BulletOffset=$AnimatedSprite/BulletPosition.global_position
+        $AnimatedSprite/BulletPosition.position.y*=-1
+    else:
+        BulletOffset=$AnimatedSprite/BulletPosition.global_position
+    
 func shoot():#（试图）开枪
     if !Enable or !Attackable:
         return
+    Owner.reset_rigid_timer(RigidTime)
+    direction_function()
     get_tree().call_group("enermy","raise_guard",global_position,GuardingValue)
     var NewBullet=Bullet.instance()
     Global.CurrentScene.add_child(NewBullet)
     var TempAngle=(randf()-0.5)*RandomAngle*PI/180
     var RandomDirection=Vector2(Direction.x*cos(TempAngle)+Direction.y*sin(TempAngle),-Direction.x*sin(TempAngle)+Direction.y*cos(TempAngle))
-    NewBullet.init(BulletType,global_position,Attack,RandomDirection,MaxRange,Owner,KnockBack)
+    NewBullet.init(BulletType,BulletOffset,Attack,BulletSpeed,RandomDirection,MaxRange,Owner,KnockBack)
     $ColdTimer.start()
     BulletNum-=1
     Durability-=1
     if Durability<0:
         Durability=0
     Attackable=false
-    Owner.reset_rigid_timer(RigidTime)
     if Owner.Identifier=="Player":
         Global.OverworldUIs.update_weapon_choice()
 
@@ -128,5 +153,5 @@ func _on_ReloadTimer_timeout():#重新装弹完成
     if $ColdTimer.time_left==0 and Durability:
         Attackable=true
     if Owner.Identifier=="Player":
-        Global.OverworldUIs.update_weapon_choice() 
-        Global.OverworldUIs.weapon_reload_change("RangedWeapon") 
+        Global.OverworldUIs.update_weapon_choice()
+        Global.OverworldUIs.weapon_reload_change("RangedWeapon")

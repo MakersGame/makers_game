@@ -15,7 +15,15 @@ var ItemRference={
         "Weight":0.01,
         "Usable":false,
         "Price":0.5,
-        "Description":"0.5毫米子弹，常用于冲锋枪。"
+        "Description":"常用于手枪。"
+       },
+    "雷明顿16号弹":{
+        "ID":12,
+        "Type":"Bullet",
+        "Weight":0.02,
+        "Usable":false,
+        "Price":1,
+        "Description":"常用于老式霰弹枪。"
        },
     "绷带":{
         "ID":21,
@@ -28,58 +36,86 @@ var ItemRference={
    }
 
 var WeaponReference={
-    "test_melee_weapon":{
-        "ID":-1,
+    "马桶橛子":{
+        "ID":1,
         "Type":"MeleeWeapon",
         "Weight":3,
         "MaxDurability":200,
+        "Attack":1,
+        "AttackExistTime":0.5,
+        "SingleTarget":false,
+        "MaxRange":70,
+        "KnockBack":150,
+        "EnergyNeed":20,
+        "GuardingValue":300,
+        "DamageAreaRect":Vector2(10,5.5),
+        "RigidTime":0.5,
+        "ColdTime":2,
+        "CenterOffset":Vector2(4,0),
+        "DamageAreaOffset":Vector2(21,1.5),
+        "Description":"马桶橛子，上古神器。\n攻击力：5\n攻速：中等\n击退力：高"
+       },
+    "EX咖喱棒":{
+        "ID":2,
+        "Type":"MeleeWeapon",
+        "Weight":10,
+        "MaxDurability":200,
         "Attack":20,
-        "MaxRange":80,
-        "KnockBack":100,
+        "AttackExistTime":0.1,
+        "SingleTarget":true,
+        "MaxRange":90,
+        "KnockBack":50,
         "EnergyNeed":20,
         "GuardingValue":600,
-        "AttackType":"test_damage_area",
-        "RigidTime":0.5,
-        "Description":"测试用近战武器。\n攻击力：10\n攻速：较慢\n击退力：中等"
+        "DamageAreaRect":Vector2(13,2),
+        "RigidTime":1,
+        "ColdTime":3,
+        "CenterOffset":Vector2(14,1),
+        "DamageAreaOffset":Vector2(62,0.6),
+        "Description":"亚瑟王之剑（迫真）。\n攻击力：20\n攻速：较慢\n击退力：较高"
        },
-    "test_ranged_weapon":{
-        "ID":-2,
+    "9mm手枪":{
+        "ID":11,
         "Type":"RangedWeapon",
-        "Weight":4,
-        "MaxDurability":1000,
-        "Attack":1,
-        "AutoAttack":true,
-        "BulletType":"9mm子弹",
-        "MagazineCapacity":50,
-        "RigidTime":0.3,
-        "ColdTime":0.2,
-        "ReloadTime":3,
-        "RandomAngle":2,
-        "MaxRange":500,
-        "KnockBack":10,
-        "BulletSpeed":15,
-        "GuardingValue":1200,
-        "Description":"测试用远程武器。\n攻击力：1\n使用子弹：test_bullet\n攻速：快\n击退力：低"
-       },
-    "test_ranged_weapon1":{
-        "ID":-3,
-        "Type":"RangedWeapon",
-        "Weight":4,
+        "Weight":2.5,
         "MaxDurability":100,
         "Attack":10,
         "AutoAttack":false,
         "BulletType":"9mm子弹",
         "MagazineCapacity":10,
-        "RigidTime":0.5,
-        "ColdTime":0.5,
+        "RigidTime":0.6,
+        "ColdTime":0.6,
         "ReloadTime":3,
         "RandomAngle":2,
         "MaxRange":600,
-        "KnockBack":20,
+        "KnockBack":8,
         "BulletSpeed":15,
         "GuardingValue":1500,
-        "Description":"第二把测试用远程武器。\n攻击力：10\n使用子弹：test_bullet\n攻速：较快\n击退力：较低"
-       }
+        "Description":"9mm手枪。\n攻击力：10\n使用子弹：9mm子弹\n攻速：一般\n击退力：低",
+        "CenterOffset":Vector2(5,0),
+        "BulletOffset":Vector2(15,-4)
+       },
+    "老式霰弹枪":{
+        "ID":12,
+        "Type":"RangedWeapon",
+        "Weight":6,
+        "MaxDurability":100,
+        "Attack":25,
+        "AutoAttack":false,
+        "BulletType":"雷明顿16号弹",           #记得改
+        "MagazineCapacity":6,
+        "RigidTime":1.2,
+        "ColdTime":1.2,
+        "ReloadTime":3.5,
+        "RandomAngle":5,
+        "MaxRange":350,
+        "KnockBack":15,
+        "BulletSpeed":15,
+        "GuardingValue":1800,
+        "Description":"老式霰弹枪\n攻击力：25\n使用子弹：9mm子弹（主要是还没做其他子弹\n攻速：较慢\n击退力：中",
+        "CenterOffset":Vector2(9,0),
+        "BulletOffset":Vector2(21,-3)   
+        }
    }
 
 var EnermyReference={

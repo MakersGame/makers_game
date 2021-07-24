@@ -1,8 +1,8 @@
 extends Area2D
 
 var identifier="DamageArea"
-var Name:String                 #用于辨别攻击种类，名字可能没什么实际意义
 var Attack:float   
+var SingleDamage:bool           #是否单体伤害
 var Direction:Vector2 
 var Camp:String="Player"        #发起攻击的阵营，和发射者一致，决定会对谁造成伤害
 var KnockBack:float             #对目标造成的击退力
@@ -10,25 +10,18 @@ var DamageList:Dictionary={}    #造成伤害的目标列表，防止二次伤�
 var Owner:Object                #发起这次攻击的对象实例
 
 
-func init(_Name:String,_Attack:float,_Direction:Vector2,_Owner:Object,_Camp:String,_KnockBack:float):
-    Name=_Name
+func init(_Attack:float,_SingleDamage:bool,_ExistTime:float,_Direction:Vector2,_Owner:Object,_Camp:String,_KnockBack:float):
     Attack=_Attack
+    SingleDamage=_SingleDamage
     Direction=_Direction
     Camp=_Camp
     KnockBack=_KnockBack
     Owner=_Owner
-    match(Name):
-        "test_damage_area":
-            $DestroyTimer.wait_time=0.5
-        _:
-            print("Invalid damage area name \"",Name,"\"!")
-            queue_free()    
-    visible=false
+    $DestroyTimer.wait_time=_ExistTime
+    $DestroyTimer.start()
 
 func _physics_process(delta):
     visible=true#避免第一帧方向错误采取的操作，可以改进
-    rotation_degrees=Direction.angle()*180/PI
-    global_position=Vector2(Owner.global_position.x+45*cos(Direction.angle()),Owner.global_position.y+45*sin(Direction.angle()))
 
 func _on_DamageArea_body_shape_entered(body_id, body, body_shape, local_shape):
     #当有实例进入伤害范围时触发此函数
@@ -38,10 +31,14 @@ func _on_DamageArea_body_shape_entered(body_id, body, body_shape, local_shape):
         return
     elif body.CreatureStatus.Camp=="Player" and Camp=="Enermy":
         if DamageList.get(body)==null:
-            hit_target(body)        
+            hit_target(body)  
+            if SingleDamage:
+                $CollisionShape2D.queue_free()      
     elif body.CreatureStatus.Camp=="Enermy" and Camp=="Player":
         if DamageList.get(body)==null:
             hit_target(body)
+            if SingleDamage:
+                $CollisionShape2D.queue_free()   
 
 func hit_target(target):#命中目标，并造成相应的击退
     if target!=null:

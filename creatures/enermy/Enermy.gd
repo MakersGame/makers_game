@@ -164,7 +164,7 @@ func attack():#攻击
     if !Attackable:
         return
     var NewDamageArea=DamageArea.instance()
-    NewDamageArea.init("test_damage_area",$CreatureStatus.Attack,FaceDirection.normalized(),self,CreatureStatus.Camp,100)
+    NewDamageArea.init($CreatureStatus.Attack,true,0.5,FaceDirection.normalized(),self,CreatureStatus.Camp,100)
     self.add_child(NewDamageArea)
     Attackable=false
     $AttackColdTimer.start()

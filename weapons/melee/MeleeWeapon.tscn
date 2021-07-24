@@ -1,13 +1,67 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://weapons/melee/MeleeWeapon.gd" type="Script" id=1]
+[ext_resource path="res://global/ReferenceList/Sprites/WeaponSprites.tres" type="SpriteFrames" id=2]
+
+[sub_resource type="Animation" id=3]
+resource_name = "EX咖喱棒"
+length = 0.8
+tracks/0/type = "value"
+tracks/0/path = NodePath("WeaponBody:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.4, 0.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ -45.0, 45.0, 45.0, 0.0 ]
+}
+
+[sub_resource type="Animation" id=1]
+resource_name = "马桶橛子"
+length = 0.8
+tracks/0/type = "value"
+tracks/0/path = NodePath("WeaponBody:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.03, 0.7, 0.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 25, 0 ), Vector2( 25, 0 ), Vector2( 0, 0 ) ]
+}
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 13, 2 )
 
 [node name="MeleeWeapon" type="Node2D"]
-z_index = 20
 script = ExtResource( 1 )
 
 [node name="ColdTimer" type="Timer" parent="."]
 wait_time = 3.0
 one_shot = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+"anims/EX咖喱棒" = SubResource( 3 )
+"anims/马桶橛子" = SubResource( 1 )
+
+[node name="WeaponBody" type="Node2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WeaponBody"]
+position = Vector2( 62, 0.6 )
+rotation = 0.00046032
+scale = Vector2( 3, 3 )
+shape = SubResource( 2 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="WeaponBody"]
+scale = Vector2( 3, 3 )
+z_index = 1
+frames = ExtResource( 2 )
+animation = "EX咖喱棒"
+offset = Vector2( 14, 1 )
 
 [connection signal="timeout" from="ColdTimer" to="." method="_on_ColdTimer_timeout"]

@@ -15,9 +15,14 @@ one_shot = true
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 scale = Vector2( 3, 3 )
+z_index = 1
 frames = ExtResource( 2 )
-animation = "weapon2"
-offset = Vector2( 6.5, 0 )
+animation = "老式霰弹枪"
+offset = Vector2( 9, 0 )
+
+[node name="BulletPosition" type="Node2D" parent="AnimatedSprite"]
+position = Vector2( 21, -3 )
+scale = Vector2( 3, 0.02 )
 
 [connection signal="timeout" from="ColdTimer" to="." method="_on_ColdTimer_timeout"]
 [connection signal="timeout" from="ReloadTimer" to="." method="_on_ReloadTimer_timeout"]

@@ -11,11 +11,13 @@ var Camp:String="Player"            #这颗子弹的阵营，和发射者一致�
 var MaxRange:float                  #子弹的最大射程
 var KnockBack:float                 #击退力
 var TempDistance:float=0            #子弹当前已经飞行的距离
+var CurrentAreaCenter               #当前区块中心坐标
 
-func init(_Name,_Position,_Attack,_Direction,_MaxRange,_Owner,_KnockBack):
+func init(_Name,_Position,_Attack,_Speed,_Direction,_MaxRange,_Owner,_KnockBack):
     Name=_Name
     global_position=_Position
     Attack=_Attack
+    Speed=_Speed
     Direction=_Direction
     rotation_degrees=Direction.angle()*180/PI
     MaxRange=_MaxRange
@@ -23,16 +25,20 @@ func init(_Name,_Position,_Attack,_Direction,_MaxRange,_Owner,_KnockBack):
     Camp=Owner.CreatureStatus.Camp
     KnockBack=_KnockBack
     Exist=true
-    match(Name):
-        "9mm子弹":
-            Speed=15#别看现在只有一个speed，还要考虑动画和碰撞呢
-        _:
-            print("Invalid bullet name \"",Name,"\"!")
-            queue_free() 
-    z_index=100        
+    CurrentAreaCenter=Owner.CurrentAreaCenter
+    if ReferenceList.ItemRference.get(Name)==null:
+        print("Invalid bullet name \"",Name,"\"!")
+        queue_free() 
+    $AnimatedSprite.animation=Name  
+
             
 func _physics_process(delta):
     move_and_detect()
+   
+    if CurrentAreaCenter==null:
+        z_index=100
+    else:
+        z_index=floor(((global_position-CurrentAreaCenter).y)/20)+3
 
 func move_and_detect():
     if !Exist:#子弹命中之后不会马上消失，但是造成伤害之后无法再次进行判定

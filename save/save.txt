@@ -5,18 +5,19 @@
 @GoodInBackpack
 木材 50
 9mm子弹 1000
+雷明顿16号弹 100
 绷带 10
 @end
 
 @WeaponInBackpack
-test_melee_weapon 200
-test_melee_weapon 134
-test_melee_weapon 105
-test_melee_weapon 98
-test_melee_weapon 1
-test_ranged_weapon 1000
-test_ranged_weapon 500
-test_ranged_weapon 0
-test_ranged_weapon 800
-test_ranged_weapon1 99
+EX咖喱棒 200
+EX咖喱棒 100
+马桶橛子 200
+马桶橛子 100
+9mm手枪 100
+9mm手枪 90
+9mm手枪 50
+9mm手枪 20
+老式霰弹枪 100
+老式霰弹枪 50
 @end
