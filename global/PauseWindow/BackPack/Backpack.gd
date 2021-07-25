@@ -65,6 +65,11 @@ func update_items_in_backpack():
     $QuickUseItem.hide()
     FocusChangable=true
     $ItemDetail/Buttons/Drop.mouse_filter=Control.MOUSE_FILTER_PASS
+    $ItemDetail/Buttons/Use.mouse_filter=Control.MOUSE_FILTER_PASS
+    $ItemDetail/Buttons/QuickUse.mouse_filter=Control.MOUSE_FILTER_PASS
+    
+    $ChoiceItemUserWindow.update_item_user()
+    $ChoiceItemUserWindow.hide()
 
 func page_change_action():
     var Inventories=$InventoryList.get_children()
@@ -144,10 +149,28 @@ func reset_quick_use_item(num):
     
 
 func _on_Use_pressed():
-    if !FocusChangable:
+    if !FocusChangable and !$ChoiceItemUserWindow.visible:
         return
+    elif FocusChangable and !$ChoiceItemUserWindow.visible:
+        FocusChangable=false
+        !$ChoiceItemUserWindow.show()
+        $ItemDetail/Buttons/Drop.mouse_filter=Control.MOUSE_FILTER_IGNORE
+        $ItemDetail/Buttons/QuickUse.mouse_filter=Control.MOUSE_FILTER_IGNORE
+    elif !FocusChangable:
+        FocusChangable=true
+        !$ChoiceItemUserWindow.hide()
+        $ItemDetail/Buttons/Drop.mouse_filter=Control.MOUSE_FILTER_PASS
+        $ItemDetail/Buttons/QuickUse.mouse_filter=Control.MOUSE_FILTER_PASS
+    
+func use_item(User:Object):
     if ReferenceList.ItemRference[SequencedItem[7*(CurrentPage-1)+InventoryChosen-1]]["Usable"]:
-        ReferenceList.use_item(Global.PlayerAndNPCs[0],SequencedItem[7*(CurrentPage-1)+InventoryChosen-1])
+        ReferenceList.use_item(User,SequencedItem[7*(CurrentPage-1)+InventoryChosen-1])
+    else:
+        return
+    FocusChangable=true
+    !$ChoiceItemUserWindow.hide()
+    $ItemDetail/Buttons/Drop.mouse_filter=Control.MOUSE_FILTER_PASS
+    $ItemDetail/Buttons/QuickUse.mouse_filter=Control.MOUSE_FILTER_PASS
     
 func _on_Drop_pressed():
     if !FocusChangable and !$DropItemWindow.visible:

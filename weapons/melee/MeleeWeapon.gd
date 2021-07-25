@@ -8,6 +8,7 @@ var MaxDurability:float         #武器耐久度上限
 var Enable:bool=true            #是否处于战斗状态
 var Attackable:bool=false       #是否可以进行攻击
 var Direction:Vector2           #武器对准的方向，也决定攻击和动画的方向
+var ForceDirection:Vector2=Vector2()#强制瞄准方向
 var Attack:float                #攻击力
 var SingleTarget:bool           #是否为单体伤害
 var AttackExistTime:float       #攻击存在的时间
@@ -21,6 +22,8 @@ var AttackType:String           #范围攻击的类型
 var DamageAreaOffset:Vector2    #伤害范围的相对位置
 var DamageAreaRect:Vector2      
 var DamageArea=preload("res://weapons/melee/damage_area/DamageArea.tscn")
+
+
 
 func init(_Name:String,_Durability,_Owner:Object,_AttackAbility:float,_KnockBackAbility:float):
     Name=_Name
@@ -54,7 +57,13 @@ func init(_Name:String,_Durability,_Owner:Object,_AttackAbility:float,_KnockBack
 
     Attack*=_AttackAbility
     KnockBack*=_KnockBackAbility
+    ForceDirection=Vector2(0,0)
 
+func _physics_process(delta):
+    if ForceDirection==Vector2():
+        rotation=Direction.angle()
+    else:
+        rotation=ForceDirection.angle()
 
 func attack():#对着瞄准方向进行攻击
     if !Enable or !Attackable:
@@ -76,6 +85,12 @@ func attack():#对着瞄准方向进行攻击
         Global.OverworldUIs.update_weapon_choice()
         Global.OverworldUIs.weapon_reload_change("MeleeWeapon")
     $AnimationPlayer.play(Name)
+    ForceDirection=Direction
+    Owner.ForceDirection=Owner.FaceDirection
+    yield($AnimationPlayer,"animation_finished")
+    ForceDirection=Vector2()
+    Owner.ForceDirection=Vector2()
+    
 
 func _on_ColdTimer_timeout():
     if Durability:

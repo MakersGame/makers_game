@@ -27,6 +27,8 @@ func update_team():
         $Members/NPC3.hide()
     update_detail()
 
+
+
 func update_detail():
     $Detail/Name.text="姓名:"+DetailedMember.Name
     $Detail/Level.text="等级：未知"#之后完善
@@ -103,6 +105,8 @@ func weapon_change(num:int):
     Global.update_pause_window()   
         
 func _on_change_melee_weapon():
+    if DetailedMember.get_node("RigidTimer").time_left:
+        return
     if WeaponTypeChosen!="MeleeWeapon":
         $WeaponChoiceWindow.position.x=0
         $WeaponChoiceWindow.update_weapons("MeleeWeapon")
@@ -113,6 +117,8 @@ func _on_change_melee_weapon():
         WeaponTypeChosen=""
 
 func _on_change_ranged_weapon():
+    if DetailedMember.get_node("RigidTimer").time_left:
+        return
     if WeaponTypeChosen!="RangedWeapon":
         $WeaponChoiceWindow.position.x=200
         $WeaponChoiceWindow.update_weapons("RangedWeapon")
@@ -123,6 +129,8 @@ func _on_change_ranged_weapon():
         WeaponTypeChosen=""
 
 func _on_TakeOffMeleeWeaponButton_pressed():
+    if DetailedMember.get_node("RigidTimer").time_left:
+        return
     if DetailedMember.get_node("MeleeWeapon").Enable:
         var OriginalWeapon={"Name":DetailedMember.get_node("MeleeWeapon").Name,"Durability":DetailedMember.get_node("MeleeWeapon").Durability}
         Global.WeaponInBackpack.push_back(OriginalWeapon)
@@ -132,6 +140,8 @@ func _on_TakeOffMeleeWeaponButton_pressed():
     Global.update_pause_window() 
         
 func _on_TakeOffRangedWeaponButton_pressed():
+    if DetailedMember.get_node("RigidTimer").time_left:
+        return
     if DetailedMember.get_node("RangedWeapon").Enable:
         var OriginalWeapon={"Name":DetailedMember.get_node("RangedWeapon").Name,"Durability":DetailedMember.get_node("RangedWeapon").Durability}
         Global.WeaponInBackpack.push_back(OriginalWeapon)

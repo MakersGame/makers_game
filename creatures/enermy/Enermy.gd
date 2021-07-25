@@ -3,7 +3,7 @@ extends KinematicBody2D
 
 var Identifier="Enermy"
 var Name:String                         #怪物名称，也代表种类
-var Exist:bool=true
+var Exist:bool=false
 var TargetPosition:Vector2              #暂定，可能无此变量
 var Target                              #锁定的目标，为玩家或NPC
 var BirthPosition:Vector2               #出生位置，回溯模式下会回到此处
@@ -23,12 +23,15 @@ var SightAngle:float                    #扇形视野的夹角，采用角度制
 var GuardingPosition:Vector3            #警戒坐标，前往此坐标查看，z值为警戒指数
 var Territory:Vector3                   #圆形领域，xy代表中心坐标，z代表半径
 
+var CurrentAreaCenter=null
 var DamageArea=preload("res://weapons/melee/damage_area/DamageArea.tscn")   
    
 onready var CreatureStatus=$CreatureStatus
 
+func _init():
+    AImode="default"
 
-func init(_Name:String,_FaceDirection:Vector2,_TempHealth:float):
+func init(_Name:String,_FaceDirection:Vector2,_TempHealth:float,_CurrentAreaCenter):
     Name=_Name
     TargetPosition=global_position
     BirthPosition=global_position
@@ -50,10 +53,16 @@ func init(_Name:String,_FaceDirection:Vector2,_TempHealth:float):
     AfterAttackTime=ReferenceList.EnermyReference[Name]["AfterAttackTime"]
               
     Attackable=true 
+    Exist=true
         
 func _physics_process(delta):
     if !Exist:
         return
+    if CurrentAreaCenter==null:
+        z_index=100
+    else:
+        z_index=floor((global_position-CurrentAreaCenter).y/20)
+    
     if !CreatureStatus.alive():
         die()#死了，但不会立刻消失。动画会持续一小段时间
     Target=CreatureStatus.TargetEnermy
@@ -79,8 +88,9 @@ func detect():
         if !collision and TempMinimumDis>(Tar.global_position-global_position).length():
             res=Tar
             TempMinimumDis=(Tar.global_position-global_position).length()
-            if CreatureStatus.AggroValue.get(Tar)==null:
-                CreatureStatus.add_aggro(100,Tar)
+            if CreatureStatus.AggroValue.get(Tar)==null or CreatureStatus.AggroValue[Tar]<100:
+                CreatureStatus.AggroValue[Tar]=240
+                CreatureStatus.add_aggro(1,Tar)
         elif collision and CreatureStatus.AggroValue.get(Tar)!=null:
                 CreatureStatus.dec_aggro(0.4,Tar)
     return res#结果为离自己最近的被检测到的敌人，若没有检测到则返回null

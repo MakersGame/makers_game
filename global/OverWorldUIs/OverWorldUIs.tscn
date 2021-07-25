@@ -316,6 +316,7 @@ centered = false
 offset = Vector2( -3, -3 )
 
 [node name="Tween" type="Tween" parent="WeaponChoice/MeleeWeapon"]
+pause_mode = 1
 
 [node name="RangedWeapon" type="Node2D" parent="WeaponChoice"]
 position = Vector2( 120, 20 )

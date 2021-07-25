@@ -37,6 +37,12 @@ position = Vector2( -1500, 400 )
 [node name="Enermy3" parent="Enermies" instance=ExtResource( 1 )]
 position = Vector2( -1700, -600 )
 
+[node name="Enermy4" parent="Enermies" instance=ExtResource( 1 )]
+position = Vector2( 600, 600 )
+
+[node name="Enermy5" parent="Enermies" instance=ExtResource( 1 )]
+position = Vector2( -700, -500 )
+
 [node name="Synthesis_table" parent="." instance=ExtResource( 3 )]
 visible = false
 position = Vector2( 247.295, 81.1731 )

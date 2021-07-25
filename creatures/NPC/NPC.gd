@@ -11,6 +11,8 @@ var Target:Object                   #追踪中的目标
 var DistanceToTarget:float          #自身到目标的距离
 var EnermyInArea=[]                 #检测范围内的敌人
 var TargetPosition:Vector2          #目标坐标
+var FaceDirection:Vector2           #面朝方向
+var ForceDirection:Vector2=Vector2()#强制面对方向
 var WeightLimit                     #NPC的最大负重值
 var InTeam:bool=true                #是否在队伍里
 var AImode:String                   #NPC的AI模式，“home"，"defenive"，"following","fighting"，"healing"
@@ -153,6 +155,8 @@ func AIFunction():#进行AI间的切换，以及执行不同的AI操作
             #如果敌人在近战武器范围内，则用近战武器攻击（不需要花时间切换）
             MeleeWeapon.Direction=(Target.global_position-global_position).normalized()
             if DistanceToTarget<=MeleeWeapon.MaxRange and MeleeWeapon.Enable and MeleeWeapon.Attackable and Energy>MeleeWeapon.EnergyNeed:
+                MeleeWeapon.Direction=(Target.global_position-MeleeWeapon.global_position).normalized()
+                MeleeWeapon.rotation=MeleeWeapon.Direction.angle()
                 MeleeWeapon.attack()
             #如果敌人与自身距离小于远程武器射程的一半（暂定），则试图远离敌人
             if DistanceToTarget<=RangedWeapon.MaxRange/2:

@@ -44,7 +44,7 @@ func hit_target(target):#命中目标，并造成相应的击退
     if target!=null:
         target.CreatureStatus.get_hurt(Attack,"melee_damage",Owner)
         DamageList[target]=false
-        var tempKnockback=Vector2(target.KnockBack.x,target.KnockBack.y)*target.KnockBack.z+Direction*KnockBack
+        var tempKnockback=Vector2(target.KnockBack.x,target.KnockBack.y)*target.KnockBack.z+Direction.normalized()*KnockBack
         target.KnockBack.z=tempKnockback.length()
         target.KnockBack.x=tempKnockback.normalized().x
         target.KnockBack.y=tempKnockback.normalized().y

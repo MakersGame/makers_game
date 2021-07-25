@@ -10,6 +10,7 @@ var TiredOut:bool=false                     #是否力竭
 var KeyboardPressState:Array=[0,0,0,0]      #运动方向按键情况
 var PlayerMoveState:Vector2=Vector2()       #当前运动向量
 var FaceDirection:Vector2                   #面朝方向，即鼠标方向
+var ForceDirection:Vector2=Vector2()        #强制面对方向
 var LoadLimit:float                         #主角的最大负重值
 var KnockBack:Vector3                       #被击退值，三维向量，xy表示方向，z表示剩余击退距离，每一帧击退距离呈二次函数
 var WeaponChoice:String                     #"ranged"或"melee"，代表当前选中远程或近战武器
@@ -54,12 +55,20 @@ func change_weapon(Type:String,NumInBackpack:int):
         RangedWeapon.get_node("ReloadTimer").stop()
         Global.OverworldUIs.get_node("WeaponChoice/RangedWeapon/ReloadBar").hide()
     if NumInBackpack<0 and Type!="null":
+        if WeaponChoice=="ranged" and Type=="RangedWeapon":
+            RangedWeapon.hide()
+        elif WeaponChoice=="melee" and Type=="MeleeWeapon":
+            MeleeWeapon.hide()
         get_node(Type).Enable=false
         return
     if Type=="MeleeWeapon":
         MeleeWeapon.init(Global.WeaponInBackpack[NumInBackpack]["Name"],Global.WeaponInBackpack[NumInBackpack]["Durability"],self,CreatureStatus.Ability["melee_damage"],1)
-    elif Type=="RangedWeapon":
+        if WeaponChoice=="melee" and MeleeWeapon.Enable:
+            MeleeWeapon.show()
+    elif Type=="RangedWeapon" and RangedWeapon.Enable:
         RangedWeapon.init(Global.WeaponInBackpack[NumInBackpack]["Name"],Global.WeaponInBackpack[NumInBackpack]["Durability"],self,CreatureStatus.Ability["ranged_damage"],1,1)    
+        if WeaponChoice=="ranged":
+            RangedWeapon.show()
     get_node(Type).Enable=true
 
 func update_area_center(Pos):
@@ -91,7 +100,7 @@ func _input(event):
     if event is InputEventMouseMotion or (event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed):
         FaceDirection=(event.global_position+Global.PlayerCamera.global_position-Vector2(640,360)-global_position).normalized()
         RangedWeapon.TargetPosition=event.global_position+Global.PlayerCamera.global_position-Vector2(640,360)
-        MeleeWeapon.Direction=FaceDirection
+        MeleeWeapon.Direction=(event.global_position+Global.PlayerCamera.global_position-Vector2(640,360)-MeleeWeapon.global_position).normalized()
     if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
         #按下鼠标左键，使用当前武器攻击
         if WeaponChoice=="ranged" and RangedWeapon.Enable:
@@ -236,11 +245,11 @@ func animation_function():
     if (WeaponChoice=="ranged" and !RangedWeapon.Enable) or (WeaponChoice=="melee" and !MeleeWeapon.Enable):
         ani="unarmed"
         $Animations/left_hand.hide()
-        $Animations/right_hand.hide()
+        $Animations/right_hand.hide()  
     else:
         ani="armed"
         $Animations/left_hand.show()
-        $Animations/right_hand.show()
+        $Animations/right_hand.show() 
     var Direction
     if PlayerMoveState==Vector2(0,0) or $RigidTimer.time_left:
         ani+="_stand" 
@@ -248,6 +257,8 @@ func animation_function():
     else:
         ani+="_walk"
         Direction=PlayerMoveState.normalized()
+    if ForceDirection!=Vector2():
+        Direction=ForceDirection
     if Direction.x>0.5:
         ani+="_right"
     elif Direction.x<-0.5:
@@ -267,17 +278,19 @@ func animation_function():
         Weapon=RangedWeapon
     if Weapon==null or !Weapon.Enable:
         return
-    Weapon.rotation=Direction.angle()
+        
+    MeleeWeapon.rotation=Direction.angle()
+    
     if Direction.x>=0 and Direction.x<=0.5 and Direction.y<-0.2:
         $Animations/left_hand.z_index=-1
-        $Animations/left_hand.position=Vector2(-28,-8)
+        $Animations/left_hand.position=Vector2(-24,-8)
         $Animations/right_hand.z_index=-1
-        $Animations/right_hand.position=Vector2(28,8)
+        $Animations/right_hand.position=Vector2(24,8)
         Weapon.global_position=$Animations/left_hand.global_position
         Weapon.z_index=-2
     elif Direction.x>0.5 and  Direction.y<-0.2:
         $Animations/left_hand.z_index=-1
-        $Animations/left_hand.position=Vector2(-24,-12)
+        $Animations/left_hand.position=Vector2(-20,0)
         $Animations/right_hand.z_index=-1
         $Animations/right_hand.position=Vector2(28,4)
         Weapon.global_position=$Animations/left_hand.global_position
@@ -286,7 +299,7 @@ func animation_function():
         $Animations/left_hand.z_index=-1
         $Animations/left_hand.position=Vector2(24,4)
         $Animations/right_hand.z_index=1
-        $Animations/right_hand.position=Vector2(-12,4)
+        $Animations/right_hand.position=Vector2(-16,4)
         Weapon.global_position=$Animations/right_hand.global_position
         Weapon.z_index=0
     elif Direction.x>=0 and Direction.x<0.5 and  Direction.y>-0.2:
@@ -298,21 +311,21 @@ func animation_function():
         Weapon.z_index=0
     elif Direction.x>=-0.5 and Direction.x<=0 and Direction.y<-0.2:
         $Animations/left_hand.z_index=-1
-        $Animations/left_hand.position=Vector2(-28,8)
+        $Animations/left_hand.position=Vector2(-24,8)
         $Animations/right_hand.z_index=-1
-        $Animations/right_hand.position=Vector2(28,-8)
+        $Animations/right_hand.position=Vector2(24,-8)
         Weapon.global_position=$Animations/right_hand.global_position
         Weapon.z_index=-2
     elif Direction.x<=-0.5 and  Direction.y<-0.2:
         $Animations/left_hand.z_index=-1
         $Animations/left_hand.position=Vector2(-28,4)
         $Animations/right_hand.z_index=-1
-        $Animations/right_hand.position=Vector2(24,-12)
+        $Animations/right_hand.position=Vector2(20,0)
         Weapon.global_position=$Animations/right_hand.global_position
         Weapon.z_index=-2
     elif Direction.x<=-0.5 and  Direction.y>=-0.2:
         $Animations/left_hand.z_index=1
-        $Animations/left_hand.position=Vector2(12,4)
+        $Animations/left_hand.position=Vector2(16,4)
         $Animations/right_hand.z_index=-1
         $Animations/right_hand.position=Vector2(-24,4)
         Weapon.global_position=$Animations/left_hand.global_position
@@ -365,6 +378,7 @@ func _on_ActionArea_body_exited(body):
     for i in range(E_Actions.size()):
         if E_Actions[i]["Target"]==body:
             E_Actions.remove(i)
+            return
 
 func E_action():
     for i in E_Actions:
