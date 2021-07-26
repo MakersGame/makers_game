@@ -9,18 +9,26 @@ func _ready():
     Number=int(name.right(9))
     $DurabilityBar.hide()
 
-func update_sprite(ItemName,WeaponNumber:int):
+func update_sprite(ItemName="null",WeaponNumber:int=-1,InHome:bool=false):
     $AnimatedSprite.animation=ItemName
     $DurabilityBar.hide()
     if ItemName=="null" or ReferenceList.ItemRference.get(ItemName)==null:
         $ItemNumber.text=""
     if WeaponNumber>=0:
-        $DurabilityBar.max_value=ReferenceList.WeaponReference[Global.WeaponInBackpack[WeaponNumber]["Name"]]["MaxDurability"]
-        $DurabilityBar.value=Global.WeaponInBackpack[WeaponNumber]["Durability"]
-        $DurabilityBar.max_value=ReferenceList.WeaponReference[Global.WeaponInBackpack[WeaponNumber]["Name"]]["MaxDurability"]
+        if !InHome:
+            $DurabilityBar.max_value=ReferenceList.WeaponReference[Global.WeaponInBackpack[WeaponNumber]["Name"]]["MaxDurability"]
+            $DurabilityBar.value=Global.WeaponInBackpack[WeaponNumber]["Durability"]
+            $DurabilityBar.max_value=ReferenceList.WeaponReference[Global.WeaponInBackpack[WeaponNumber]["Name"]]["MaxDurability"]
+        else:
+            $DurabilityBar.max_value=ReferenceList.WeaponReference[Global.WeaponInHome[WeaponNumber]["Name"]]["MaxDurability"]
+            $DurabilityBar.value=Global.WeaponInHome[WeaponNumber]["Durability"]
+            $DurabilityBar.max_value=ReferenceList.WeaponReference[Global.WeaponInHome[WeaponNumber]["Name"]]["MaxDurability"]
         $DurabilityBar.show()
     elif ReferenceList.ItemRference.get(ItemName)!=null:
-        $ItemNumber.text=String(Global.GoodInBackpack[ItemName])
+        if !InHome:
+            $ItemNumber.text=String(Global.GoodInBackpack[ItemName])
+        else:
+            $ItemNumber.text=String(Global.GoodInHome[ItemName])
 
 func _on_Inventory_mouse_entered():
     CursorOn=true

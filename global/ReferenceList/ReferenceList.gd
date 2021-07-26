@@ -3,7 +3,7 @@ extends Node
 var ItemRference={
     "木材":{
         "ID":1,                                 #ID，代表物品编号，也可以认为是另一种代号
-        "Type":"Material",                      #类型，便于区分
+        "Type":"Resource",                      #类型，便于区分
         "Weight":1,                             #单个物品重量
         "Usable":false,                         #是否可以直接在背包中使用
         "Price":1,                              #单价（出售）

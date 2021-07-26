@@ -34,14 +34,23 @@ func _ready():#游戏最开始会执行一次，之后就不会了
     
 func _input(event):
     if event.is_action_pressed("ui_pause") && !InCraftTable:
-        if GameStatus=="Paused":
+        if GameStatus=="Paused" and $PauseWindow.visible:
             get_tree().paused=false
             GameStatus="PlayerControl"
             $PauseWindow.hide()
-        elif GameStatus=="PlayerControl":
+        elif GameStatus=="PlayerControl" and !$PauseWindow.visible:
             GameStatus="Paused"
             get_tree().paused=true
             $PauseWindow.show()
+    if event.is_action_pressed("test_key"):
+        if GameStatus=="Paused" and $ItemAccess.visible:
+            get_tree().paused=false
+            GameStatus="PlayerControl"
+            $ItemAccess.hide()
+        elif GameStatus=="PlayerControl" and !$ItemAccess.visible:
+            GameStatus="Paused"
+            get_tree().paused=true
+            $ItemAccess.show()
 
 func set_scnene_info():#在进入新场景的时候，记录场景中的所有玩家和NPC，供敌人查看
     PlayerAndNPCs=[]
@@ -96,6 +105,7 @@ func update_pause_window():
     $PauseWindow/Backpack.update_items_in_backpack()
     $PauseWindow/TeamInfo.update_team() 
     $OverWorldUIs.set_ui()   
+    $ItemAccess.update_items()
 
 func send_message(Message:String):
     OverworldUIs.send_message(Message)
