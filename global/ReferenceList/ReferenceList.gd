@@ -52,7 +52,7 @@ var WeaponReference={
         "RigidTime":0.5,
         "ColdTime":2,
         "CenterOffset":Vector2(4,0),
-        "DamageAreaOffset":Vector2(21,1.5),
+        "DamageAreaOffset":Vector2(7,0.5),
         "Description":"马桶橛子，上古神器。\n攻击力：5\n攻速：中等\n击退力：高"
        },
     "EX咖喱棒":{
@@ -71,7 +71,7 @@ var WeaponReference={
         "RigidTime":1,
         "ColdTime":3,
         "CenterOffset":Vector2(14,1),
-        "DamageAreaOffset":Vector2(62,0.6),
+        "DamageAreaOffset":Vector2(21,0.2),
         "Description":"亚瑟王之剑（迫真）。\n攻击力：20\n攻速：较慢\n击退力：较高"
        },
     "9mm手枪":{

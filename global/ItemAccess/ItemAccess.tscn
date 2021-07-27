@@ -33,6 +33,10 @@ font_data = ExtResource( 1 )
 size = 20
 font_data = ExtResource( 1 )
 
+[sub_resource type="DynamicFont" id=3]
+size = 40
+font_data = ExtResource( 1 )
+
 [sub_resource type="DynamicFont" id=4]
 size = 40
 font_data = ExtResource( 1 )
@@ -42,10 +46,6 @@ size = 40
 font_data = ExtResource( 1 )
 
 [sub_resource type="DynamicFont" id=6]
-size = 40
-font_data = ExtResource( 1 )
-
-[sub_resource type="DynamicFont" id=3]
 size = 20
 font_data = ExtResource( 1 )
 
@@ -178,7 +178,7 @@ __meta__ = {
 }
 
 [node name="Buttons" type="Node2D" parent="ItemInBackpack/ItemDetail"]
-position = Vector2( 200, 450 )
+position = Vector2( 230, 470 )
 
 [node name="Drop" type="TextureButton" parent="ItemInBackpack/ItemDetail/Buttons"]
 margin_right = 100.0
@@ -203,7 +203,7 @@ position = Vector2( 500, 230 )
 z_index = 15
 
 [node name="LineEdit" parent="ItemInBackpack/ItemDetail/DropItemWindow" index="1"]
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = SubResource( 3 )
 
 [node name="Timer2" type="Timer" parent="ItemInBackpack/ItemDetail/DropItemWindow/LineEdit" index="0"]
 wait_time = 0.65
@@ -218,10 +218,10 @@ wait_time = 0.65
 items = [ "剪切", null, 0, false, false, 0, 268435544, null, "", false, "复制", null, 0, false, false, 1, 268435523, null, "", false, "粘贴", null, 0, false, false, 2, 268435542, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "全选", null, 0, false, false, 4, 268435521, null, "", false, "清除", null, 0, false, false, 3, 0, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "撤销", null, 0, false, false, 5, 268435546, null, "", false, "重做", null, 0, false, false, 6, 301989978, null, "", false ]
 
 [node name="OKbutton" parent="ItemInBackpack/ItemDetail/DropItemWindow" index="2"]
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 4 )
 
 [node name="QuitButton" parent="ItemInBackpack/ItemDetail/DropItemWindow" index="3"]
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 4 )
 
 [node name="DropWeaponWindow" type="Node2D" parent="ItemInBackpack/ItemDetail"]
 visible = false
@@ -236,7 +236,7 @@ margin_left = -180.0
 margin_top = 20.0
 margin_right = -30.0
 margin_bottom = 80.0
-custom_fonts/font = SubResource( 6 )
+custom_fonts/font = SubResource( 5 )
 text = "确定"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -247,7 +247,7 @@ margin_left = 30.0
 margin_top = 20.0
 margin_right = 180.0
 margin_bottom = 80.0
-custom_fonts/font = SubResource( 6 )
+custom_fonts/font = SubResource( 5 )
 text = "取消"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -262,7 +262,7 @@ z_index = 15
 texture = ExtResource( 21 )
 
 [node name="LineEdit" parent="ItemInBackpack/ItemDetail/AccessItemWindow" index="1"]
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = SubResource( 3 )
 
 [node name="Timer2" type="Timer" parent="ItemInBackpack/ItemDetail/AccessItemWindow/LineEdit" index="0"]
 wait_time = 0.65
@@ -277,10 +277,10 @@ wait_time = 0.65
 items = [ "剪切", null, 0, false, false, 0, 268435544, null, "", false, "复制", null, 0, false, false, 1, 268435523, null, "", false, "粘贴", null, 0, false, false, 2, 268435542, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "全选", null, 0, false, false, 4, 268435521, null, "", false, "清除", null, 0, false, false, 3, 0, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "撤销", null, 0, false, false, 5, 268435546, null, "", false, "重做", null, 0, false, false, 6, 301989978, null, "", false ]
 
 [node name="OKbutton" parent="ItemInBackpack/ItemDetail/AccessItemWindow" index="2"]
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 4 )
 
 [node name="QuitButton" parent="ItemInBackpack/ItemDetail/AccessItemWindow" index="3"]
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 4 )
 
 [node name="Buttons" type="Node2D" parent="ItemInBackpack"]
 
@@ -349,7 +349,7 @@ margin_left = 20.0
 margin_top = 8.0
 margin_right = 220.0
 margin_bottom = 29.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 6 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "负重值：10/100"
 __meta__ = {
@@ -478,7 +478,7 @@ __meta__ = {
 }
 
 [node name="Buttons" type="Node2D" parent="ItemInHome/ItemDetail"]
-position = Vector2( 200, 450 )
+position = Vector2( 230, 470 )
 
 [node name="Drop" type="TextureButton" parent="ItemInHome/ItemDetail/Buttons"]
 margin_right = 100.0
@@ -515,7 +515,7 @@ margin_left = -180.0
 margin_top = 20.0
 margin_right = -30.0
 margin_bottom = 80.0
-custom_fonts/font = SubResource( 6 )
+custom_fonts/font = SubResource( 5 )
 text = "确定"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -526,7 +526,7 @@ margin_left = 30.0
 margin_top = 20.0
 margin_right = 180.0
 margin_bottom = 80.0
-custom_fonts/font = SubResource( 6 )
+custom_fonts/font = SubResource( 5 )
 text = "取消"
 __meta__ = {
 "_edit_use_anchors_": false

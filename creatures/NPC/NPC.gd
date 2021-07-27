@@ -139,7 +139,7 @@ func AIFunction():#进行AI间的切换，以及执行不同的AI操作
             else:#如果无障碍物，则原地不动（在没有其他移动需求的情况下）
                 TargetPosition=global_position  
             #如果远程武器可用    
-            if RangedWeapon.AllBulletNum>0 or RangedWeapon.Bullet>0:
+            if RangedWeapon.AllBulletNum>0 or RangedWeapon.BulletNum>0:
                 if RangedWeapon.BulletNum<=0:#子弹不够自动换弹
                     RangedWeapon.set_bullet_num()
                     RangedWeapon.reload()

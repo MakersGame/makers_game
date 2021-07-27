@@ -40,9 +40,9 @@ func init(_Name:String,_Durability:float,_Owner,_AttackAbility:float,_ReloadAbil
         queue_free()
         return
     var WeaponInfo=ReferenceList.WeaponReference[Name]
-    $AnimatedSprite.animation=Name
-    $AnimatedSprite.offset=WeaponInfo["CenterOffset"]
-    $AnimatedSprite/BulletPosition.position=WeaponInfo["BulletOffset"]
+    $WeaponBody/AnimatedSprite.animation=Name
+    $WeaponBody/AnimatedSprite.offset=WeaponInfo["CenterOffset"]
+    $WeaponBody/AnimatedSprite/BulletPosition.position=WeaponInfo["BulletOffset"]
     MaxDurability=WeaponInfo["MaxDurability"]
     if _Durability==-1:
         Durability=MaxDurability
@@ -75,27 +75,27 @@ func _physics_process(delta):
 
 func direction_function():
     var DirectionAngle
-    if $AnimatedSprite.flip_v:
-        DirectionAngle=(TargetPosition-global_position).angle()+asin($AnimatedSprite/BulletPosition.position.y*$AnimatedSprite.scale.y/(TargetPosition-global_position).length())
+    if $WeaponBody/AnimatedSprite.flip_v:
+        DirectionAngle=(TargetPosition-global_position).angle()+asin($WeaponBody/AnimatedSprite/BulletPosition.position.y*$WeaponBody/AnimatedSprite.scale.y/(TargetPosition-global_position).length())
     else:
-        DirectionAngle=(TargetPosition-global_position).angle()-asin($AnimatedSprite/BulletPosition.position.y*$AnimatedSprite.scale.y/(TargetPosition-global_position).length())
+        DirectionAngle=(TargetPosition-global_position).angle()-asin($WeaponBody/AnimatedSprite/BulletPosition.position.y*$WeaponBody/AnimatedSprite.scale.y/(TargetPosition-global_position).length())
     if ForceDirection==Vector2(0,0):
         Direction=Vector2(cos(DirectionAngle),sin(DirectionAngle))
     else:
         Direction=ForceDirection
     rotation=Direction.angle()
     if rotation<-PI/2 or rotation>PI/2:
-        $AnimatedSprite.flip_v=true
+        $WeaponBody/AnimatedSprite.flip_v=true
     else:
-        $AnimatedSprite.flip_v=false
+        $WeaponBody/AnimatedSprite.flip_v=false
 
     
-    if $AnimatedSprite.flip_v:
-        $AnimatedSprite/BulletPosition.position.y*=-1
-        BulletOffset=$AnimatedSprite/BulletPosition.global_position
-        $AnimatedSprite/BulletPosition.position.y*=-1
+    if $WeaponBody/AnimatedSprite.flip_v:
+        $WeaponBody/AnimatedSprite/BulletPosition.position.y*=-1
+        BulletOffset=$WeaponBody/AnimatedSprite/BulletPosition.global_position
+        $WeaponBody/AnimatedSprite/BulletPosition.position.y*=-1
     else:
-        BulletOffset=$AnimatedSprite/BulletPosition.global_position
+        BulletOffset=$WeaponBody/AnimatedSprite/BulletPosition.global_position
     
 func shoot():#（试图）开枪
     if !Enable or !Attackable:
@@ -116,7 +116,12 @@ func shoot():#（试图）开枪
     Attackable=false
     if Owner.Identifier=="Player":
         Global.OverworldUIs.update_weapon_choice()
-
+    if !AutoAttack:
+        if $WeaponBody/AnimatedSprite.flip_v:
+            $AnimationPlayer.play("NonautoAttackFlipV")
+        else:
+            $AnimationPlayer.play("NonautoAttackNormal")
+            
 func reload():#重新装弹
     if AllBulletNum<=0 or $ReloadTimer.time_left:
         return

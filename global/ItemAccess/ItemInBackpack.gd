@@ -89,10 +89,14 @@ func _input(event):
             $InventoryChosen.show()
             item_detail_change()
     elif event.is_action_pressed("ui_focus_next") and SequencedItem.size()+SequencedWeapon.size()>(CurrentPage-1)*4+12:
+        if get_viewport().get_mouse_position().x>640:
+            return
         CurrentPage+=1
         $ScrollBar/Bar.position.y+=122*$ScrollBar/Bar.scale.y/1.5
         page_change_action()
     elif event.is_action_pressed("ui_focus_prev") and CurrentPage>1:
+        if get_viewport().get_mouse_position().x>640:
+            return
         CurrentPage-=1
         $ScrollBar/Bar.position.y-=122*$ScrollBar/Bar.scale.y/1.5
         page_change_action()

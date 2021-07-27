@@ -1,7 +1,72 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://weapons/ranged/RangedWeapon.gd" type="Script" id=1]
 [ext_resource path="res://global/ReferenceList/Sprites/WeaponSprites.tres" type="SpriteFrames" id=2]
+
+[sub_resource type="Animation" id=3]
+resource_name = "AutoAttackFlipV"
+length = 0.05
+step = 0.01
+tracks/0/type = "value"
+tracks/0/path = NodePath("WeaponBody:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.02, 0.05 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 10, 0 ), Vector2( 0, 0 ) ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "AutoAttackNormal"
+length = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("WeaponBody:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.02, 0.05 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( -10, 0 ), Vector2( 0, 0 ) ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "NonautoAttackFlipV"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath("WeaponBody:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.03, 0.2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, 20.0, 0.0 ]
+}
+
+[sub_resource type="Animation" id=1]
+resource_name = "NonautoAttackFlipV"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath("WeaponBody:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.03, 0.2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, -20.0, 0.0 ]
+}
 
 [node name="RangedWeapon" type="Node2D"]
 script = ExtResource( 1 )
@@ -13,16 +78,24 @@ one_shot = true
 wait_time = 3.0
 one_shot = true
 
-[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+[node name="WeaponBody" type="Node2D" parent="."]
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="WeaponBody"]
 scale = Vector2( 3, 3 )
 z_index = 1
 frames = ExtResource( 2 )
 animation = "老式霰弹枪"
 offset = Vector2( 9, 0 )
 
-[node name="BulletPosition" type="Node2D" parent="AnimatedSprite"]
+[node name="BulletPosition" type="Node2D" parent="WeaponBody/AnimatedSprite"]
 position = Vector2( 21, -3 )
 scale = Vector2( 3, 0.02 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/AutoAttackFlipV = SubResource( 3 )
+anims/AutoAttackNormal = SubResource( 4 )
+anims/NonautoAttackFlipV = SubResource( 2 )
+anims/NonautoAttackNormal = SubResource( 1 )
 
 [connection signal="timeout" from="ColdTimer" to="." method="_on_ColdTimer_timeout"]
 [connection signal="timeout" from="ReloadTimer" to="." method="_on_ReloadTimer_timeout"]
