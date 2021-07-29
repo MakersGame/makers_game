@@ -104,6 +104,7 @@ func shoot():#（试图）开枪
     direction_function()
     get_tree().call_group("enermy","raise_guard",global_position,GuardingValue)
     var NewBullet=Bullet.instance()
+    NewBullet.visible=true
     Global.CurrentScene.add_child(NewBullet)
     var TempAngle=(randf()-0.5)*RandomAngle*PI/180
     var RandomDirection=Vector2(Direction.x*cos(TempAngle)+Direction.y*sin(TempAngle),-Direction.x*sin(TempAngle)+Direction.y*cos(TempAngle))

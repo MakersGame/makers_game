@@ -9,9 +9,10 @@ var TiredOut:bool=false             #是否力竭
 var LoadLimit:float                 #负重上限
 var Target:Object                   #追踪中的目标
 var DistanceToTarget:float          #自身到目标的距离
+var movement:Vector2
 var EnermyInArea=[]                 #检测范围内的敌人
 var TargetPosition:Vector2          #目标坐标
-var FaceDirection:Vector2           #面朝方向
+var FaceDirection:Vector2=Vector2(1,0)#面朝方向
 var ForceDirection:Vector2=Vector2()#强制面对方向
 var WeightLimit                     #NPC的最大负重值
 var InTeam:bool=true                #是否在队伍里
@@ -24,6 +25,7 @@ var KnockBack:Vector3               #被击退值，三维向量，xy表示方�
 var FollowDistance:Vector2          #跟随模式和撤退模式下，x代表离玩家超过此距离开始追逐，y代表离玩家小于此距离停止追逐
 var FightingFollowDistance:Vector2  #冲突模式下跟随玩家的距离
 var DistanceToPlayer:float=0        #距离玩家的距离，动态更新
+var WeaponChoice=""
 
 var CurrentAreaCenter               #当前区块中心，决定NPC图层
 
@@ -78,16 +80,19 @@ func _physics_process(delta):
     calc_distance_to_player_and_target()
     update_enermy_in_area()
     AIFunction()
-    var movement=CreatureStatus.find_way(TargetPosition)
+    movement=CreatureStatus.find_way(TargetPosition)
     move_mode_function()
     energy_recover()
-    move(movement)
+    move()
+    animation_function()
     
-func move(movement):#移动策略
+func move():#移动策略
     if (TargetPosition-global_position).length()<=Speed*0.5:#离目标位置足够近，不需要继续移动
         movement=Vector2()
     if $RigidTimer.time_left:
         movement=Vector2(0,0)
+    if movement!=Vector2():
+        FaceDirection=movement.normalized()
     if KnockBack.z:#如果自身被击退，需要往击退方向移动（向量加）
         var KnockBackDistance=sqrt(KnockBack.z)#每一帧击退距离平方递减！
         movement+=Vector2(KnockBack.x,KnockBack.y).normalized()*KnockBackDistance
@@ -121,8 +126,10 @@ func AIFunction():#进行AI间的切换，以及执行不同的AI操作
         "home":return#家园模式，待定
         "defensive":return#家园防御模式，待定
         "following":#未冲突状态
+            WeaponChoice=""
             if Target!=null:
                 AImode="fighting"
+                WeaponChoice="ranged"
             #根据自身距离玩家距离，决定是否要跟上玩家    
             if DistanceToPlayer>FollowDistance.x:
                 TracingPlayer=true
@@ -144,19 +151,39 @@ func AIFunction():#进行AI间的切换，以及执行不同的AI操作
                     RangedWeapon.set_bullet_num()
                     RangedWeapon.reload()
                 elif RangedWeapon.Attackable and DistanceToTarget>RangedWeapon.MaxRange/2:#可攻击则自动攻击
+                    if WeaponChoice=="melee":
+                        if MeleeWeapon.Enable and MeleeWeapon.get_node("AnimationPlayer").is_playing():
+                            return
+                        else:
+                            WeaponChoice="ranged"
+                            return
                     #计算射击角度（考虑敌人移动的情况下）
                     var AimPosition=Target.global_position+calc_aim_position(global_position-Target.global_position,Target.FaceDirection,$RangedWeapon.BulletSpeed/Target.Speed)
                     collision=Global.detect_collision_in_line(global_position,AimPosition,[self], 1)
                     #如果不会碰到障碍物，则射击
-                    if !collision and (AimPosition-global_position).length()<=RangedWeapon.MaxRange:
+                    if !collision and (AimPosition-global_position).length()<=RangedWeapon.MaxRange and !ForceDirection:
+                        FaceDirection=(AimPosition-global_position).normalized()
+                        movement=Vector2()
+                        animation_function()
                         RangedWeapon.TargetPosition=AimPosition
+                        RangedWeapon.ForceDirection=Vector2()
                         RangedWeapon.direction_function()
+                        ForceDirection=(AimPosition-global_position).normalized()
                         RangedWeapon.shoot()
             #如果敌人在近战武器范围内，则用近战武器攻击（不需要花时间切换）
             MeleeWeapon.Direction=(Target.global_position-global_position).normalized()
             if DistanceToTarget<=MeleeWeapon.MaxRange and MeleeWeapon.Enable and MeleeWeapon.Attackable and Energy>MeleeWeapon.EnergyNeed:
+                if WeaponChoice=="ranged":
+                    if RangedWeapon.Enable and RangedWeapon.get_node("AnimationPlayer").is_playing():
+                        return
+                    else:
+                        WeaponChoice="melee"
+                        return
                 MeleeWeapon.Direction=(Target.global_position-MeleeWeapon.global_position).normalized()
                 MeleeWeapon.rotation=MeleeWeapon.Direction.angle()
+                FaceDirection=MeleeWeapon.Direction
+                movement=Vector2()
+                animation_function()
                 MeleeWeapon.attack()
             #如果敌人与自身距离小于远程武器射程的一半（暂定），则试图远离敌人
             if DistanceToTarget<=RangedWeapon.MaxRange/2:
@@ -255,3 +282,151 @@ func energy_consume(value:float):
 func reset_rigid_timer(num:float):
     $RigidTimer.wait_time=num
     $RigidTimer.start()
+
+func animation_function():
+    var ani
+    if (WeaponChoice=="ranged" and !RangedWeapon.Enable) or (WeaponChoice=="melee" and !MeleeWeapon.Enable) or WeaponChoice=="":
+        ani="unarmed"
+        $Animations/left_hand.hide()
+        $Animations/right_hand.hide()  
+    else:
+        ani="armed"
+        $Animations/left_hand.show()
+        $Animations/right_hand.show() 
+    var Direction
+    if movement==Vector2(0,0) or $RigidTimer.time_left:
+        ani+="_stand" 
+        Direction=FaceDirection.normalized()
+    else:
+        ani+="_walk"
+        Direction=movement.normalized()
+    if ForceDirection!=Vector2():
+        Direction=ForceDirection
+    if Direction.x>0.5:
+        ani+="_right"
+    elif Direction.x<-0.5:
+        ani+="_left"
+    if Direction.y>=-0.2:
+        ani+="_down"
+    elif Direction.y<0.2:
+        ani+="_up"
+    if CreatureStatus.SpeedType==1:
+        $Animations/NPCAnimation.speed_scale=1
+    else:
+        $Animations/NPCAnimation.speed_scale=0.7
+    $Animations/NPCAnimation.animation=ani
+    
+    var Weapon=null
+    if WeaponChoice=="melee":
+        Weapon=MeleeWeapon
+        MeleeWeapon.show()
+        RangedWeapon.hide()
+    elif WeaponChoice=="ranged":
+        Weapon=RangedWeapon
+        MeleeWeapon.hide()
+        RangedWeapon.show()
+    else:
+        MeleeWeapon.hide()
+        RangedWeapon.hide()
+    if Weapon==null or !Weapon.Enable:
+        return
+        
+    MeleeWeapon.rotation=Direction.angle()
+    if Direction.x>=-0.5 and Direction.x<=0 and Direction.y<-0.2:
+        if ForceDirection==Vector2():
+            $Animations/left_hand.z_index=-1
+            $Animations/left_hand.position=Vector2(-24,8)
+            $Animations/right_hand.z_index=-1
+            $Animations/right_hand.position=Vector2(24,4)
+            Weapon.global_position=$Animations/right_hand.global_position
+        elif WeaponChoice=="melee":
+            $Animations/right_hand.global_position=Weapon.get_node("WeaponBody").global_position
+        Weapon.z_index=-2
+    elif Direction.x>=0 and Direction.x<=0.5 and Direction.y<-0.2:
+        if ForceDirection==Vector2():
+            $Animations/left_hand.z_index=-1
+            $Animations/left_hand.position=Vector2(-24,4)
+            $Animations/right_hand.z_index=-1
+            $Animations/right_hand.position=Vector2(24,8)
+            Weapon.global_position=$Animations/left_hand.global_position
+        elif WeaponChoice=="melee":
+            $Animations/left_hand.global_position=Weapon.get_node("WeaponBody").global_position
+        Weapon.z_index=-2
+    elif Direction.x>0.5 and  Direction.y<-0.2:
+        if ForceDirection==Vector2():
+            $Animations/left_hand.z_index=-1
+            $Animations/left_hand.position=Vector2(-20,0)
+            $Animations/right_hand.z_index=-1
+            $Animations/right_hand.position=Vector2(28,4)
+            Weapon.global_position=$Animations/left_hand.global_position
+        elif WeaponChoice=="melee":
+            $Animations/left_hand.global_position=Weapon.get_node("WeaponBody").global_position
+        Weapon.z_index=-2
+    elif Direction.x>=0.5 and  Direction.y>=-0.2:
+        if ForceDirection==Vector2():
+            $Animations/left_hand.z_index=-1
+            $Animations/left_hand.position=Vector2(24,4)
+            $Animations/right_hand.z_index=1
+            $Animations/right_hand.position=Vector2(-16,4)
+            Weapon.global_position=$Animations/right_hand.global_position
+        elif WeaponChoice=="melee":
+            $Animations/right_hand.global_position=Weapon.get_node("WeaponBody").global_position
+        Weapon.z_index=0
+    elif Direction.x>=0 and Direction.x<0.5 and  Direction.y>-0.2 and Direction!=Vector2():
+        if ForceDirection==Vector2():
+            $Animations/left_hand.z_index=-1
+            $Animations/left_hand.position=Vector2(24,8)
+            $Animations/right_hand.z_index=1
+            $Animations/right_hand.position=Vector2(-24,8)
+            Weapon.global_position=$Animations/right_hand.global_position
+        elif WeaponChoice=="melee":
+            $Animations/right_hand.global_position=Weapon.get_node("WeaponBody").global_position
+        Weapon.z_index=0
+    elif Direction.x<=-0.5 and  Direction.y<-0.2:
+        if ForceDirection==Vector2():
+            $Animations/left_hand.z_index=-1
+            $Animations/left_hand.position=Vector2(-28,4)
+            $Animations/right_hand.z_index=-1
+            $Animations/right_hand.position=Vector2(20,0)
+            Weapon.global_position=$Animations/right_hand.global_position
+        elif WeaponChoice=="melee":
+            $Animations/right_hand.global_position=Weapon.get_node("WeaponBody").global_position
+        Weapon.z_index=-2
+    elif Direction.x<=-0.5 and  Direction.y>=-0.2:
+        if ForceDirection==Vector2():
+            $Animations/left_hand.z_index=1
+            $Animations/left_hand.position=Vector2(16,4)
+            $Animations/right_hand.z_index=-1
+            $Animations/right_hand.position=Vector2(-24,4)
+            Weapon.global_position=$Animations/left_hand.global_position
+        elif WeaponChoice=="melee":
+            $Animations/left_hand.global_position=Weapon.get_node("WeaponBody").global_position
+        Weapon.z_index=0
+    elif Direction.x>-0.5 and Direction.x<0 and  Direction.y>-0.2:
+        if ForceDirection==Vector2():
+            $Animations/left_hand.z_index=1
+            $Animations/left_hand.position=Vector2(24,8)
+            $Animations/right_hand.z_index=-1
+            $Animations/right_hand.position=Vector2(-24,8)
+            Weapon.global_position=$Animations/left_hand.global_position
+        elif WeaponChoice=="melee":
+            $Animations/left_hand.global_position=Weapon.get_node("WeaponBody").global_position
+        Weapon.z_index=0
+    
+    if FaceDirection==Vector2(0,0) or $RigidTimer.time_left:
+        RangedWeapon.ForceDirection=Vector2()
+        if ForceDirection==Vector2():
+            MeleeWeapon.ForceDirection=Vector2()
+    else:
+        if Direction.y==0:
+            RangedWeapon.ForceDirection=Vector2(Direction.x,abs(Direction.x)).normalized()
+        else:
+            RangedWeapon.ForceDirection=Direction
+        if ForceDirection==Vector2():
+            if Direction.y==0:
+                MeleeWeapon.ForceDirection=Vector2(Direction.x,abs(Direction.x)).normalized()
+            else:
+                MeleeWeapon.ForceDirection=Direction
+
+func _on_RigidTimer_timeout():
+    ForceDirection=Vector2()

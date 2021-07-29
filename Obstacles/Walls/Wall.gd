@@ -1,4 +1,4 @@
-extends TileMap
+extends Node2D
 
 func _ready():
     z_index=floor(position.y/20)

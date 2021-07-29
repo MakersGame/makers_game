@@ -8,19 +8,19 @@ func update_team():
         DetailedMember=Global.Team[0]
     $Members/Player/AnimatedSprite.animation="info"
     if Global.Team.size()>1:
-        $Members/NPC1/AnimatedSprite.frames=Global.Team[1].get_node("AnimatedSprite").frames
+        $Members/NPC1/AnimatedSprite.frames=Global.Team[1].get_node("Animations/NPCAnimation").frames
         $Members/NPC1/AnimatedSprite.animation="info"
         $Members/NPC1.show()
     else:
         $Members/NPC1.hide()
     if Global.Team.size()>2:
-        $Members/NPC2/AnimatedSprite.frames=Global.Team[2].get_node("AnimatedSprite").frames
+        $Members/NPC2/AnimatedSprite.frames=Global.Team[2].get_node("Animations/NPCAnimation").frames
         $Members/NPC2/AnimatedSprite.animation="info"
         $Members/NPC2.show()
     else:
         $Members/NPC2.hide()
     if Global.Team.size()>3:
-        $Members/NPC3/AnimatedSprite.frames=Global.Team[3].get_node("AnimatedSprite").frames
+        $Members/NPC3/AnimatedSprite.frames=Global.Team[3].get_node("Animations/NPCAnimation").frames
         $Members/NPC3/AnimatedSprite.animation="info"
         $Members/NPC3.show()
     else:

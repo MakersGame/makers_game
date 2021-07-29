@@ -28,6 +28,7 @@ var ItemRference={
     "绷带":{
         "ID":21,
         "Type":"Medicine",
+        "HealValue":10,
         "Weight":0.01,
         "Usable":true,
         "Price":10,
@@ -141,10 +142,9 @@ func use_item(Target:Object,ItemName:String):
     if Global.GoodInBackpack.get(ItemName)==null or Global.GoodInBackpack[ItemName]<=0:
         return
     Global.GoodInBackpack[ItemName]-=1
-    match ItemName:
-        "绷带":
-            Target.CreatureStatus.heal(10)
-    Global.send_message(Target.Name+"使用了一个"+ItemName+"!")
+    if ItemRference[ItemName]["Type"]=="Medicine":
+        Target.CreatureStatus.heal(ItemRference[ItemName]["HealValue"])
+        Global.send_message(Target.Name+"使用了一个"+ItemName+"，恢复了"+String(ItemRference[ItemName]["HealValue"])+"点生命值。")
     Global.update_pause_window()
     
 

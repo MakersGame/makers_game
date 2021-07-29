@@ -11,7 +11,7 @@ func update_sprite(User):
         $AnimatedSprite.frames=User.get_node("Animations/PlayerAnimation").frames
         $AnimatedSprite.animation="info"
     elif User.Identifier=="NPC":
-        $AnimatedSprite.frames=User.get_node("AnimatedSprite").frames
+        $AnimatedSprite.frames=User.get_node("Animations/NPCAnimation").frames
         $AnimatedSprite.animation="info"
     $HealthBar.max_value=User.CreatureStatus.MaxHealth
     $HealthBar.value=User.CreatureStatus.Health

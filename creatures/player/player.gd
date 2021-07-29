@@ -17,6 +17,7 @@ var WeaponChoice:String                     #"ranged"或"melee"，代表当前�
 
 var CurrentAreaCenter                       #当前区块中心，决定玩家图层
 var E_Actions=[]
+var Q_Actions=[]
 
 onready var CreatureStatus=$creature_status
 onready var RangedWeapon=$RangedWeapon
@@ -138,21 +139,18 @@ func _input(event):
         if WeaponChoice=="ranged":
             WeaponChoice="melee"
             RangedWeapon.hide()
-            MeleeWeapon.show()
+            if MeleeWeapon.Enable:
+                MeleeWeapon.show()
             Global.OverworldUIs.change_weapon_choice("melee")
         elif WeaponChoice=="melee":
             WeaponChoice="ranged"
             MeleeWeapon.hide()
-            RangedWeapon.show()
+            if RangedWeapon.Enable:
+                RangedWeapon.show()
             Global.OverworldUIs.change_weapon_choice("ranged")
         $ChangeWeaponTimer.start()
     elif event.is_action_pressed("ui_focus_next"):#鼠标下滚切换快捷栏道具
         Global.QuickUseItemChoice=(Global.QuickUseItemChoice+1)%5
-        Global.OverworldUIs.update_quick_item()
-    elif event.is_action_pressed("quick_use_item"):
-        if Global.QuickUseItem[Global.QuickUseItemChoice]==null:
-            return
-        ReferenceList.use_item(self,Global.QuickUseItem[Global.QuickUseItemChoice])
         Global.OverworldUIs.update_quick_item()
     elif event.is_action_pressed("ui_speed_up"):
         if !TiredOut:
@@ -163,6 +161,10 @@ func _input(event):
         CreatureStatus.SpeedType=0
     elif event.is_action_pressed("E_action"):
         E_action()
+    elif event.is_action_pressed("Q_action"):
+        if Global.QuickUseItem[Global.QuickUseItemChoice]==null:
+            return
+        Q_action()
     
 func direction_action():
     #根据按键情况，决定移动方向
@@ -281,8 +283,17 @@ func animation_function():
         return
         
     MeleeWeapon.rotation=Direction.angle()
-    
-    if Direction.x>=0 and Direction.x<=0.5 and Direction.y<-0.2:
+    if Direction.x>=-0.5 and Direction.x<=0 and Direction.y<-0.2:
+        if ForceDirection==Vector2():
+            $Animations/left_hand.z_index=-1
+            $Animations/left_hand.position=Vector2(-24,8)
+            $Animations/right_hand.z_index=-1
+            $Animations/right_hand.position=Vector2(24,4)
+            Weapon.global_position=$Animations/right_hand.global_position
+        elif WeaponChoice=="melee":
+            $Animations/right_hand.global_position=Weapon.get_node("WeaponBody").global_position
+        Weapon.z_index=-2
+    elif Direction.x>=0 and Direction.x<=0.5 and Direction.y<-0.2:
         if ForceDirection==Vector2():
             $Animations/left_hand.z_index=-1
             $Animations/left_hand.position=Vector2(-24,4)
@@ -322,16 +333,6 @@ func animation_function():
         elif WeaponChoice=="melee":
             $Animations/right_hand.global_position=Weapon.get_node("WeaponBody").global_position
         Weapon.z_index=0
-    elif Direction.x>=-0.5 and Direction.x<=0 and Direction.y<-0.2:
-        if ForceDirection==Vector2():
-            $Animations/left_hand.z_index=-1
-            $Animations/left_hand.position=Vector2(-24,8)
-            $Animations/right_hand.z_index=-1
-            $Animations/right_hand.position=Vector2(24,4)
-            Weapon.global_position=$Animations/right_hand.global_position
-        elif WeaponChoice=="melee":
-            $Animations/right_hand.global_position=Weapon.get_node("WeaponBody").global_position
-        Weapon.z_index=-2
     elif Direction.x<=-0.5 and  Direction.y<-0.2:
         if ForceDirection==Vector2():
             $Animations/left_hand.z_index=-1
@@ -368,9 +369,15 @@ func animation_function():
         if ForceDirection==Vector2():
             MeleeWeapon.ForceDirection=Vector2()
     else:
-        RangedWeapon.ForceDirection=Direction
+        if Direction.y==0:
+            RangedWeapon.ForceDirection=Vector2(Direction.x,abs(Direction.x)).normalized()
+        else:
+            RangedWeapon.ForceDirection=Direction
         if ForceDirection==Vector2():
-            MeleeWeapon.ForceDirection=Direction
+            if Direction.y==0:
+                MeleeWeapon.ForceDirection=Vector2(Direction.x,abs(Direction.x)).normalized()
+            else:
+                MeleeWeapon.ForceDirection=Direction
     
 
 func reset_rigid_timer(num:float):
@@ -385,29 +392,56 @@ func action_ui_function():
             E_Actions.remove(i)
             i-=1
         i+=1
+    i=0
+    while i<Q_Actions.size():
+        if Q_Actions[i]["Type"]=="Heal" and !Q_Actions[i]["Target"].CreatureStatus.alive():
+            Q_Actions.remove(i)
+            i-=1
+        i+=1
     for key in E_Actions:
         var Collision=Global.detect_collision_in_line(global_position,key["Target"].global_position,[self,key["Target"]],1)
         if Collision:
             $E_ActionUI.hide()
             key["Enable"]=false
             continue
-        else:
+        elif key["Target"].AImode!="attacking":
             $E_ActionUI.show()  
             $E_ActionUI.global_position=key["Target"].global_position
             key["Enable"]=true
             return
-    $E_ActionUI.hide()      
+    $E_ActionUI.hide()   
+    for key in Q_Actions:
+        var Collision=Global.detect_collision_in_line(global_position,key["Target"].global_position,[self,key["Target"]],1)
+        if Collision:
+            $Q_ActionUI.hide()
+            key["Enable"]=false
+            continue
+        elif key["Type"]=="Heal":
+            if Global.QuickUseItem[Global.QuickUseItemChoice]==null or ReferenceList.ItemRference[Global.QuickUseItem[Global.QuickUseItemChoice]]["Type"]!="Medicine":
+                continue
+            if (key["Target"].CreatureStatus.MaxHealth-key["Target"].CreatureStatus.Health)>=ReferenceList.ItemRference[Global.QuickUseItem[Global.QuickUseItemChoice]]["HealValue"]:
+                $Q_ActionUI.show()  
+                $Q_ActionUI.global_position=key["Target"].global_position
+                key["Enable"]=true
+                return
+    $Q_ActionUI.hide()   
 
 func _on_ActionArea_body_entered(body):
     if body.Identifier=="Enermy" and body.AImode!="Attacking":
         E_Actions.push_back({"Type":"Assassinate","Target":body,"Enable":false})
+    if body.Identifier=="NPC" and body.CreatureStatus.alive():
+            Q_Actions.push_back({"Type":"Heal","Target":body,"Enable":false})
 
 
 func _on_ActionArea_body_exited(body):
     for i in range(E_Actions.size()):
         if E_Actions[i]["Target"]==body:
             E_Actions.remove(i)
-            return
+            break
+    for i in range(Q_Actions.size()):
+        if Q_Actions[i]["Target"]==body:
+            Q_Actions.remove(i)
+            break
 
 func E_action():
     for i in E_Actions:
@@ -415,3 +449,15 @@ func E_action():
             if i["Type"]=="Assassinate":
                 i["Target"].CreatureStatus.get_hurt(9999,"real",self)
             return    
+          
+func Q_action():
+    for key in Q_Actions:
+        if key["Enable"]:
+            if key["Type"]=="Heal" and ReferenceList.ItemRference[Global.QuickUseItem[Global.QuickUseItemChoice]]["Type"]=="Medicine":
+                ReferenceList.use_item(key["Target"],Global.QuickUseItem[Global.QuickUseItemChoice])
+                Global.OverworldUIs.update_quick_item()
+                return
+    ReferenceList.use_item(self,Global.QuickUseItem[Global.QuickUseItemChoice])
+    Global.OverworldUIs.update_quick_item()
+          
+        

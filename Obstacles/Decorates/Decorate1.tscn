@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Obstacles/Walls/Wall.gd" type="Script" id=1]
+[ext_resource path="res://art/decorates/1.png" type="Texture" id=2]
+
+[node name="Decorate1" type="Sprite"]
+scale = Vector2( 4, 4 )
+texture = ExtResource( 2 )
+offset = Vector2( 0, -17.5 )
+script = ExtResource( 1 )
