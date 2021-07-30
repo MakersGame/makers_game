@@ -74,7 +74,7 @@ func _physics_process(delta):
     if CurrentAreaCenter==null:
         z_index=100
     else:
-        z_index=floor((global_position-CurrentAreaCenter).y/20)
+        z_index=floor(((global_position-CurrentAreaCenter).y)/20)+3
     
     Speed=CreatureStatus.Speed[CreatureStatus.SpeedType]
     calc_distance_to_player_and_target()

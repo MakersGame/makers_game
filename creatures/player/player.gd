@@ -391,6 +391,12 @@ func action_ui_function():
         if E_Actions[i]["Type"]=="Assassinate" and (E_Actions[i]["Target"].AImode=="attacking" or !E_Actions[i]["Target"].CreatureStatus.alive()):
             E_Actions.remove(i)
             i-=1
+        elif E_Actions[i]["Type"]=="PickableItem" and E_Actions[i]["Enable"]==false:
+            E_Actions.remove(i)
+            i-=1
+        elif E_Actions[i]["Type"]=="Chest" and E_Actions[i]["Enable"]==false:
+            E_Actions.remove(i)
+            i-=1
         i+=1
     i=0
     while i<Q_Actions.size():
@@ -404,10 +410,14 @@ func action_ui_function():
             $E_ActionUI.hide()
             key["Enable"]=false
             continue
-        elif key["Target"].AImode!="attacking":
+        elif key["Type"]=="Assassinate" and key["Target"].AImode!="attacking":
             $E_ActionUI.show()  
             $E_ActionUI.global_position=key["Target"].global_position
             key["Enable"]=true
+            return
+        elif key["Type"]=="PickableItem" or key["Type"]=="Chest":
+            $E_ActionUI.show()  
+            $E_ActionUI.global_position=key["Target"].global_position
             return
     $E_ActionUI.hide()   
     for key in Q_Actions:
@@ -427,10 +437,14 @@ func action_ui_function():
     $Q_ActionUI.hide()   
 
 func _on_ActionArea_body_entered(body):
-    if body.Identifier=="Enermy" and body.AImode!="Attacking":
+    if body.Identifier=="Enermy" and body.CreatureStatus.alive():
         E_Actions.push_back({"Type":"Assassinate","Target":body,"Enable":false})
-    if body.Identifier=="NPC" and body.CreatureStatus.alive():
-            Q_Actions.push_back({"Type":"Heal","Target":body,"Enable":false})
+    elif body.Identifier=="NPC" and body.CreatureStatus.alive():
+        Q_Actions.push_back({"Type":"Heal","Target":body,"Enable":false})
+    elif body.Identifier=="PickableItem":
+        E_Actions.push_back({"Type":"PickableItem","Target":body,"Enable":true})
+    elif body.Identifier=="Chest" and body.Opened==false:
+        E_Actions.push_back({"Type":"Chest","Target":body,"Enable":true})
 
 
 func _on_ActionArea_body_exited(body):
@@ -448,6 +462,20 @@ func E_action():
         if i["Enable"]:
             if i["Type"]=="Assassinate":
                 i["Target"].CreatureStatus.get_hurt(9999,"real",self)
+            elif i["Type"]=="PickableItem":
+                if i["Target"].Type=="Weapon":
+                    Global.WeaponInBackpack.push_back({"Name":i["Target"].Name,"Durability":ReferenceList.WeaponReference[i["Target"].Name]["MaxDurability"]})
+                elif i["Target"].Type=="Item":
+                    if Global.GoodInBackpack.get(i["Target"].Name)==null:
+                        Global.GoodInBackpack[i["Target"].Name]=i["Target"].Number
+                    else:
+                        Global.GoodInBackpack[i["Target"].Name]+=i["Target"].Number
+                Global.update_pause_window()
+                i["Target"].queue_free()
+                i["Enable"]=false
+            elif i["Type"]=="Chest":
+                i["Target"].open()
+                i["Enable"]=false
             return    
           
 func Q_action():
