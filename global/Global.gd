@@ -25,6 +25,7 @@ onready var SceneChanger=$PlayerCamera/SceneChanger
 onready var OverworldUIs=$OverWorldUIs
 
 func _ready():#游戏最开始会执行一次，之后就不会了
+    randomize()
     Root=get_tree().get_root()
     CurrentScene=Root.get_child(Root.get_child_count() - 1)
     GameStatus="PlayerControl"

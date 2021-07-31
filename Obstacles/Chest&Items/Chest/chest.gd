@@ -19,8 +19,8 @@ func open():
     for i in Contents:
         var Offset=Vector2()
         while Offset==Vector2():
-            Offset=Vector2(randi()%150+40,randi()%150+40)
-            if Global.detect_collision_in_line(global_position+Offset,global_position+Offset+Vector2(0.1,0.1),[self],1):
+            Offset=Vector2(randi()%300-150,randi()%150+40)
+            if Global.detect_collision_in_line(global_position,global_position+Offset,[self],1):
                 Offset=Vector2()
         var NewItem=Item.instance()
         NewItem.init(i["Type"],i["Name"],i["Number"],Offset)

@@ -127,7 +127,7 @@ func _process(delta):
     update()
 
 func _draw():
-    return
+    #return
     if TargetPath==null:
         return
     z_index=1

@@ -1,18 +1,9 @@
 extends Panel
 signal ClosePanel
 
-# Called when the node enters the scene tree for the first time.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#    pass
-
-
 func _on_close_pressed():
     emit_signal("ClosePanel")
     pass # Replace with function body.
-
 
 var SequencedItem=[]            #背包中的物品，按编号排序，仅储存名称
 var CurrentPage=1               #当前背包在第几页
