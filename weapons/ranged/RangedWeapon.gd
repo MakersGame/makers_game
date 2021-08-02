@@ -122,6 +122,11 @@ func shoot():#（试图）开枪
             $AnimationPlayer.play("NonautoAttackFlipV")
         else:
             $AnimationPlayer.play("NonautoAttackNormal")
+    else:
+        if $WeaponBody/AnimatedSprite.flip_v:
+            $AnimationPlayer.play("AutoAttackFlipV")
+        else:
+            $AnimationPlayer.play("AutoAttackNormal")
             
 func reload():#重新装弹
     if AllBulletNum<=0 or $ReloadTimer.time_left:

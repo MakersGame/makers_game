@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://global/Global.gd" type="Script" id=1]
 [ext_resource path="res://global/PlayerCamera.gd" type="Script" id=2]
 [ext_resource path="res://global/PauseWindow/PauseWindow.tscn" type="PackedScene" id=3]
 [ext_resource path="res://global/OverWorldUIs/OverWorldUIs.tscn" type="PackedScene" id=4]
 [ext_resource path="res://global/ItemAccess/ItemAccess.tscn" type="PackedScene" id=5]
+[ext_resource path="res://global/HomeUpdateWindow/HomeUpdateWindow.tscn" type="PackedScene" id=6]
 
 [sub_resource type="Animation" id=1]
 resource_name = "scenechange"
@@ -52,3 +53,6 @@ anims/scenechange = SubResource( 1 )
 [node name="ItemAccess" parent="." instance=ExtResource( 5 )]
 visible = false
 z_index = 999
+
+[node name="HomeUpdateWindow" parent="." instance=ExtResource( 6 )]
+visible = false

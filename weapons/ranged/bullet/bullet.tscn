@@ -16,7 +16,7 @@ script = ExtResource( 1 )
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 rotation = 1.5708
 frames = ExtResource( 2 )
-animation = "雷明顿16号弹"
+animation = "45ACP子弹"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )

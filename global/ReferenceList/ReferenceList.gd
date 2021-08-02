@@ -25,6 +25,14 @@ var ItemRference={
         "Price":1,
         "Description":"常用于老式霰弹枪。"
        },
+    "45ACP子弹":{
+        "ID":13,
+        "Type":"Bullet",
+        "Weight":0.02,
+        "Usable":false,
+        "Price":1,
+        "Description":"常用于汤姆逊冲锋枪。"
+       },
     "绷带":{
         "ID":21,
         "Type":"Medicine",
@@ -75,6 +83,25 @@ var WeaponReference={
         "DamageAreaOffset":Vector2(21,0.2),
         "Description":"亚瑟王之剑（迫真）。\n攻击力：20\n攻速：较慢\n击退力：较高"
        },
+    "军刀":{
+        "ID":3,
+        "Type":"MeleeWeapon",
+        "Weight":1,
+        "MaxDurability":300,
+        "Attack":5,
+        "AttackExistTime":0.1,
+        "SingleTarget":true,
+        "MaxRange":100,
+        "KnockBack":20,
+        "EnergyNeed":15,
+        "GuardingValue":100,
+        "DamageAreaRect":Vector2(12,2.5),
+        "RigidTime":0.6,
+        "ColdTime":0.5,
+        "CenterOffset":Vector2(9.5,0.5),
+        "DamageAreaOffset":Vector2(9.5,0.2),
+        "Description":"攻击力：5\n攻速：快\n击退力：低"
+       },
     "9mm手枪":{
         "ID":11,
         "Type":"RangedWeapon",
@@ -103,7 +130,7 @@ var WeaponReference={
         "MaxDurability":100,
         "Attack":25,
         "AutoAttack":false,
-        "BulletType":"雷明顿16号弹",           #记得改
+        "BulletType":"雷明顿16号弹",           
         "MagazineCapacity":6,
         "RigidTime":1.2,
         "ColdTime":1.2,
@@ -113,9 +140,30 @@ var WeaponReference={
         "KnockBack":15,
         "BulletSpeed":15,
         "GuardingValue":1800,
-        "Description":"老式霰弹枪\n攻击力：25\n使用子弹：9mm子弹（主要是还没做其他子弹\n攻速：较慢\n击退力：中",
+        "Description":"老式霰弹枪\n攻击力：25\n使用子弹：雷明顿16号弹\n攻速：较慢\n击退力：中",
         "CenterOffset":Vector2(9,0),
         "BulletOffset":Vector2(21,-3)   
+        },
+        "汤姆逊冲锋枪":{
+        "ID":13,
+        "Type":"RangedWeapon",
+        "Weight":5,
+        "MaxDurability":500,
+        "Attack":5,
+        "AutoAttack":true,
+        "BulletType":"45ACP子弹",           
+        "MagazineCapacity":20,
+        "RigidTime":1,
+        "ColdTime":0.2,
+        "ReloadTime":5,
+        "RandomAngle":2,
+        "MaxRange":700,
+        "KnockBack":5,
+        "BulletSpeed":15,
+        "GuardingValue":1200,
+        "Description":"攻击力：10\n使用子弹：45ACP子弹\n攻速：较快\n击退力：低",
+        "CenterOffset":Vector2(7,0),
+        "BulletOffset":Vector2(24,-6)   
         }
    }
 
@@ -136,6 +184,45 @@ var EnermyReference={
         "AfterAttackTime":0.5,
         "AttackColdTime":2
        }
+   }
+
+var HomeUpdateReference={
+    "厨房":{
+        0:{
+            "Need":{"木材":100},
+            "Description":"建造厨房。在食物充足的情况下，每天增加20点士气。"
+           },
+        1:{
+            "Need":{"木材":150},
+            "Description":"二级厨房。在食物充足的情况下，每天增加30点士气。"
+           },
+        2:{
+            "Need":{"木材":200},
+            "Description":"三级厨房。在食物充足的情况下，每天增加40点士气。"
+           },
+        3:{
+            "Need":{"木材":300},
+            "Description":"四级厨房。在食物充足的情况下，每天增加50点士气。"
+           },
+       },
+    "储藏室":{
+        0:{
+            "Need":{"木材":200},
+            "Description":"建造仓库。仓库容量由1000kg提升至1500kg。"
+           },
+        1:{
+            "Need":{"木材":400},
+            "Description":"二级仓库。仓库容量由1500kg提升至2000kg。"
+           },
+        2:{
+            "Need":{"木材":800},
+            "Description":"三级仓库。仓库容量由2000kg提升至2500kg。"
+            },
+        3:{
+            "Need":{"木材":160},
+            "Description":"四级仓库。仓库容量由2500kg提升至3000kg。"
+            },   
+       },
    }
 
 func use_item(Target:Object,ItemName:String):

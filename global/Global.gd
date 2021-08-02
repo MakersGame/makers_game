@@ -11,6 +11,7 @@ var GameStatus:String                   #游戏状态
 #“PlayerControl”：玩家控制中，可以自由移动
 #“AnimationPlaying"：动画播放中，游戏暂停
 #"Paused"：玩家暂停游戏
+var HomeUpdateInfo:Dictionary={}
 var GoodInHome:Dictionary={}            #家中的物品
 var GoodInBackpack:Dictionary={}        #背包中的物品
 var WeaponInHome:Array=[]               #家中的武器，每个元素为字典，记录名称和耐久
@@ -35,10 +36,13 @@ func _ready():#游戏最开始会执行一次，之后就不会了
     
 func _input(event):
     if event.is_action_pressed("ui_pause") && !InCraftTable:
-        if GameStatus=="Paused" and $PauseWindow.visible:
+        if GameStatus=="Paused":
+            if $PauseWindow.visible:
+                $PauseWindow.hide()
+            elif $HomeUpdateWindow.visible:
+                $HomeUpdateWindow.hide()
             get_tree().paused=false
             GameStatus="PlayerControl"
-            $PauseWindow.hide()
         elif GameStatus=="PlayerControl" and !$PauseWindow.visible:
             GameStatus="Paused"
             get_tree().paused=true
@@ -87,26 +91,33 @@ func change_scene(path):#切换场景
     yield(SceneChanger.get_node("AnimationPlayer"), "animation_finished")
     SceneChanger.get_node("ColorRect").hide()
 
-# 用于打开合成面板
-func open_synthesis():
-    InCraftTable = true
-    get_tree().paused=true
-    var SynthesisTablePanel=preload("res://Synthesis_table/VirtualNodeForCrafting.tscn").instance()
-    var middle_position=Global.PlayerCamera.global_position
-    SynthesisTablePanel.set_global_position(Vector2(middle_position.x - 450, middle_position.y - 250))
-    CurrentScene.add_child(SynthesisTablePanel)
-    
-# 关闭合成面板
-func close_synthesis():
-    CurrentScene.get_node("VirtualNodeForCrafting").queue_free()
-    get_tree().paused=false
-    InCraftTable = false
+## 用于打开合成面板
+#func open_synthesis():
+#    InCraftTable = true
+#    get_tree().paused=true
+#    var SynthesisTablePanel=preload("res://Synthesis_table/VirtualNodeForCrafting.tscn").instance()
+#    var middle_position=Global.PlayerCamera.global_position
+#    SynthesisTablePanel.set_global_position(Vector2(middle_position.x - 450, middle_position.y - 250))
+#    CurrentScene.add_child(SynthesisTablePanel)
+#
+## 关闭合成面板
+#func close_synthesis():
+#    CurrentScene.get_node("VirtualNodeForCrafting").queue_free()
+#    get_tree().paused=false
+#    InCraftTable = false
+
+func open_home_update():
+    if GameStatus=="PlayerControl":
+        GameStatus="Paused"
+        get_tree().paused=true
+        $HomeUpdateWindow.show()
 
 func update_pause_window():
     $PauseWindow/Backpack.update_items_in_backpack()
     $PauseWindow/TeamInfo.update_team() 
     $OverWorldUIs.set_ui()   
     $ItemAccess.update_items()
+    $HomeUpdateWindow.refresh_update_window()
 
 func send_message(Message:String):
     OverworldUIs.send_message(Message)

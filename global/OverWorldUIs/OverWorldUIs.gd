@@ -56,9 +56,10 @@ func update_health(NewValue:float):
         $HealthBar/Tween.start()
 
 func update_energy(NewValue:float):
-    $EnergyBar/Tween.interpolate_property(self,"TempEnergy",TempEnergy,NewValue,0.1)
-    if not $EnergyBar/Tween.is_active():
-        $EnergyBar/Tween.start()
+    if NewValue==TempEnergy:
+        return
+    $EnergyBar/Tween.interpolate_property(self,"TempEnergy",TempEnergy,NewValue,0.1*abs(TempEnergy-NewValue)/20)
+    $EnergyBar/Tween.start()
     if NewValue<=0:
         $EnergyBar/TiredOutBar.show()
         $EnergyBar/Bar.hide()

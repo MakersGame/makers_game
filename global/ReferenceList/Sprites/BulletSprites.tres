@@ -5,6 +5,11 @@
 
 [resource]
 animations = [ {
+"frames": [ ExtResource( 1 ) ],
+"loop": true,
+"name": "9mm子弹",
+"speed": 5.0
+}, {
 "frames": [ ExtResource( 2 ) ],
 "loop": true,
 "name": "雷明顿16号弹",
@@ -12,6 +17,6 @@ animations = [ {
 }, {
 "frames": [ ExtResource( 1 ) ],
 "loop": true,
-"name": "9mm子弹",
+"name": "45ACP子弹",
 "speed": 5.0
 } ]

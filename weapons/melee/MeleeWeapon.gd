@@ -70,6 +70,7 @@ func attack():#对着瞄准方向进行攻击
         return
     get_tree().call_group("enermy","raise_guard",global_position,GuardingValue)
     var NewDamageArea=DamageArea.instance()
+    
     NewDamageArea.init(Attack,SingleTarget,AttackExistTime,Direction,Owner,Owner.CreatureStatus.Camp,KnockBack)
     $WeaponBody.add_child(NewDamageArea)
     NewDamageArea.get_node("CollisionShape2D").shape.extents=DamageAreaRect

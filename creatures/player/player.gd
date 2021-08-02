@@ -83,7 +83,7 @@ func _physics_process(delta):
     if CurrentAreaCenter==null:
         z_index=100
     else:
-        z_index=floor(((global_position-CurrentAreaCenter).y)/20)+3
+        z_index=floor(((global_position-CurrentAreaCenter).y)/20)+2
     
     Global.PlayerCamera.set_camera(global_position)
     Speed=CreatureStatus.Speed[CreatureStatus.SpeedType]
@@ -225,6 +225,8 @@ func move():
         energy_consume(1.03333)
 
 func energy_recover():
+    if $RigidTimer.time_left:
+        return
     if !TiredOut:
         Energy+=0.66667
     else:
@@ -391,10 +393,13 @@ func action_ui_function():
         if E_Actions[i]["Type"]=="Assassinate" and (E_Actions[i]["Target"].AImode=="attacking" or !E_Actions[i]["Target"].CreatureStatus.alive()):
             E_Actions.remove(i)
             i-=1
-        elif E_Actions[i]["Type"]=="PickableItem" and E_Actions[i]["Enable"]==false:
+        elif E_Actions[i]["Type"]=="PickableItem" and E_Actions[i]["Target"]==null:
             E_Actions.remove(i)
             i-=1
-        elif E_Actions[i]["Type"]=="Chest" and E_Actions[i]["Enable"]==false:
+        elif E_Actions[i]["Type"]=="Chest" and E_Actions[i]["Target"].Opened:
+            E_Actions.remove(i)
+            i-=1
+        elif E_Actions[i]["Type"]=="HomeUpdateArea" and !E_Actions[i]["Enable"]:
             E_Actions.remove(i)
             i-=1
         i+=1
@@ -415,7 +420,7 @@ func action_ui_function():
             $E_ActionUI.global_position=key["Target"].global_position
             key["Enable"]=true
             return
-        elif key["Type"]=="PickableItem" or key["Type"]=="Chest":
+        elif key["Type"]=="PickableItem" or key["Type"]=="Chest" or key["Type"]=="HomeUpdateArea":
             $E_ActionUI.show()  
             $E_ActionUI.global_position=key["Target"].global_position
             return
@@ -445,6 +450,8 @@ func _on_ActionArea_body_entered(body):
         E_Actions.push_back({"Type":"PickableItem","Target":body,"Enable":true})
     elif body.Identifier=="Chest" and body.Opened==false:
         E_Actions.push_back({"Type":"Chest","Target":body,"Enable":true})
+    elif body.Identifier=="HomeUpdateArea":
+        E_Actions.push_back({"Type":"HomeUpdateArea","Target":body,"Enable":true})
 
 
 func _on_ActionArea_body_exited(body):
@@ -472,9 +479,13 @@ func E_action():
                         Global.GoodInBackpack[i["Target"].Name]+=i["Target"].Number
                 Global.update_pause_window()
                 i["Target"].queue_free()
+                i["Target"]=null
                 i["Enable"]=false
             elif i["Type"]=="Chest":
                 i["Target"].open()
+                i["Enable"]=false
+            elif i["Type"]=="HomeUpdateArea":
+                Global.open_home_update()
                 i["Enable"]=false
             return    
           

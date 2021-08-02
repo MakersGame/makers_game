@@ -1,4 +1,4 @@
-extends Panel
+extends Node2D
 signal ClosePanel
 
 func _on_close_pressed():
@@ -25,6 +25,9 @@ func _ready():
     $Buttons/Craft.hide()
     $Buttons/CannotCraft.hide()
     update_items_in_backpack()
+
+func _physics_process(delta):
+    global_position=Global.PlayerCamera.global_position-Vector2(450,300)
 
 func update_items_in_backpack():
     SequencedItem=[]

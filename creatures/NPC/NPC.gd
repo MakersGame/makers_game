@@ -74,7 +74,7 @@ func _physics_process(delta):
     if CurrentAreaCenter==null:
         z_index=100
     else:
-        z_index=floor(((global_position-CurrentAreaCenter).y)/20)+3
+        z_index=floor(((global_position-CurrentAreaCenter).y)/20)+2
     
     Speed=CreatureStatus.Speed[CreatureStatus.SpeedType]
     calc_distance_to_player_and_target()
@@ -264,6 +264,8 @@ func move_mode_function():
         CreatureStatus.SpeedType=0
 
 func energy_recover():
+    if $RigidTimer.time_left:
+        return
     if !TiredOut:
         Energy+=0.66667
     else:

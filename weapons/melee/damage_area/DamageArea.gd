@@ -18,7 +18,7 @@ func init(_Attack:float,_SingleDamage:bool,_ExistTime:float,_Direction:Vector2,_
     KnockBack=_KnockBack
     Owner=_Owner
     $DestroyTimer.wait_time=_ExistTime
-    $DestroyTimer.start()
+    $DestroyTimer.call_deferred("start")
 
 func _physics_process(delta):
     visible=true#避免第一帧方向错误采取的操作，可以改进

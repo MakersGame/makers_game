@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=12 format=2]
+[gd_resource type="SpriteFrames" load_steps=14 format=2]
 
 [ext_resource path="res://art/temp/bandage.png" type="Texture" id=1]
 [ext_resource path="res://art/temp/OverworldUIs/WeaponChoice/gun.png" type="Texture" id=2]
@@ -11,6 +11,8 @@
 [ext_resource path="res://art/temp/Bullet2.png" type="Texture" id=9]
 [ext_resource path="res://art/weapons/MeleeWeapon1.png" type="Texture" id=10]
 [ext_resource path="res://art/weapons/weapon1.png" type="Texture" id=11]
+[ext_resource path="res://art/weapons/weapon2.png" type="Texture" id=12]
+[ext_resource path="res://art/weapons/weapon5.png" type="Texture" id=13]
 
 [resource]
 animations = [ {
@@ -19,29 +21,9 @@ animations = [ {
 "name": "绷带",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 9 ) ],
+"frames": [  ],
 "loop": true,
-"name": "雷明顿16号弹",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 5 ) ],
-"loop": true,
-"name": "9mm子弹",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 7 ) ],
-"loop": true,
-"name": "9mm手枪",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 6 ) ],
-"loop": true,
-"name": "test_ranged_weapon1",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 10 ) ],
-"loop": true,
-"name": "马桶橛子",
+"name": "null",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 3 ) ],
@@ -49,19 +31,24 @@ animations = [ {
 "name": "test_melee_weapon",
 "speed": 5.0
 }, {
-"frames": [  ],
+"frames": [ ExtResource( 9 ) ],
 "loop": true,
-"name": "null",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 4 ) ],
-"loop": true,
-"name": "木材",
+"name": "雷明顿16号弹",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 2 ) ],
 "loop": true,
 "name": "test_ranged_weapon",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 10 ) ],
+"loop": true,
+"name": "马桶橛子",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 7 ) ],
+"loop": true,
+"name": "9mm手枪",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 8 ) ],
@@ -72,5 +59,35 @@ animations = [ {
 "frames": [ ExtResource( 11 ) ],
 "loop": true,
 "name": "EX咖喱棒",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 6 ) ],
+"loop": true,
+"name": "test_ranged_weapon1",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 4 ) ],
+"loop": true,
+"name": "木材",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 5 ) ],
+"loop": true,
+"name": "9mm子弹",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 12 ) ],
+"loop": true,
+"name": "汤姆逊冲锋枪",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 5 ) ],
+"loop": true,
+"name": "45ACP子弹",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 13 ) ],
+"loop": true,
+"name": "军刀",
 "speed": 5.0
 } ]

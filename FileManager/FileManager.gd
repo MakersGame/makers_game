@@ -6,6 +6,13 @@ func load_data():
     while !SaveFile.eof_reached():
         var TempLine=SaveFile.get_line()
         match TempLine:
+            "@HomeUpdateInfo":
+                Global.HomeUpdateInfo={}
+                TempLine=SaveFile.get_line()
+                while TempLine!="@end":
+                    var Contents=TempLine.split(" ")
+                    Global.HomeUpdateInfo[Contents[0]]=int(Contents[1])
+                    TempLine=SaveFile.get_line()
             "@GoodInHome":
                 Global.GoodInHome={}
                 TempLine=SaveFile.get_line()

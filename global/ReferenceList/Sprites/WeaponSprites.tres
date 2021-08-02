@@ -1,10 +1,11 @@
-[gd_resource type="SpriteFrames" load_steps=6 format=2]
+[gd_resource type="SpriteFrames" load_steps=7 format=2]
 
 [ext_resource path="res://art/weapons/weapon2.png" type="Texture" id=1]
 [ext_resource path="res://art/weapons/weapon3.png" type="Texture" id=2]
 [ext_resource path="res://art/weapons/weapon1.png" type="Texture" id=3]
 [ext_resource path="res://art/weapons/weapon4.png" type="Texture" id=4]
 [ext_resource path="res://art/weapons/MeleeWeapon1.png" type="Texture" id=5]
+[ext_resource path="res://art/weapons/weapon5.png" type="Texture" id=6]
 
 [resource]
 animations = [ {
@@ -13,14 +14,14 @@ animations = [ {
 "name": "default",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 2 ) ],
-"loop": true,
-"name": "9mm手枪",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 5 ) ],
 "loop": true,
 "name": "马桶橛子",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 2 ) ],
+"loop": true,
+"name": "9mm手枪",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 4 ) ],
@@ -30,16 +31,16 @@ animations = [ {
 }, {
 "frames": [ ExtResource( 3 ) ],
 "loop": true,
-"name": "weapon1",
+"name": "EX咖喱棒",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 1 ) ],
 "loop": true,
-"name": "weapon2",
+"name": "汤姆逊冲锋枪",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 3 ) ],
+"frames": [ ExtResource( 6 ) ],
 "loop": true,
-"name": "EX咖喱棒",
+"name": "军刀",
 "speed": 5.0
 } ]

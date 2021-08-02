@@ -7,9 +7,10 @@ func _ready():
     $Enermies/Enermy4.init("test_enermy",Vector2(0,-1),-1,global_position)
     $Enermies/Enermy5.init("test_enermy",Vector2(0,-1),-1,global_position)
     $Chests/Chest.init([
-        {"Name":"9mm子弹","Type":"Item","Number":100},
+        {"Name":"45ACP子弹","Type":"Item","Number":100},
         {"Name":"木材","Type":"Item","Number":10},
-        {"Name":"老式霰弹枪","Type":"Weapon","Number":1}
+        {"Name":"汤姆逊冲锋枪","Type":"Weapon","Number":1},
+        {"Name":"军刀","Type":"Weapon","Number":1}
        ])
 
 func _on_UpdateArea_body_entered(body):

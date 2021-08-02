@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://weapons/melee/MeleeWeapon.gd" type="Script" id=1]
 [ext_resource path="res://global/ReferenceList/Sprites/WeaponSprites.tres" type="SpriteFrames" id=2]
@@ -20,6 +20,22 @@ tracks/0/keys = {
 }
 
 [sub_resource type="Animation" id=2]
+resource_name = "军刀"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath("WeaponBody:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.05, 0.4, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 30, 0 ), Vector2( 30, 0 ), Vector2( 0, 0 ) ]
+}
+
+[sub_resource type="Animation" id=3]
 length = 0.8
 tracks/0/type = "value"
 tracks/0/path = NodePath("WeaponBody:position")
@@ -34,8 +50,8 @@ tracks/0/keys = {
 "values": [ Vector2( 0, 0 ), Vector2( 25, 0 ), Vector2( 25, 0 ), Vector2( 0, 0 ) ]
 }
 
-[sub_resource type="RectangleShape2D" id=3]
-extents = Vector2( 13, 2 )
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 12, 2.5 )
 
 [node name="MeleeWeapon" type="Node2D"]
 script = ExtResource( 1 )
@@ -46,20 +62,22 @@ one_shot = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 "anims/EX咖喱棒" = SubResource( 1 )
-"anims/马桶橛子" = SubResource( 2 )
+"anims/军刀" = SubResource( 2 )
+"anims/马桶橛子" = SubResource( 3 )
 
 [node name="WeaponBody" type="Node2D" parent="."]
 scale = Vector2( 4, 4 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="WeaponBody"]
-position = Vector2( 21, 0.2 )
-rotation = 0.00046032
-shape = SubResource( 3 )
-
 [node name="AnimatedSprite" type="AnimatedSprite" parent="WeaponBody"]
 z_index = 1
 frames = ExtResource( 2 )
-animation = "EX咖喱棒"
-offset = Vector2( 14, 1 )
+animation = "军刀"
+offset = Vector2( 9.5, 0.5 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WeaponBody"]
+position = Vector2( 9.5, 0.2 )
+rotation = 0.00046032
+z_index = 1
+shape = SubResource( 4 )
 
 [connection signal="timeout" from="ColdTimer" to="." method="_on_ColdTimer_timeout"]
