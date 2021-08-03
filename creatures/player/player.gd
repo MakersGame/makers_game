@@ -403,7 +403,7 @@ func action_ui_function():
             E_Actions.remove(i)
             i-=1
         elif E_Actions[i]["Type"]=="Door":
-            if E_Actions[i]["Target"].Opened==false and !E_Actions[i]["Target"].get_node("AnimationPlayer").is_playing():
+            if (E_Actions[i]["Target"].Opened==false and !E_Actions[i]["Target"].get_node("AnimationPlayer").is_playing()) or (E_Actions[i]["Target"].Opened and E_Actions[i]["Target"].get_node("AnimationPlayer").is_playing()):
                 E_Actions[i]["Enable"]=true
             else:
                 E_Actions[i]["Enable"]=false

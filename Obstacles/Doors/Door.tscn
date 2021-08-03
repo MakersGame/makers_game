@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://art/Rooms/Doors/door1.png" type="Texture" id=1]
 [ext_resource path="res://Obstacles/Doors/Door.gd" type="Script" id=2]
@@ -6,19 +6,19 @@
 [ext_resource path="res://art/Rooms/Doors/door3.png" type="Texture" id=4]
 [ext_resource path="res://Obstacles/obstacle.gd" type="Script" id=5]
 
-[sub_resource type="RectangleShape2D" id=4]
+[sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 3, 3 )
 
-[sub_resource type="SpriteFrames" id=1]
+[sub_resource type="SpriteFrames" id=2]
 animations = [ {
-"frames": [ ExtResource( 1 ) ],
-"loop": true,
-"name": "right2left",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 3 ) ],
 "loop": true,
 "name": "left2right",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 1 ) ],
+"loop": true,
+"name": "right2left",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 4 ) ],
@@ -27,11 +27,11 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[sub_resource type="RectangleShape2D" id=8]
+[sub_resource type="RectangleShape2D" id=3]
 resource_local_to_scene = true
 extents = Vector2( 10, 5 )
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="Animation" id=4]
 resource_name = "left2right"
 length = 0.5
 tracks/0/type = "value"
@@ -47,8 +47,7 @@ tracks/0/keys = {
 "values": [ Vector2( 0, 0 ), Vector2( 20, 0 ) ]
 }
 
-[sub_resource type="Animation" id=3]
-resource_name = "right2left"
+[sub_resource type="Animation" id=5]
 length = 0.5
 tracks/0/type = "value"
 tracks/0/path = NodePath("DoorBody:position")
@@ -63,7 +62,7 @@ tracks/0/keys = {
 "values": [ Vector2( 0, 0 ), Vector2( -20, 0 ) ]
 }
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id=6]
 length = 0.5
 tracks/0/type = "value"
 tracks/0/path = NodePath("DoorBody:position")
@@ -78,6 +77,8 @@ tracks/0/keys = {
 "values": [ Vector2( 0, 0 ), Vector2( 0, 20 ) ]
 }
 
+[sub_resource type="RectangleShape2D" id=7]
+
 [node name="Door" type="StaticBody2D"]
 scale = Vector2( 4, 4 )
 collision_layer = 16
@@ -85,12 +86,13 @@ collision_mask = 0
 script = ExtResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource( 4 )
+visible = false
+shape = SubResource( 1 )
 
 [node name="DoorBody" type="Node2D" parent="."]
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="DoorBody"]
-frames = SubResource( 1 )
+frames = SubResource( 2 )
 animation = "left2right"
 offset = Vector2( 0, -10 )
 
@@ -99,17 +101,28 @@ collision_mask = 6
 script = ExtResource( 5 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DoorBody/Obstacle"]
+visible = false
 position = Vector2( 0, -5 )
-shape = SubResource( 8 )
+shape = SubResource( 3 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/left2right = SubResource( 5 )
-anims/right2left = SubResource( 3 )
-anims/up2down = SubResource( 7 )
+anims/left2right = SubResource( 4 )
+anims/right2left = SubResource( 5 )
+anims/up2down = SubResource( 6 )
 
 [node name="CloseTimer" type="Timer" parent="."]
 wait_time = 10.0
 one_shot = true
 
+[node name="DetectArea" type="Area2D" parent="."]
+position = Vector2( 0, -5 )
+collision_layer = 0
+collision_mask = 6
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectArea"]
+visible = false
+shape = SubResource( 7 )
+
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
 [connection signal="timeout" from="CloseTimer" to="." method="_on_CloseTimer_timeout"]
+[connection signal="body_entered" from="DetectArea" to="." method="_on_DetectArea_body_entered"]

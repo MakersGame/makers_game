@@ -6,7 +6,7 @@ var Key=null
 var Opened:bool=false
 var CurrentAnimation=""
 
-\
+
 func init(_Direction:String,_Opened:bool=false,_Locked=false,_Key=null):
     Key=_Key
     Locked=_Locked
@@ -28,8 +28,9 @@ func init(_Direction:String,_Opened:bool=false,_Locked=false,_Key=null):
 
     z_index=floor(position.y/20)
 func open():
-    if $AnimationPlayer.is_playing():
-        yield($AnimationPlayer,"animation_finished")
+    if $AnimationPlayer.is_playing() and Opened:
+        $AnimationPlayer.stop(false)
+        $AnimationPlayer.play(CurrentAnimation)
     if !Opened:
         $AnimationPlayer.play(CurrentAnimation)
 
@@ -38,6 +39,7 @@ func close():
         yield($AnimationPlayer,"animation_finished")
     if Opened:
         $AnimationPlayer.play_backwards(CurrentAnimation)
+        $DetectArea/CollisionShape2D.disabled=false
 
 func _on_AnimationPlayer_animation_finished(anim_name):
     if $AnimationPlayer.get_current_animation_position()!=0:
@@ -50,3 +52,18 @@ func _on_CloseTimer_timeout():
     if $AnimationPlayer.is_playing():
         yield($AnimationPlayer,"animation_finished")
     close()
+
+
+func _on_DetectArea_body_entered(body):
+    if body.Identifier=="Player" or Locked:
+        return
+    if !Opened and !$AnimationPlayer.is_playing():
+        open()
+        $DetectArea/CollisionShape2D.disabled=true
+    elif Opened and $AnimationPlayer.is_playing():
+        $AnimationPlayer.stop(false)
+        $AnimationPlayer.play(CurrentAnimation)
+        $DetectArea/CollisionShape2D.disabled=true
+        $CloseTimer.start()
+
+
