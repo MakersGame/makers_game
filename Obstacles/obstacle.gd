@@ -1,3 +1,3 @@
-extends TileMap
+extends Node2D
 
 var Identifier="Obstacle"

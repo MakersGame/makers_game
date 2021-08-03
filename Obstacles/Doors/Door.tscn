@@ -1,18 +1,54 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://art/Rooms/Doors/door1.png" type="Texture" id=1]
 [ext_resource path="res://Obstacles/Doors/Door.gd" type="Script" id=2]
+[ext_resource path="res://art/Rooms/Doors/door2.png" type="Texture" id=3]
+[ext_resource path="res://art/Rooms/Doors/door3.png" type="Texture" id=4]
+[ext_resource path="res://Obstacles/obstacle.gd" type="Script" id=5]
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 3, 3 )
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
 "frames": [ ExtResource( 1 ) ],
 "loop": true,
-"name": "door1",
+"name": "right2left",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 3 ) ],
+"loop": true,
+"name": "left2right",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 4 ) ],
+"loop": true,
+"name": "up2down",
 "speed": 5.0
 } ]
 
-[sub_resource type="Animation" id=2]
-resource_name = "door1"
+[sub_resource type="RectangleShape2D" id=8]
+resource_local_to_scene = true
+extents = Vector2( 10, 5 )
+
+[sub_resource type="Animation" id=5]
+resource_name = "left2right"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath("DoorBody:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 20, 0 ) ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "right2left"
 length = 0.5
 tracks/0/type = "value"
 tracks/0/path = NodePath("DoorBody:position")
@@ -27,19 +63,53 @@ tracks/0/keys = {
 "values": [ Vector2( 0, 0 ), Vector2( -20, 0 ) ]
 }
 
-[node name="Door" type="Node2D"]
-position = Vector2( 40, 0 )
+[sub_resource type="Animation" id=7]
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath("DoorBody:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 0, 20 ) ]
+}
+
+[node name="Door" type="StaticBody2D"]
 scale = Vector2( 4, 4 )
+collision_layer = 16
+collision_mask = 0
 script = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 4 )
 
 [node name="DoorBody" type="Node2D" parent="."]
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="DoorBody"]
 frames = SubResource( 1 )
-animation = "door1"
+animation = "left2right"
 offset = Vector2( 0, -10 )
 
+[node name="Obstacle" type="KinematicBody2D" parent="DoorBody"]
+collision_mask = 6
+script = ExtResource( 5 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DoorBody/Obstacle"]
+position = Vector2( 0, -5 )
+shape = SubResource( 8 )
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/door1 = SubResource( 2 )
+anims/left2right = SubResource( 5 )
+anims/right2left = SubResource( 3 )
+anims/up2down = SubResource( 7 )
+
+[node name="CloseTimer" type="Timer" parent="."]
+wait_time = 10.0
+one_shot = true
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
+[connection signal="timeout" from="CloseTimer" to="." method="_on_CloseTimer_timeout"]

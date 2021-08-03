@@ -6,5 +6,5 @@
 [node name="Decorate1" type="Sprite"]
 scale = Vector2( 4, 4 )
 texture = ExtResource( 2 )
-offset = Vector2( 0, -1 )
+offset = Vector2( 0, 5.5 )
 script = ExtResource( 1 )

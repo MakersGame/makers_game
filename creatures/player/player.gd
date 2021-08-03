@@ -402,6 +402,11 @@ func action_ui_function():
         elif E_Actions[i]["Type"]=="HomeUpdateArea" and !E_Actions[i]["Enable"]:
             E_Actions.remove(i)
             i-=1
+        elif E_Actions[i]["Type"]=="Door":
+            if E_Actions[i]["Target"].Opened==false and !E_Actions[i]["Target"].get_node("AnimationPlayer").is_playing():
+                E_Actions[i]["Enable"]=true
+            else:
+                E_Actions[i]["Enable"]=false
         i+=1
     i=0
     while i<Q_Actions.size():
@@ -410,8 +415,10 @@ func action_ui_function():
             i-=1
         i+=1
     for key in E_Actions:
+        if !key["Enable"]:
+            continue
         var Collision=Global.detect_collision_in_line(global_position,key["Target"].global_position,[self,key["Target"]],1)
-        if Collision:
+        if Collision and !key["Target"].is_a_parent_of(Collision.collider):
             $E_ActionUI.hide()
             key["Enable"]=false
             continue
@@ -420,7 +427,7 @@ func action_ui_function():
             $E_ActionUI.global_position=key["Target"].global_position
             key["Enable"]=true
             return
-        elif key["Type"]=="PickableItem" or key["Type"]=="Chest" or key["Type"]=="HomeUpdateArea":
+        elif key["Type"]=="PickableItem" or key["Type"]=="Chest" or key["Type"]=="HomeUpdateArea" or key["Type"]=="Door":
             $E_ActionUI.show()  
             $E_ActionUI.global_position=key["Target"].global_position
             return
@@ -452,6 +459,8 @@ func _on_ActionArea_body_entered(body):
         E_Actions.push_back({"Type":"Chest","Target":body,"Enable":true})
     elif body.Identifier=="HomeUpdateArea":
         E_Actions.push_back({"Type":"HomeUpdateArea","Target":body,"Enable":true})
+    elif body.Identifier=="Door":
+        E_Actions.push_back({"Type":"Door","Target":body,"Enable":false})
 
 
 func _on_ActionArea_body_exited(body):
@@ -487,6 +496,8 @@ func E_action():
             elif i["Type"]=="HomeUpdateArea":
                 Global.open_home_update()
                 i["Enable"]=false
+            elif i["Type"]=="Door":
+                i["Target"].open()
             return    
           
 func Q_action():

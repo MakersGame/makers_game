@@ -12,6 +12,9 @@ func _ready():
         {"Name":"汤姆逊冲锋枪","Type":"Weapon","Number":1},
         {"Name":"军刀","Type":"Weapon","Number":1}
        ])
+    $Doors/Door1.init("left")
+    $Doors/Door2.init("right")
+    $Doors/Door3.init("down")
 
 func _on_UpdateArea_body_entered(body):
     if body.Identifier=="Player":
