@@ -55,7 +55,7 @@ func move_and_detect():
             Exist=false
             queue_free()
         return
-    if collision.collider.Identifier=="Obstacle":#撞到障碍物，则销毁自身
+    if collision.collider.Identifier=="Obstacle" or collision.collider.Identifier=="Chest":#撞到障碍物，则销毁自身
         Exist=false
         global_position=collision.position
         hit_target(null)

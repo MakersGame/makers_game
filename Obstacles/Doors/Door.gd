@@ -69,11 +69,13 @@ func _on_DetectArea_body_entered(body):
     if not body in BodyInArea:
         BodyInArea.push_back(body)
     if !Opened and !$AnimationPlayer.is_playing():
-        open()
+        if !(body.Identifier=="Enermy" and body.AImode=="default"):
+            open()
     elif Opened and $AnimationPlayer.is_playing():
-        $AnimationPlayer.stop(false)
-        $AnimationPlayer.play(CurrentAnimation)
-        $CloseTimer.start()
+        if !(body.Identifier=="Enermy" and body.AImode=="default"):
+            $AnimationPlayer.stop(false)
+            $AnimationPlayer.play(CurrentAnimation)
+            $CloseTimer.start()
 
 func _on_DetectArea_body_exited(body):
     if body in BodyInArea:

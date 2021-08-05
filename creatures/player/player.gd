@@ -14,6 +14,8 @@ var ForceDirection:Vector2=Vector2()        #强制面对方向
 var LoadLimit:float                         #主角的最大负重值
 var KnockBack:Vector3                       #被击退值，三维向量，xy表示方向，z表示剩余击退距离，每一帧击退距离呈二次函数
 var WeaponChoice:String                     #"ranged"或"melee"，代表当前选中远程或近战武器
+var GuardingEnermies=[]                     #正在警戒自己的敌人
+var AttackingEnermies=[]                    #正在攻击自己的敌人
 
 var CurrentAreaCenter                       #当前区块中心，决定玩家图层
 var E_Actions=[]
@@ -92,8 +94,31 @@ func _physics_process(delta):
     move()
     Global.OverworldUIs.update_energy(Energy)
     animation_function()
-    
+    guarding_sign_function()
     action_ui_function()
+
+func guarding_sign_function():
+    if $creature_status/GuardSign.visible and !GuardingEnermies.size() and !AttackingEnermies.size():
+        $creature_status/GuardSign.hide()
+    else:
+        var i=0
+        while i<GuardingEnermies.size():
+            if !GuardingEnermies[i].CreatureStatus.alive():
+                GuardingEnermies.remove(i)
+                i-=1
+            i+=1
+        i=0
+        while i<AttackingEnermies.size():
+            if !AttackingEnermies[i].CreatureStatus.alive() or AttackingEnermies[i].Target!=self:
+                AttackingEnermies.remove(i)
+                i-=1
+            i+=1
+        if GuardingEnermies.size():
+            $creature_status/GuardSign.show()
+            $creature_status/GuardSign.animation="Detected"
+        if AttackingEnermies.size():
+            $creature_status/GuardSign.show()
+            $creature_status/GuardSign.animation="Attacked"
 
 func _input(event):
     if Global.GameStatus!="PlayerControl":

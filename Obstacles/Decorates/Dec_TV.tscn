@@ -9,3 +9,6 @@ z_index = 600
 texture = ExtResource( 1 )
 offset = Vector2( 0, -1 )
 script = ExtResource( 2 )
+__meta__ = {
+"_edit_group_": true
+}

@@ -179,7 +179,7 @@ var EnermyReference={
         "AnimationOffset":Vector2(0,0),
         "Ability":[1,1,1,1],
         "SightAngle":90,
-        "SightRange":400,
+        "SightRange":200,
         "BeforeAttackTime":0.5,
         "AfterAttackTime":0.5,
         "AttackColdTime":2

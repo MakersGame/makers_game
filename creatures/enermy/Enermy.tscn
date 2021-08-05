@@ -13,7 +13,7 @@ animations = [ {
 } ]
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 25, 25 )
+extents = Vector2( 30, 30 )
 
 [node name="Enermy" type="KinematicBody2D" groups=[
 "enermy",
@@ -39,7 +39,17 @@ one_shot = true
 one_shot = true
 
 [node name="DisappearTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="RaiseGuardTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="RandomMoveTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
 
 [connection signal="timeout" from="AttackColdTimer" to="." method="_on_AttackColdTimer_timeout"]
 [connection signal="timeout" from="RigidTimer" to="." method="_on_RigidTimer_timeout"]
 [connection signal="timeout" from="DisappearTimer" to="." method="_on_DisappearTimer_timeout"]
+[connection signal="timeout" from="RandomMoveTimer" to="." method="_on_RandomMoveTimer_timeout"]

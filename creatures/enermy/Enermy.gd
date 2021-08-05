@@ -54,6 +54,7 @@ func init(_Name:String,_FaceDirection:Vector2,_TempHealth:float,_CurrentAreaCent
               
     Attackable=true 
     Exist=true
+    CurrentAreaCenter=Vector2()
         
 func _physics_process(delta):
     if !CreatureStatus.alive() and Exist:
@@ -63,12 +64,14 @@ func _physics_process(delta):
     if CurrentAreaCenter==null:
         z_index=100
     else:
-        z_index=floor((global_position-CurrentAreaCenter).y/20)
+        z_index=floor((global_position-CurrentAreaCenter).y/20)+2
     Target=CreatureStatus.TargetEnermy
     if Target!=null:
         TargetPosition=Target.global_position    
     AIFunction()
     var movement=CreatureStatus.find_way(TargetPosition)
+    if CreatureStatus.TargetPath.size()>1:
+        FaceDirection=(CreatureStatus.TargetPath[1]-CreatureStatus.TargetPath[0]).normalized()
     Speed=CreatureStatus.Speed[CreatureStatus.SpeedType]
     move(movement)
     $AnimatedSprite.rotation_degrees=FaceDirection.angle()*180/PI+90
@@ -81,29 +84,30 @@ func detect():
     var TempMinimumDis=INF#当前检测到的生物的离自己最短距离
     FaceDirection=FaceDirection.normalized()
     for Tar in Tars:
-        if CreatureStatus.AggroValue.get(Tar)==null and (Tar.global_position-global_position).length()>SightRange or abs(FaceDirection.angle_to(Tar.global_position-global_position))*180/PI>SightAngle/2:
+        Tar.GuardingEnermies.erase(self)
+        if CreatureStatus.AggroValue.get(Tar)==null and (Tar.global_position-global_position).length()>SightRange*2 or abs(FaceDirection.angle_to(Tar.global_position-global_position))*180/PI>SightAngle/2:
             continue#若对此单位没有仇恨，且其不在扇形区域内，直接判断下一个
         #判断是否撞上障碍物
         var collision=Global.detect_collision_in_line(global_position,Tar.global_position,[self], 1)
-        if !collision and TempMinimumDis>(Tar.global_position-global_position).length():
+        if collision:
+            if CreatureStatus.AggroValue.get(Tar)!=null:
+                CreatureStatus.dec_aggro(0.1*sqrt(CreatureStatus.AggroValue[Tar]),Tar)
+        elif CreatureStatus.AggroValue.get(Tar)==null and (Tar.global_position-global_position).length()>SightRange and abs(FaceDirection.angle_to(Tar.global_position-global_position))*180/PI<=SightAngle/2:
+            call_deferred("deferred_raise_guard",Tar.global_position,SightRange*3)
+            if not self in Tar.GuardingEnermies:
+                Tar.GuardingEnermies.push_back(self)
+        elif TempMinimumDis>(Tar.global_position-global_position).length():
             res=Tar
             TempMinimumDis=(Tar.global_position-global_position).length()
             if CreatureStatus.AggroValue.get(Tar)==null or CreatureStatus.AggroValue[Tar]<100:
-                CreatureStatus.AggroValue[Tar]=240
-                CreatureStatus.add_aggro(1,Tar)
-        elif collision and CreatureStatus.AggroValue.get(Tar)!=null:
-                CreatureStatus.dec_aggro(0.4,Tar)
+                CreatureStatus.add_aggro(100,Tar)
     return res#结果为离自己最近的被检测到的敌人，若没有检测到则返回null
         
 func move(movement:Vector2):#移动策略，同NPC的
-    if movement!=Vector2(0,0):
-        FaceDirection=movement.normalized()#移动方向决定面朝方向
-    if (TargetPosition-global_position).length()<=Speed*0.5: 
+    if (TargetPosition-global_position).length()<Speed: 
         movement=Vector2()
     if $RigidTimer.time_left:
         movement=Vector2(0,0)
-    if movement!=Vector2():
-        FaceDirection=movement.normalized()
     if KnockBack.z:
         var KnockBackDistance=sqrt(KnockBack.z)
         movement+=Vector2(KnockBack.x,KnockBack.y).normalized()*KnockBackDistance
@@ -119,21 +123,29 @@ func move(movement:Vector2):#移动策略，同NPC的
 func AIFunction():#AI切换以及不同AI的行动
     match AImode:
         "default":#默认模式
+            if !$RandomMoveTimer.time_left and CreatureStatus.TargetPath.size()<=1:
+                $RandomMoveTimer.start()
+            elif CreatureStatus.TargetPath.size()>1:
+                $RandomMoveTimer.stop()
             var Tar=detect()
             if Tar!=null:
                 Target=Tar
                 AImode="attacking"#找到目标后进入攻击模式
+                $CreatureStatus/GuardSign.show()
             elif GuardingPosition.z>0:
                 AImode="guarding"
                 SightAngle*=1.5
                 SightRange*=1.5
+                $CreatureStatus/GuardSign.show()
         "guarding":#警戒模式
+            $CreatureStatus/GuardSign.animation="Guarding"
             detect()
             TargetPosition=Vector2(GuardingPosition.x,GuardingPosition.y)
             if Target!=null:
                 AImode="attacking"
                 SightAngle/=1.5
                 SightRange/=1.5
+                $CreatureStatus/GuardSign.show()
             if (TargetPosition-global_position).length()<=SightRange/3:
                 var collision=Global.detect_collision_in_line(global_position,TargetPosition,[self],1)
                 if collision:
@@ -145,14 +157,22 @@ func AIFunction():#AI切换以及不同AI的行动
                 AImode="backtracking"
                 SightAngle/=1.5
                 SightRange/=1.5
+                $CreatureStatus/GuardSign.hide()
         "attacking":#冲突模式，追踪目标进行攻击
+            $CreatureStatus/GuardSign.animation="Attacking"
             detect()
             if Target==null :
                 if GuardingPosition.z<=0:
                     AImode="backtracking"#失去目标，则进入回溯模式 
+                    $CreatureStatus/GuardSign.hide()
                 else:
                     AImode="guarding"
+                    SightAngle*=1.5
+                    SightRange*=1.5
+                    $CreatureStatus/GuardSign.show()
             else:
+                if not self in Target.AttackingEnermies:
+                    Target.AttackingEnermies.push_back(self)
                 if !$RigidTimer.time_left and !$AttackColdTimer.time_left and Attackable and (Target.global_position-global_position).length()<=AttackRange:
                     $RigidTimer.wait_time=BeforeAttackTime
                     FaceDirection=(Target.global_position-global_position).normalized()
@@ -160,18 +180,22 @@ func AIFunction():#AI切换以及不同AI的行动
         "backtracking":#回溯模式，回到出生点
             if Target!=null:
                 AImode="attacking"
+                $CreatureStatus/GuardSign.show()
                 return
             elif GuardingPosition.z>0:
                 AImode="guarding"    
                 SightAngle*=1.5
                 SightRange*=1.5
+                $CreatureStatus/GuardSign.show()
             TargetPosition=BirthPosition
-            if (global_position-BirthPosition).length()<=Speed*0.5:
+            if abs(TargetPosition.x-global_position.x)<=$CollisionShape2D.shape.extents.x and abs(TargetPosition.y-global_position.y)<=$CollisionShape2D.shape.extents.y:
                 TargetPosition=global_position
                 AImode="default"
+                $CreatureStatus/GuardSign.hide()
         _:
             print("WARNING!!! ",self," in an unknown AImode!")
             return
+
 
 func attack():#攻击
     if !Attackable:
@@ -199,6 +223,14 @@ func raise_guard(pos:Vector2,value:float):
     if GuardingPosition.z<=value and (global_position-pos).length()<=value:
         GuardingPosition=Vector3(pos.x,pos.y,value)
 
+func deferred_raise_guard(pos:Vector2,value:float):
+    if AImode!="attacking":
+        $CreatureStatus/GuardSign.animation="Guarding"
+        $CreatureStatus/GuardSign.show()
+    if $RaiseGuardTimer.time_left==0:
+        $RaiseGuardTimer.start()
+    yield($RaiseGuardTimer,"timeout")
+    raise_guard(pos,value)
 
 func die():
     $DisappearTimer.start()
@@ -207,3 +239,21 @@ func die():
 
 func _on_DisappearTimer_timeout():
     queue_free()
+
+func _on_RandomMoveTimer_timeout():
+    if AImode!="default" or $RaiseGuardTimer.time_left:
+        return
+    for i in range(100):
+        var RandomNumber=randi()%200
+        var RandomMovement
+        if RandomNumber%4==0:
+            RandomMovement=Vector2(1,0)*(100+RandomNumber)
+        elif RandomNumber%4==1:
+            RandomMovement=Vector2(-1,0)*(100+RandomNumber)
+        elif RandomNumber%4==2:
+            RandomMovement=Vector2(0,1)*(100+RandomNumber)
+        else:
+            RandomMovement=Vector2(0,-1)*(100+RandomNumber)
+        if !Global.detect_collision_in_line(global_position,global_position+RandomMovement,[self],1):
+            TargetPosition=global_position+RandomMovement
+            return

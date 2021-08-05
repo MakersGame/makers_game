@@ -29,7 +29,7 @@ animations = [ {
 
 [sub_resource type="RectangleShape2D" id=3]
 resource_local_to_scene = true
-extents = Vector2( 10, 5 )
+extents = Vector2( 5, 10 )
 
 [sub_resource type="Animation" id=4]
 resource_name = "left2right"
@@ -46,6 +46,30 @@ tracks/0/keys = {
 "update": 0,
 "values": [ Vector2( 0, 0 ), Vector2( 20, 0 ) ]
 }
+tracks/1/type = "value"
+tracks/1/path = NodePath("DoorBody/Obstacle/CollisionShape2D:shape:extents")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 10, 5 ), Vector2( 0, 5 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("DoorBody/Obstacle/CollisionShape2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, -5 ), Vector2( -10, -5 ) ]
+}
 
 [sub_resource type="Animation" id=5]
 length = 0.5
@@ -61,6 +85,30 @@ tracks/0/keys = {
 "update": 0,
 "values": [ Vector2( 0, 0 ), Vector2( -20, 0 ) ]
 }
+tracks/1/type = "value"
+tracks/1/path = NodePath("DoorBody/Obstacle/CollisionShape2D:shape:extents")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 10, 5 ), Vector2( 0, 5 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("DoorBody/Obstacle/CollisionShape2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, -5 ), Vector2( 10, -5 ) ]
+}
 
 [sub_resource type="Animation" id=6]
 length = 0.5
@@ -75,6 +123,30 @@ tracks/0/keys = {
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
 "values": [ Vector2( 0, 0 ), Vector2( 0, 20 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("DoorBody/Obstacle/CollisionShape2D:shape:extents")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 5, 10 ), Vector2( 5, 0 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("DoorBody/Obstacle/CollisionShape2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, -5 ), Vector2( 0, -15 ) ]
 }
 
 [sub_resource type="RectangleShape2D" id=7]

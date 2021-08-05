@@ -26,6 +26,8 @@ var FollowDistance:Vector2          #跟随模式和撤退模式下，x代表离
 var FightingFollowDistance:Vector2  #冲突模式下跟随玩家的距离
 var DistanceToPlayer:float=0        #距离玩家的距离，动态更新
 var WeaponChoice=""
+var GuardingEnermies=[]             #正在警戒自己的敌人
+var AttackingEnermies=[]            #正在攻击自己的敌人
 
 var CurrentAreaCenter               #当前区块中心，决定NPC图层
 
@@ -85,7 +87,32 @@ func _physics_process(delta):
     energy_recover()
     move()
     animation_function()
+    guarding_sign_function()
     
+func guarding_sign_function():
+    if $creature_status/GuardSign.visible and !GuardingEnermies.size() and !AttackingEnermies.size():
+        $creature_status/GuardSign.hide()
+    else:
+        var i=0
+        while i<GuardingEnermies.size():
+            if !GuardingEnermies[i].CreatureStatus.alive():
+                GuardingEnermies.remove(i)
+                i-=1
+            i+=1
+        i=0
+        while i<AttackingEnermies.size():
+            if !AttackingEnermies[i].CreatureStatus.alive() or AttackingEnermies[i].Target!=self:
+                AttackingEnermies.remove(i)
+                i-=1
+            i+=1
+        if GuardingEnermies.size():
+            $creature_status/GuardSign.show()
+            $creature_status/GuardSign.animation="Detected"
+        if AttackingEnermies.size():
+            $creature_status/GuardSign.show()
+            $creature_status/GuardSign.animation="Attacked"
+                
+
 func move():#移动策略
     if (TargetPosition-global_position).length()<=Speed*0.5:#离目标位置足够近，不需要继续移动
         movement=Vector2()

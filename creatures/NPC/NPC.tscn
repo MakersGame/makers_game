@@ -93,31 +93,6 @@ animations = [ {
 "name": "info",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 17 ), ExtResource( 58 ), ExtResource( 12 ), ExtResource( 58 ), ExtResource( 37 ), ExtResource( 73 ), ExtResource( 3 ), ExtResource( 73 ) ],
-"loop": true,
-"name": "armed_walk_left_down",
-"speed": 10.0
-}, {
-"frames": [ ExtResource( 20 ), ExtResource( 76 ), ExtResource( 10 ), ExtResource( 76 ), ExtResource( 29 ), ExtResource( 75 ), ExtResource( 30 ), ExtResource( 75 ) ],
-"loop": true,
-"name": "armed_walk_up",
-"speed": 10.0
-}, {
-"frames": [ ExtResource( 23 ), ExtResource( 57 ), ExtResource( 11 ), ExtResource( 57 ), ExtResource( 39 ), ExtResource( 72 ), ExtResource( 33 ), ExtResource( 72 ) ],
-"loop": true,
-"name": "armed_walk_left_up",
-"speed": 10.0
-}, {
-"frames": [ ExtResource( 21 ), ExtResource( 55 ), ExtResource( 24 ), ExtResource( 55 ), ExtResource( 28 ), ExtResource( 44 ), ExtResource( 38 ), ExtResource( 44 ) ],
-"loop": true,
-"name": "armed_walk_right_down",
-"speed": 10.0
-}, {
-"frames": [ ExtResource( 19 ), ExtResource( 74 ), ExtResource( 18 ), ExtResource( 74 ), ExtResource( 40 ), ExtResource( 77 ), ExtResource( 32 ), ExtResource( 77 ) ],
-"loop": true,
-"name": "armed_walk_right_up",
-"speed": 10.0
-}, {
 "frames": [ ExtResource( 57 ), ExtResource( 72 ) ],
 "loop": true,
 "name": "armed_stand_left_up",
@@ -128,54 +103,9 @@ animations = [ {
 "name": "armed_stand_right_up",
 "speed": 2.0
 }, {
-"frames": [ ExtResource( 41 ), ExtResource( 63 ), ExtResource( 46 ), ExtResource( 63 ), ExtResource( 14 ), ExtResource( 45 ), ExtResource( 27 ), ExtResource( 45 ) ],
+"frames": [ ExtResource( 62 ), ExtResource( 43 ) ],
 "loop": true,
-"name": "unarmed_walk_right_down",
-"speed": 10.0
-}, {
-"frames": [ ExtResource( 53 ), ExtResource( 51 ), ExtResource( 65 ), ExtResource( 51 ), ExtResource( 13 ), ExtResource( 64 ), ExtResource( 7 ), ExtResource( 64 ) ],
-"loop": true,
-"name": "unarmed_walk_left_up",
-"speed": 10.0
-}, {
-"frames": [ ExtResource( 79 ), ExtResource( 68 ), ExtResource( 78 ), ExtResource( 68 ), ExtResource( 6 ), ExtResource( 56 ), ExtResource( 36 ), ExtResource( 56 ) ],
-"loop": true,
-"name": "armed_walk_down",
-"speed": 10.0
-}, {
-"frames": [ ExtResource( 76 ), ExtResource( 75 ) ],
-"loop": true,
-"name": "armed_stand_up",
-"speed": 2.0
-}, {
-"frames": [ ExtResource( 47 ), ExtResource( 52 ) ],
-"loop": true,
-"name": "unarmed_stand_left_down",
-"speed": 2.0
-}, {
-"frames": [ ExtResource( 48 ), ExtResource( 59 ), ExtResource( 70 ), ExtResource( 59 ), ExtResource( 31 ), ExtResource( 67 ), ExtResource( 34 ), ExtResource( 67 ) ],
-"loop": true,
-"name": "unarmed_walk_down",
-"speed": 10.0
-}, {
-"frames": [ ExtResource( 55 ), ExtResource( 44 ) ],
-"loop": true,
-"name": "armed_stand_right_down",
-"speed": 2.0
-}, {
-"frames": [ ExtResource( 51 ), ExtResource( 64 ) ],
-"loop": true,
-"name": "unarmed_stand_left_up",
-"speed": 2.0
-}, {
-"frames": [ ExtResource( 63 ), ExtResource( 45 ) ],
-"loop": true,
-"name": "unarmed_stand_right_down",
-"speed": 2.0
-}, {
-"frames": [ ExtResource( 59 ), ExtResource( 67 ) ],
-"loop": true,
-"name": "unarmed_stand_down",
+"name": "unarmed_stand_up",
 "speed": 2.0
 }, {
 "frames": [ ExtResource( 58 ), ExtResource( 73 ) ],
@@ -183,9 +113,34 @@ animations = [ {
 "name": "armed_stand_left_down",
 "speed": 2.0
 }, {
+"frames": [ ExtResource( 53 ), ExtResource( 51 ), ExtResource( 65 ), ExtResource( 51 ), ExtResource( 13 ), ExtResource( 64 ), ExtResource( 7 ), ExtResource( 64 ) ],
+"loop": true,
+"name": "unarmed_walk_left_up",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 69 ), ExtResource( 61 ) ],
+"loop": true,
+"name": "unarmed_stand_right_up",
+"speed": 2.0
+}, {
+"frames": [ ExtResource( 48 ), ExtResource( 59 ), ExtResource( 70 ), ExtResource( 59 ), ExtResource( 31 ), ExtResource( 67 ), ExtResource( 34 ), ExtResource( 67 ) ],
+"loop": true,
+"name": "unarmed_walk_down",
+"speed": 10.0
+}, {
 "frames": [ ExtResource( 54 ), ExtResource( 62 ), ExtResource( 60 ), ExtResource( 62 ), ExtResource( 15 ), ExtResource( 43 ), ExtResource( 26 ), ExtResource( 43 ) ],
 "loop": true,
 "name": "unarmed_walk_up",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 79 ), ExtResource( 68 ), ExtResource( 78 ), ExtResource( 68 ), ExtResource( 6 ), ExtResource( 56 ), ExtResource( 36 ), ExtResource( 56 ) ],
+"loop": true,
+"name": "armed_walk_down",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 71 ), ExtResource( 69 ), ExtResource( 50 ), ExtResource( 69 ), ExtResource( 9 ), ExtResource( 61 ), ExtResource( 16 ), ExtResource( 61 ) ],
+"loop": true,
+"name": "unarmed_walk_right_up",
 "speed": 10.0
 }, {
 "frames": [ ExtResource( 68 ), ExtResource( 56 ) ],
@@ -193,24 +148,69 @@ animations = [ {
 "name": "armed_stand_down",
 "speed": 2.0
 }, {
-"frames": [ ExtResource( 71 ), ExtResource( 69 ), ExtResource( 50 ), ExtResource( 69 ), ExtResource( 9 ), ExtResource( 61 ), ExtResource( 16 ), ExtResource( 61 ) ],
+"frames": [ ExtResource( 59 ), ExtResource( 67 ) ],
 "loop": true,
-"name": "unarmed_walk_right_up",
+"name": "unarmed_stand_down",
+"speed": 2.0
+}, {
+"frames": [ ExtResource( 55 ), ExtResource( 44 ) ],
+"loop": true,
+"name": "armed_stand_right_down",
+"speed": 2.0
+}, {
+"frames": [ ExtResource( 47 ), ExtResource( 52 ) ],
+"loop": true,
+"name": "unarmed_stand_left_down",
+"speed": 2.0
+}, {
+"frames": [ ExtResource( 51 ), ExtResource( 64 ) ],
+"loop": true,
+"name": "unarmed_stand_left_up",
+"speed": 2.0
+}, {
+"frames": [ ExtResource( 76 ), ExtResource( 75 ) ],
+"loop": true,
+"name": "armed_stand_up",
+"speed": 2.0
+}, {
+"frames": [ ExtResource( 41 ), ExtResource( 63 ), ExtResource( 46 ), ExtResource( 63 ), ExtResource( 14 ), ExtResource( 45 ), ExtResource( 27 ), ExtResource( 45 ) ],
+"loop": true,
+"name": "unarmed_walk_right_down",
 "speed": 10.0
-}, {
-"frames": [ ExtResource( 62 ), ExtResource( 43 ) ],
-"loop": true,
-"name": "unarmed_stand_up",
-"speed": 2.0
-}, {
-"frames": [ ExtResource( 69 ), ExtResource( 61 ) ],
-"loop": true,
-"name": "unarmed_stand_right_up",
-"speed": 2.0
 }, {
 "frames": [ ExtResource( 42 ), ExtResource( 47 ), ExtResource( 66 ), ExtResource( 47 ), ExtResource( 35 ), ExtResource( 52 ), ExtResource( 8 ), ExtResource( 52 ) ],
 "loop": true,
 "name": "unarmed_walk_left_down",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 63 ), ExtResource( 45 ) ],
+"loop": true,
+"name": "unarmed_stand_right_down",
+"speed": 2.0
+}, {
+"frames": [ ExtResource( 17 ), ExtResource( 58 ), ExtResource( 12 ), ExtResource( 58 ), ExtResource( 37 ), ExtResource( 73 ), ExtResource( 3 ), ExtResource( 73 ) ],
+"loop": true,
+"name": "armed_walk_left_down",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 21 ), ExtResource( 55 ), ExtResource( 24 ), ExtResource( 55 ), ExtResource( 28 ), ExtResource( 44 ), ExtResource( 38 ), ExtResource( 44 ) ],
+"loop": true,
+"name": "armed_walk_right_down",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 23 ), ExtResource( 57 ), ExtResource( 11 ), ExtResource( 57 ), ExtResource( 39 ), ExtResource( 72 ), ExtResource( 33 ), ExtResource( 72 ) ],
+"loop": true,
+"name": "armed_walk_left_up",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 20 ), ExtResource( 76 ), ExtResource( 10 ), ExtResource( 76 ), ExtResource( 29 ), ExtResource( 75 ), ExtResource( 30 ), ExtResource( 75 ) ],
+"loop": true,
+"name": "armed_walk_up",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 19 ), ExtResource( 74 ), ExtResource( 18 ), ExtResource( 74 ), ExtResource( 40 ), ExtResource( 77 ), ExtResource( 32 ), ExtResource( 77 ) ],
+"loop": true,
+"name": "armed_walk_right_up",
 "speed": 10.0
 } ]
 

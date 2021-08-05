@@ -48,6 +48,8 @@ func get_hurt(DMG:float,DMG_kind:String,src:Object):#此处的src为攻击的对
         Health=0
     if get_parent().Identifier=="Player":
         Global.OverworldUIs.update_health(Health)    
+    if AggroValue.get(src)==null:
+        add_aggro(100,src)
     add_aggro(hurt*10,src)#受到伤害会增加自身对于攻击者的仇恨
 
 func heal(Value:float):
@@ -59,10 +61,10 @@ func heal(Value:float):
 
 func add_aggro(value:int,src:Object):#增加仇恨值
     if src in AggroValue.keys():
-        AggroValue[src]=log(exp(AggroValue[src])+value)
+        AggroValue[src]=sqrt(pow(AggroValue[src],2)+value)
     else:
-        AggroValue[src]=log(value)
-    if TargetEnermy==null or AggroValue[src]>=AggroValue[TargetEnermy]:
+        AggroValue[src]=sqrt(value)
+    if TargetEnermy==null or AggroValue[src]>AggroValue[TargetEnermy]:
         TargetEnermy=src
 
 func dec_aggro(num:float,src:Object):#降低仇恨值
@@ -79,16 +81,17 @@ func find_way(target:Vector2):#寻路算法，并且在拐弯处修正移动，�
         return Vector2()
     var movement=Vector2()
     var _Speed=Speed[SpeedType]
+    var cornor_pos=$CollisionShape2D.shape.extents#记下自身碰撞矩形的长宽
 #注意，碰撞遮罩中，layer1为障碍物，也是creature作为底层对象在实现寻路时考虑的
     if TargetPath.size()<=1 or TargetPath[TargetPath.size()-1]!=target:
-        TargetPath=navigation.get_simple_path(global_position,target)
+        if target!=global_position:
+            TargetPath=navigation.get_simple_path(global_position,target)
+        else:
+            TargetPath=[]
         if TargetPath.size()<=1:
             return Vector2(0,0)
-    elif TargetPath.size()>1:
-        if DistanceToNextPoint<=(TargetPath[1]-global_position).length() and !Global.detect_collision_in_line(global_position,TargetPath[1],[self],1):
-            TargetPath=[]
-        elif TargetPath.size()>2 and !Global.detect_collision_in_line(global_position,TargetPath[2],[self],1):
-            TargetPath.remove(0)
+    if TargetPath.size()>1 and TargetPath[1].x>=global_position.x-cornor_pos.x and TargetPath[1].x<=global_position.x+cornor_pos.x and TargetPath[1].y>=global_position.y-cornor_pos.y and TargetPath[1].y<=global_position.y+cornor_pos.y:
+        TargetPath.remove(0)
     if TargetPath.size()>1:
         movement=_Speed*((TargetPath[1]-global_position).normalized())#首先根据速度和目标移动方向计算移动向量
         DistanceToNextPoint=(TargetPath[1]-global_position).length()
@@ -100,7 +103,7 @@ func find_way(target:Vector2):#寻路算法，并且在拐弯处修正移动，�
        ############################################
         var collision_dir=movement-movement.slide(collision.normal)#计算出碰撞的位置，即来源的方向（上下左右）
         position=original_position
-        var cornor_pos=$CollisionShape2D.shape.extents#记下自身碰撞矩形的长宽
+        
         #从碰撞矩形的四个角分别发射与运动向量相同的射线，并进行碰撞检测
         var collision_top_left=Global.detect_collision_in_line(global_position-cornor_pos,global_position-cornor_pos+movement,[self], collision_mask)
         var collision_top_right=Global.detect_collision_in_line(global_position+Vector2(cornor_pos.x,-cornor_pos.y),global_position+Vector2(cornor_pos.x,-cornor_pos.y)+movement,[self], collision_mask)
@@ -109,24 +112,24 @@ func find_way(target:Vector2):#寻路算法，并且在拐弯处修正移动，�
         #根据碰撞体形状（矩形）来确定修正角度
         var FixAngle=atan2($CollisionShape2D.shape.extents.y,$CollisionShape2D.shape.extents.x)
         if collision_dir.x>0 :#根据碰撞结果以及运动方向进行移动修正
-            if collision_right_bottom && !collision_top_right && movement.angle()>=0 && movement.angle()<=FixAngle :
+            if collision_right_bottom && !collision_top_right && movement.angle()>=-1e-5 && movement.angle()<=FixAngle+1e-5 :
                 movement=Vector2(0,-_Speed)
-            elif !collision_right_bottom && collision_top_right && movement.angle()<=0 && movement.angle()>=-FixAngle :
+            elif !collision_right_bottom && collision_top_right && movement.angle()<=1e-5 && movement.angle()>=-FixAngle-1e-5 :
                 movement=Vector2(0,_Speed)
         elif collision_dir.x<0 :
-            if collision_left_bottom && !collision_top_left && movement.angle()>=PI-FixAngle && movement.angle()<=PI:
+            if collision_left_bottom && !collision_top_left && movement.angle()>=PI-FixAngle-1e-5 && movement.angle()<=PI+1e-5:
                 movement=Vector2(0,-_Speed)
-            elif !collision_left_bottom && collision_top_left && movement.angle()>=-PI && movement.angle()<=FixAngle-PI:
+            elif !collision_left_bottom && collision_top_left && movement.angle()>=-PI-1e-5 && movement.angle()<=FixAngle-PI+1e-5:
                 movement=Vector2(0,_Speed)
         elif collision_dir.y>0 :
-            if collision_left_bottom && !collision_right_bottom && movement.angle()>=PI/2 && movement.angle()<=PI/2+FixAngle:
+            if collision_left_bottom && !collision_right_bottom && movement.angle()>=PI/2-1e-5 && movement.angle()<=PI/2+FixAngle+1e-5:
                 movement=Vector2(_Speed,0)
-            elif !collision_left_bottom && collision_right_bottom && movement.angle()<=PI/2 && movement.angle()>=FixAngle:
+            elif !collision_left_bottom && collision_right_bottom && movement.angle()<=PI/2+1e-5 && movement.angle()>=FixAngle-1e-5:
                 movement=Vector2(-_Speed,0)
         elif collision_dir.y<0 :
-            if collision_top_left && !collision_top_right && movement.angle()<=-PI/2 && movement.angle()>=FixAngle-PI :
+            if collision_top_left && !collision_top_right && movement.angle()<=-PI/2+1e-5 && movement.angle()>=FixAngle-PI-1e-5 :
                 movement=Vector2(_Speed,0)
-            elif !collision_top_left && collision_top_right && movement.angle()<=-FixAngle && movement.angle()>=-PI/2:
+            elif !collision_top_left && collision_top_right && movement.angle()<=-FixAngle+1e-5 && movement.angle()>=-PI/2-1e-5:
                 movement=Vector2(-_Speed,0)
     else:
         position=original_position
