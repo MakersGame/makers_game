@@ -56,15 +56,14 @@ func init(_Name:String,_FaceDirection:Vector2,_TempHealth:float,_CurrentAreaCent
     Exist=true
         
 func _physics_process(delta):
+    if !CreatureStatus.alive() and Exist:
+        die()#死了，但不会立刻消失。动画会持续一小段时间
     if !Exist:
         return
     if CurrentAreaCenter==null:
         z_index=100
     else:
         z_index=floor((global_position-CurrentAreaCenter).y/20)
-    
-    if !CreatureStatus.alive():
-        die()#死了，但不会立刻消失。动画会持续一小段时间
     Target=CreatureStatus.TargetEnermy
     if Target!=null:
         TargetPosition=Target.global_position    
@@ -72,6 +71,7 @@ func _physics_process(delta):
     var movement=CreatureStatus.find_way(TargetPosition)
     Speed=CreatureStatus.Speed[CreatureStatus.SpeedType]
     move(movement)
+    $AnimatedSprite.rotation_degrees=FaceDirection.angle()*180/PI+90
 
 func detect():
     if FaceDirection==Vector2(0,0):#这种情况说明初始化有问题，且会引发错误
@@ -102,6 +102,8 @@ func move(movement:Vector2):#移动策略，同NPC的
         movement=Vector2()
     if $RigidTimer.time_left:
         movement=Vector2(0,0)
+    if movement!=Vector2():
+        FaceDirection=movement.normalized()
     if KnockBack.z:
         var KnockBackDistance=sqrt(KnockBack.z)
         movement+=Vector2(KnockBack.x,KnockBack.y).normalized()*KnockBackDistance
@@ -153,6 +155,7 @@ func AIFunction():#AI切换以及不同AI的行动
             else:
                 if !$RigidTimer.time_left and !$AttackColdTimer.time_left and Attackable and (Target.global_position-global_position).length()<=AttackRange:
                     $RigidTimer.wait_time=BeforeAttackTime
+                    FaceDirection=(Target.global_position-global_position).normalized()
                     $RigidTimer.start()                             #准备攻击
         "backtracking":#回溯模式，回到出生点
             if Target!=null:
@@ -193,7 +196,7 @@ func _on_RigidTimer_timeout():
         Attackable=true
 
 func raise_guard(pos:Vector2,value:float):
-    if GuardingPosition.z<value and (global_position-pos).length()<=value:
+    if GuardingPosition.z<=value and (global_position-pos).length()<=value:
         GuardingPosition=Vector3(pos.x,pos.y,value)
 
 

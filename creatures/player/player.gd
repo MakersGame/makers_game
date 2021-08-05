@@ -450,7 +450,7 @@ func action_ui_function():
 
 func _on_ActionArea_body_entered(body):
     if body.Identifier=="Enermy" and body.CreatureStatus.alive():
-        E_Actions.push_back({"Type":"Assassinate","Target":body,"Enable":false})
+        E_Actions.push_back({"Type":"Assassinate","Target":body,"Enable":true})
     elif body.Identifier=="NPC" and body.CreatureStatus.alive():
         Q_Actions.push_back({"Type":"Heal","Target":body,"Enable":false})
     elif body.Identifier=="PickableItem":

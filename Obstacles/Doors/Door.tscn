@@ -16,14 +16,14 @@ animations = [ {
 "name": "left2right",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 1 ) ],
-"loop": true,
-"name": "right2left",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 4 ) ],
 "loop": true,
 "name": "up2down",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 1 ) ],
+"loop": true,
+"name": "right2left",
 "speed": 5.0
 } ]
 
@@ -94,14 +94,13 @@ shape = SubResource( 1 )
 [node name="AnimatedSprite" type="AnimatedSprite" parent="DoorBody"]
 frames = SubResource( 2 )
 animation = "left2right"
-offset = Vector2( 0, -10 )
+offset = Vector2( 0, -12 )
 
 [node name="Obstacle" type="KinematicBody2D" parent="DoorBody"]
 collision_mask = 6
 script = ExtResource( 5 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DoorBody/Obstacle"]
-visible = false
 position = Vector2( 0, -5 )
 shape = SubResource( 3 )
 
@@ -115,14 +114,15 @@ wait_time = 10.0
 one_shot = true
 
 [node name="DetectArea" type="Area2D" parent="."]
+visible = false
 position = Vector2( 0, -5 )
 collision_layer = 0
 collision_mask = 6
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectArea"]
-visible = false
 shape = SubResource( 7 )
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
 [connection signal="timeout" from="CloseTimer" to="." method="_on_CloseTimer_timeout"]
 [connection signal="body_entered" from="DetectArea" to="." method="_on_DetectArea_body_entered"]
+[connection signal="body_exited" from="DetectArea" to="." method="_on_DetectArea_body_exited"]

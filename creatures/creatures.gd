@@ -1,6 +1,7 @@
 extends KinematicBody2D
 
-var TargetPath=null
+var TargetPath:PoolVector2Array=[]
+var DistanceToNextPoint:float=INF
 var Identifier="Creature"
 var Health:float            #当前生命值
 var MaxHealth:float         #生命上限
@@ -76,13 +77,21 @@ func dec_aggro(num:float,src:Object):#降低仇恨值
 func find_way(target:Vector2):#寻路算法，并且在拐弯处修正移动，以防卡死
     if navigation==null:
         return Vector2()
-#注意，碰撞遮罩中，layer1为障碍物，也是creature作为底层对象在实现寻路时考虑的
+    var movement=Vector2()
     var _Speed=Speed[SpeedType]
-    TargetPath=navigation.get_simple_path(global_position,target)
-    if TargetPath.size()<=1:
-        return Vector2(0,0)
-    var TargetDirection=(TargetPath[1]-TargetPath[0]).normalized()
-    var movement=_Speed*(TargetDirection.normalized())#首先根据速度和目标移动方向计算移动向量
+#注意，碰撞遮罩中，layer1为障碍物，也是creature作为底层对象在实现寻路时考虑的
+    if TargetPath.size()<=1 or TargetPath[TargetPath.size()-1]!=target:
+        TargetPath=navigation.get_simple_path(global_position,target)
+        if TargetPath.size()<=1:
+            return Vector2(0,0)
+    elif TargetPath.size()>1:
+        if DistanceToNextPoint<=(TargetPath[1]-global_position).length() and !Global.detect_collision_in_line(global_position,TargetPath[1],[self],1):
+            TargetPath=[]
+        elif TargetPath.size()>2 and !Global.detect_collision_in_line(global_position,TargetPath[2],[self],1):
+            TargetPath.remove(0)
+    if TargetPath.size()>1:
+        movement=_Speed*((TargetPath[1]-global_position).normalized())#首先根据速度和目标移动方向计算移动向量
+        DistanceToNextPoint=(TargetPath[1]-global_position).length()
     var original_position=position#因为移动并碰撞来进行检测后，需要回到原位，所以需要记录移动前的位置
     var collision=move_and_collide(movement)
     if collision:#如果碰撞到障碍物

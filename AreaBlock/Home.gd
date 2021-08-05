@@ -15,6 +15,12 @@ func _ready():
     $Doors/Door1.init("left")
     $Doors/Door2.init("right")
     $Doors/Door3.init("down")
+    $Doors/Door4.init("down")
+    $Doors/Door5.init("right")
+    $Doors/Door6.init("right")
+    $Doors/Door7.init("right")
+    $Doors/Door8.init("right")
+    $Doors/Door9.init("right")
 
 func _on_UpdateArea_body_entered(body):
     if body.Identifier=="Player":

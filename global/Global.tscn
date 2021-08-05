@@ -56,3 +56,8 @@ z_index = 999
 
 [node name="HomeUpdateWindow" parent="." instance=ExtResource( 6 )]
 visible = false
+
+[node name="WorldTimer" type="Timer" parent="."]
+wait_time = 10.0
+
+[connection signal="timeout" from="WorldTimer" to="." method="_on_WorldTimer_timeout"]

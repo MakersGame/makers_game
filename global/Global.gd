@@ -20,6 +20,7 @@ var QuickUseItem:Array=[null,null,null,null,null]   #快捷栏物品
 var QuickUseItemChoice:int=0                        #选中的快捷栏物品
 var InCraftTable = false
 
+var WorldTime:Vector2=Vector2(6,0)
 
 onready var PlayerCamera=$PlayerCamera  #游戏镜头对象实例
 onready var SceneChanger=$PlayerCamera/SceneChanger
@@ -41,6 +42,8 @@ func _input(event):
                 $PauseWindow.hide()
             elif $HomeUpdateWindow.visible:
                 $HomeUpdateWindow.hide()
+            elif $ItemAccess.visible:
+                $ItemAccess.hide()
             get_tree().paused=false
             GameStatus="PlayerControl"
         elif GameStatus=="PlayerControl" and !$PauseWindow.visible:
@@ -129,3 +132,9 @@ func area_block_change(area):
     else:
         for i in PlayerAndNPCs:
             i.update_area_center(area.global_position)
+
+func _on_WorldTimer_timeout():
+    WorldTime.y+=10
+    if WorldTime.y>=60:
+        WorldTime.y-=60
+        WorldTime.x+=1

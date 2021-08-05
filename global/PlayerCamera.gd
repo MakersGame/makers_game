@@ -13,7 +13,7 @@ func reset_camera_area(x1:float,y1:float,x2:float,y2:float):#重设镜头边界
     LimitArea[3]=y2
 
 func set_camera(pos:Vector2):#重设镜头位置，如果超出边界会被锁定在边界
-    global_position=pos
+    global_position=Vector2(round(pos.x),round(pos.y))
     if pos.x<LimitArea[0]:
         global_position.x=LimitArea[0]
     elif pos.x>LimitArea[2]:

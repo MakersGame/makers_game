@@ -5,6 +5,7 @@ var Locked:bool=false
 var Key=null
 var Opened:bool=false
 var CurrentAnimation=""
+var BodyInArea=[]
 
 
 func init(_Direction:String,_Opened:bool=false,_Locked=false,_Key=null):
@@ -38,8 +39,16 @@ func close():
     if $AnimationPlayer.is_playing():
         yield($AnimationPlayer,"animation_finished")
     if Opened:
-        $AnimationPlayer.play_backwards(CurrentAnimation)
-        $DetectArea/CollisionShape2D.disabled=false
+        var i=0
+        while i<BodyInArea.size():
+            if !BodyInArea[i].CreatureStatus.alive():
+                BodyInArea.remove(i)
+                i-=1
+            i+=1
+        if BodyInArea.size()==0:
+            $AnimationPlayer.play_backwards(CurrentAnimation)
+        else:
+            $CloseTimer.start()
 
 func _on_AnimationPlayer_animation_finished(anim_name):
     if $AnimationPlayer.get_current_animation_position()!=0:
@@ -57,13 +66,15 @@ func _on_CloseTimer_timeout():
 func _on_DetectArea_body_entered(body):
     if body.Identifier=="Player" or Locked:
         return
+    if not body in BodyInArea:
+        BodyInArea.push_back(body)
     if !Opened and !$AnimationPlayer.is_playing():
         open()
-        $DetectArea/CollisionShape2D.disabled=true
     elif Opened and $AnimationPlayer.is_playing():
         $AnimationPlayer.stop(false)
         $AnimationPlayer.play(CurrentAnimation)
-        $DetectArea/CollisionShape2D.disabled=true
         $CloseTimer.start()
 
-
+func _on_DetectArea_body_exited(body):
+    if body in BodyInArea:
+        BodyInArea.erase(body)
