@@ -3,6 +3,7 @@ extends Node2D
 #全局任意代码段可以通过Global来访问此实例，调用全局函数。
 var Root                                #场景根节点
 var CurrentScene                        #当前场景，很明显只会存在一个（全局场景之外的）
+var CurrentAreaBlock                    #当前加载区块
 var PlayerAndNPCs=[]                    #当前中的玩家和NPC对象
 var Team=[]                             #当前队伍中的玩家和NPC
 var GameStatus:String                   #游戏状态
@@ -30,6 +31,7 @@ func _ready():#游戏最开始会执行一次，之后就不会了
     randomize()
     Root=get_tree().get_root()
     CurrentScene=Root.get_child(Root.get_child_count() - 1)
+    CurrentAreaBlock=CurrentScene.get_node("AreaBlocks/Home")
     GameStatus="PlayerControl"
     $PlayerCamera.current=true
     set_scnene_info()
@@ -72,8 +74,11 @@ func set_scnene_info():#在进入新场景的时候，记录场景中的所有�
                 Team.push_back(i)
     
 func set_navigation():#给所有生物初始化navigation，用于导航
-    get_tree().call_group("creature","set_navigation",CurrentScene.navigation)
-
+    if CurrentAreaBlock!=null:
+        get_tree().call_group("creature","set_navigation",CurrentAreaBlock.navigation)
+    else:
+        get_tree().call_group("creature","set_navigation",null)
+    
 func detect_collision_in_line(Pos1:Vector2,Pos2:Vector2,Ignore:Array,CollisionMask:int):
     #将探测射线功能封装，便于调用，参数Ignore为碰撞检测中忽略的对象数组
     var space_state = get_world_2d().direct_space_state#获取2D空间，准备发射碰撞检测射线
@@ -129,9 +134,12 @@ func area_block_change(area):
     if area==null:
         for i in PlayerAndNPCs:
             i.update_area_center(null)
+        CurrentAreaBlock=null
     else:
         for i in PlayerAndNPCs:
             i.update_area_center(area.global_position)
+        CurrentAreaBlock=area
+    set_navigation()
 
 func _on_WorldTimer_timeout():
     WorldTime.y+=10

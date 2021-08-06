@@ -252,6 +252,7 @@ position = Vector2( -2, -22 )
 scale = Vector2( 4, 4 )
 frames = SubResource( 3 )
 animation = "armed_stand_down"
+frame = 1
 speed_scale = 0.7
 playing = true
 

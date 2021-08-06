@@ -147,7 +147,7 @@ func calc_distance_to_player_and_target():#计算自身到玩家和到目标敌�
         return
     var TargetPath=CreatureStatus.navigation.get_simple_path(global_position,Player.global_position)
     DistanceToPlayer=0
-    if TargetPath[TargetPath.size()-1]==Player.global_position:
+    if CreatureStatus.navigation!=null and TargetPath.size() and TargetPath[TargetPath.size()-1]==Player.global_position:
         for i in range(TargetPath.size()-1):
             DistanceToPlayer+=(TargetPath[i+1]-TargetPath[i]).length()
     else:

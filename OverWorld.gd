@@ -1,7 +1,5 @@
 extends Node2D
 
-onready var navigation=$Navigation2D
-
 var Identifier="BattleScene"
 
 func _ready():

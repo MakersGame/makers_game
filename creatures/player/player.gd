@@ -80,8 +80,7 @@ func update_area_center(Pos):
     else:
         CurrentAreaCenter=Pos
 
-func _physics_process(delta):
-    
+func _physics_process(delta): 
     if CurrentAreaCenter==null:
         z_index=100
     else:

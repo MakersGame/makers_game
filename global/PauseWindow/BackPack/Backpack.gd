@@ -153,12 +153,12 @@ func _on_Use_pressed():
         return
     elif FocusChangable and !$ChoiceItemUserWindow.visible:
         FocusChangable=false
-        !$ChoiceItemUserWindow.show()
+        $ChoiceItemUserWindow.show()
         $ItemDetail/Buttons/Drop.mouse_filter=Control.MOUSE_FILTER_IGNORE
         $ItemDetail/Buttons/QuickUse.mouse_filter=Control.MOUSE_FILTER_IGNORE
     elif !FocusChangable:
         FocusChangable=true
-        !$ChoiceItemUserWindow.hide()
+        $ChoiceItemUserWindow.hide()
         $ItemDetail/Buttons/Drop.mouse_filter=Control.MOUSE_FILTER_PASS
         $ItemDetail/Buttons/QuickUse.mouse_filter=Control.MOUSE_FILTER_PASS
     
@@ -168,7 +168,7 @@ func use_item(User:Object):
     else:
         return
     FocusChangable=true
-    !$ChoiceItemUserWindow.hide()
+    $ChoiceItemUserWindow.hide()
     $ItemDetail/Buttons/Drop.mouse_filter=Control.MOUSE_FILTER_PASS
     $ItemDetail/Buttons/QuickUse.mouse_filter=Control.MOUSE_FILTER_PASS
     
