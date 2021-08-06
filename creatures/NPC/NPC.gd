@@ -82,7 +82,14 @@ func _physics_process(delta):
     calc_distance_to_player_and_target()
     update_enermy_in_area()
     AIFunction()
-    movement=CreatureStatus.find_way(TargetPosition)
+    if TracingPlayer:
+        movement=CreatureStatus.find_way_to_target(Player.CreatureStatus)
+    elif Target!=null:
+        movement=CreatureStatus.find_way_to_target(Target.CreatureStatus)
+    else:
+        movement=CreatureStatus.find_way(TargetPosition)
+        if CreatureStatus.TargetPath.size()>1 and TargetPosition!=CreatureStatus.TargetPath[CreatureStatus.TargetPath.size()-1]:
+            movement=CreatureStatus.move_correction((TargetPosition-global_position).normalized()*Speed)
     move_mode_function()
     energy_recover()
     move()
@@ -140,8 +147,11 @@ func calc_distance_to_player_and_target():#计算自身到玩家和到目标敌�
         return
     var TargetPath=CreatureStatus.navigation.get_simple_path(global_position,Player.global_position)
     DistanceToPlayer=0
-    for i in range(TargetPath.size()-1):
-        DistanceToPlayer+=(TargetPath[i+1]-TargetPath[i]).length()
+    if TargetPath[TargetPath.size()-1]==Player.global_position:
+        for i in range(TargetPath.size()-1):
+            DistanceToPlayer+=(TargetPath[i+1]-TargetPath[i]).length()
+    else:
+        DistanceToPlayer=(Player.global_position-global_position).length()
     if Target==null or !Target.has_meta("Identifier"):
         DistanceToTarget=INF
     else:

@@ -66,12 +66,17 @@ func _physics_process(delta):
     else:
         z_index=floor((global_position-CurrentAreaCenter).y/20)+2
     Target=CreatureStatus.TargetEnermy
+    var movement:Vector2=Vector2()
     if Target!=null:
-        TargetPosition=Target.global_position    
+        TargetPosition=Target.global_position   
+        movement=CreatureStatus.find_way_to_target(Target.CreatureStatus)
+    else:
+        movement=CreatureStatus.find_way(TargetPosition) 
     AIFunction()
-    var movement=CreatureStatus.find_way(TargetPosition)
     if CreatureStatus.TargetPath.size()>1:
         FaceDirection=(CreatureStatus.TargetPath[1]-CreatureStatus.TargetPath[0]).normalized()
+    elif movement!=Vector2():
+        FaceDirection=movement
     Speed=CreatureStatus.Speed[CreatureStatus.SpeedType]
     move(movement)
     $AnimatedSprite.rotation_degrees=FaceDirection.angle()*180/PI+90

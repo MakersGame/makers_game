@@ -14,6 +14,8 @@ var TargetEnermy=null       #仇恨最大的对象，若没有则为null
 var Ability={"melee_damage":1 , "ranged_damage":1 , "melee_defense":1 , "ranged_defense":1 , "knockback_defense":1}
 #近战伤害、远程伤害、近战抗性、远程抗性倍率、击退抗性，默认为1
 var navigation:Navigation2D #由Gloabl传入此参数，为当前地图的导航
+var TrackRecords=[]         #自身运动经过的位置
+var TrackRecordNumber:int=20#记录位置的最大数量
 
 func init(_Health:float,_MaxHealth:float,_Attack:float,_Speed:Array,_Camp:String,_CollisionShape:Object,_Ablity:Array):#并非是默认的_init()函数！是自己写的一个设置各种参数的函数。。。
     Health=_Health
@@ -32,6 +34,12 @@ func set_navigation(_navigation):
 
 func alive():
     return Health>0
+
+func _physics_process(delta):
+    if !TrackRecords.size() or (TrackRecords[0]-global_position).length()>=40:
+        TrackRecords.insert(0,global_position)
+    if TrackRecords.size()>TrackRecordNumber:
+        TrackRecords.remove(TrackRecordNumber)
 
 func get_hurt(DMG:float,DMG_kind:String,src:Object):#此处的src为攻击的对象实例
     if !Health:
@@ -79,7 +87,7 @@ func dec_aggro(num:float,src:Object):#降低仇恨值
 func find_way(target:Vector2):#寻路算法，并且在拐弯处修正移动，以防卡死
     if navigation==null:
         return Vector2()
-    var movement=Vector2()
+    var movement:Vector2=Vector2()
     var _Speed=Speed[SpeedType]
     var cornor_pos=$CollisionShape2D.shape.extents#记下自身碰撞矩形的长宽
 #注意，碰撞遮罩中，layer1为障碍物，也是creature作为底层对象在实现寻路时考虑的
@@ -95,6 +103,25 @@ func find_way(target:Vector2):#寻路算法，并且在拐弯处修正移动，�
     if TargetPath.size()>1:
         movement=_Speed*((TargetPath[1]-global_position).normalized())#首先根据速度和目标移动方向计算移动向量
         DistanceToNextPoint=(TargetPath[1]-global_position).length()
+    return move_correction(movement)
+
+func find_way_to_target(Target):
+    if !Global.detect_collision_in_line(global_position,Target.global_position,[self],1):
+        TargetPath=[global_position,Target.global_position]
+        return find_way(Target.global_position)
+    if TargetPath.size()>1 and TargetPath[TargetPath.size()-1]==Target.global_position:
+        return find_way(Target.global_position)
+    var TargetRecords=Target.TrackRecords
+    for i in TargetRecords:
+        if !Global.detect_collision_in_line(global_position,i,[self],1):
+            TargetPath=[global_position,i]
+            return move_correction(Speed[SpeedType]*((i-global_position).normalized()))
+    return find_way(Target.global_position)
+    
+func move_correction(Movement:Vector2):
+    var movement:Vector2=Movement
+    var cornor_pos=$CollisionShape2D.shape.extents#记下自身碰撞矩形的长宽
+    var _Speed=Speed[SpeedType]
     var original_position=position#因为移动并碰撞来进行检测后，需要回到原位，所以需要记录移动前的位置
     var collision=move_and_collide(movement)
     if collision:#如果碰撞到障碍物
@@ -147,6 +174,9 @@ func _draw():
     if TargetPath.size()>1 and TargetPath[0]!=TargetPath[1]:
         for i in range(TargetPath.size()-1):
             draw_line(TargetPath[i]-global_position,TargetPath[i+1]-global_position,Color.yellow,10)
+    if get_parent().Identifier=="Player":
+        for i in TrackRecords:
+            draw_circle(i-global_position,10,Color.blue)
 
 func _on_creature_mouse_entered():
     if Camp=="Enermy":
