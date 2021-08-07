@@ -45,9 +45,9 @@ func move_and_detect():
         return
     var collision
     if Camp=="Player":
-        collision=Global.detect_collision_in_line(global_position,global_position+Direction.normalized()*Speed,[self], 0b101)
+        collision=Global.detect_collision_in_line(global_position,global_position+Direction.normalized()*Speed,[self], 0b100101)
     elif Camp=="Enermy":
-        collision=Global.detect_collision_in_line(global_position,global_position+Direction.normalized()*Speed,[self], 0b11)
+        collision=Global.detect_collision_in_line(global_position,global_position+Direction.normalized()*Speed,[self], 0b100011)
     if !collision:#向飞行方向发射探测射线，没有碰撞，直接往前飞
         global_position+=Direction.normalized()*Speed
         TempDistance+=Speed
@@ -55,7 +55,7 @@ func move_and_detect():
             Exist=false
             queue_free()
         return
-    if collision.collider.Identifier=="Obstacle" or collision.collider.Identifier=="Chest":#撞到障碍物，则销毁自身
+    if collision.collider.Identifier=="Obstacle" or collision.collider.Identifier=="Chest" or collision.collider.Identifier=="Door":#撞到障碍物，则销毁自身
         Exist=false
         global_position=collision.position
         hit_target(null)

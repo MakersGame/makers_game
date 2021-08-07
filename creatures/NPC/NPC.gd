@@ -24,7 +24,7 @@ var Task=null                       #在家园中分配的任务，待定，null
 var KnockBack:Vector3               #被击退值，三维向量，xy表示方向，z表示剩余击退距离，每一帧击退距离呈二次函数
 var FollowDistance:Vector2          #跟随模式和撤退模式下，x代表离玩家超过此距离开始追逐，y代表离玩家小于此距离停止追逐
 var FightingFollowDistance:Vector2  #冲突模式下跟随玩家的距离
-var DistanceToPlayer:float=0        #距离玩家的距离，动态更新
+var DistanceToPlayer:float=0        #距离玩家的距离，动态更新,未必精确
 var WeaponChoice=""
 var GuardingEnermies=[]             #正在警戒自己的敌人
 var AttackingEnermies=[]            #正在攻击自己的敌人
@@ -48,7 +48,7 @@ func init(_Name:String,_AImode:String):
             CreatureStatus.init(100,100,0,[3,5,5],"Player",$CollisionShape2D,[1,1,1,1])
             RangedWeapon.init("9mm手枪",-1,self,CreatureStatus.Ability["ranged_damage"],1,1)
             RangedWeapon.set_bullet_num()
-            MeleeWeapon.init("马桶橛子",-1,self,CreatureStatus.Ability["melee_damage"],1)
+            MeleeWeapon.init("军刀",-1,self,CreatureStatus.Ability["melee_damage"],1)
             FollowDistance=Vector2(200,100)
             FightingFollowDistance=Vector2(400,300)
         _:
@@ -144,18 +144,35 @@ func move():#移动策略
 
 func calc_distance_to_player_and_target():#计算自身到玩家和到目标敌人的距离
     if CreatureStatus.navigation==null:
+        if Player!=null:
+            DistanceToPlayer=(global_position-Player.global_position).length()
+        if Target!=null:
+            DistanceToTarget=(global_position-Target.global_position).length()
         return
-    var TargetPath=CreatureStatus.navigation.get_simple_path(global_position,Player.global_position)
-    DistanceToPlayer=0
-    if CreatureStatus.navigation!=null and TargetPath.size() and TargetPath[TargetPath.size()-1]==Player.global_position:
-        for i in range(TargetPath.size()-1):
-            DistanceToPlayer+=(TargetPath[i+1]-TargetPath[i]).length()
-    else:
+    
+    DistanceToPlayer=-1
+    if !Global.detect_collision_in_line(global_position,Player.global_position,[self],1):
         DistanceToPlayer=(Player.global_position-global_position).length()
-    if Target==null or !Target.has_meta("Identifier"):
-        DistanceToTarget=INF
     else:
-        TargetPath=CreatureStatus.navigation.get_simple_path(global_position,Target.global_position)
+        for i in range(Player.CreatureStatus.TrackRecords.size()):
+            if !Global.detect_collision_in_line(global_position,Player.CreatureStatus.TrackRecords[i],[self],1):
+                DistanceToPlayer=i*40+(Player.CreatureStatus.TrackRecords[i]-global_position).length()+(Player.global_position-Player.CreatureStatus.TrackRecords[0]).length()
+    if DistanceToPlayer<0:
+        DistanceToPlayer=INF            
+#    if Target==null or !Target.has_meta("Identifier"):
+#        DistanceToTarget=INF
+#    else:
+#        TargetPath=CreatureStatus.navigation.get_simple_path(global_position-CreatureStatus.navigation.global_position,Target.global_position-CreatureStatus.navigation.global_position)
+#        DistanceToTarget=0
+#        if CreatureStatus.navigation!=null and TargetPath.size() and TargetPath[TargetPath.size()-1]==Target.global_position:
+#            for i in range(TargetPath.size()-1):
+#                DistanceToTarget+=(TargetPath[i+1]-TargetPath[i]).length()
+#        else:
+#            DistanceToTarget=(Target.global_position-global_position).length()
+    if Target!=null and !Global.detect_collision_in_line(global_position,Target.global_position,[self],1):
+        DistanceToTarget=(Target.global_position-global_position).length()
+    else:
+        DistanceToTarget=INF
     return
 
 func AIFunction():#进行AI间的切换，以及执行不同的AI操作
@@ -196,7 +213,7 @@ func AIFunction():#进行AI间的切换，以及执行不同的AI操作
                             return
                     #计算射击角度（考虑敌人移动的情况下）
                     var AimPosition=Target.global_position+calc_aim_position(global_position-Target.global_position,Target.FaceDirection,$RangedWeapon.BulletSpeed/Target.Speed)
-                    collision=Global.detect_collision_in_line(global_position,AimPosition,[self], 1)
+                    collision=Global.detect_collision_in_line(global_position,AimPosition,[self], 0b100001)
                     #如果不会碰到障碍物，则射击
                     if !collision and (AimPosition-global_position).length()<=RangedWeapon.MaxRange and !ForceDirection:
                         FaceDirection=(AimPosition-global_position).normalized()
@@ -221,7 +238,9 @@ func AIFunction():#进行AI间的切换，以及执行不同的AI操作
                 FaceDirection=MeleeWeapon.Direction
                 movement=Vector2()
                 animation_function()
-                MeleeWeapon.attack()
+                if Energy>MeleeWeapon.EnergyNeed:
+                    energy_consume(MeleeWeapon.EnergyNeed)
+                    MeleeWeapon.attack()
             #如果敌人与自身距离小于远程武器射程的一半（暂定），则试图远离敌人
             if DistanceToTarget<=RangedWeapon.MaxRange/2:
                 #远离的方向即向后退
@@ -270,7 +289,7 @@ func update_enermy_in_area():
             if DistanceToTarget*0.8<=(EnermyInArea[i].global_position-global_position).length():
                 i+=1
                 continue
-            var collision=Global.detect_collision_in_line(global_position,EnermyInArea[i].global_position,[self], 1)
+            var collision=Global.detect_collision_in_line(global_position,EnermyInArea[i].global_position,[self], 0b100001)
             if !collision:
                 Target=EnermyInArea[i]
                 DistanceToTarget=(EnermyInArea[i].global_position-global_position).length()

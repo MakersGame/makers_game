@@ -32,7 +32,7 @@ func _ready():#暂时留着，之后会被init取代
     CreatureStatus.init(100,100,1,[3,5,5],"Player",$CollisionShape2D,[1,1,1,1])
     RangedWeapon.init("9mm手枪",-1,self,CreatureStatus.Ability["ranged_damage"],1,1)
     RangedWeapon.set_bullet_num()
-    MeleeWeapon.init("马桶橛子",-1,self,CreatureStatus.Ability["melee_damage"],1)
+    MeleeWeapon.init("军刀",-1,self,CreatureStatus.Ability["melee_damage"],1)
     WeaponChoice="melee"
     MeleeWeapon.show()
     RangedWeapon.hide()
@@ -42,10 +42,13 @@ func init():
     Energy=100
     MaxEnergy=100
     LoadLimit=50
-    CreatureStatus.init(100,100,1,[5,5,5],"Player",$CollisionShape2D,[1,1,1,1])
-    RangedWeapon.init("test_ranged_weapon",-1,self,CreatureStatus.Ability["ranged_damage"],1,1)
-    RangedWeapon.set_bullet_num(200)
-    MeleeWeapon.init("test_melee_weapon",-1,self,CreatureStatus.Ability["melee_damage"],1)
+    CreatureStatus.init(100,100,1,[3,5,5],"Player",$CollisionShape2D,[1,1,1,1])
+    RangedWeapon.init("9mm手枪",-1,self,CreatureStatus.Ability["ranged_damage"],1,1)
+    RangedWeapon.set_bullet_num()
+    MeleeWeapon.init("军刀",-1,self,CreatureStatus.Ability["melee_damage"],1)
+    WeaponChoice="melee"
+    MeleeWeapon.show()
+    RangedWeapon.hide()
     $ChangeWeaponTimer.wait_time=0.1
 
 func change_weapon(Type:String,NumInBackpack:int):
@@ -441,7 +444,7 @@ func action_ui_function():
     for key in E_Actions:
         if !key["Enable"]:
             continue
-        var Collision=Global.detect_collision_in_line(global_position,key["Target"].global_position,[self,key["Target"]],1)
+        var Collision=Global.detect_collision_in_line(global_position,key["Target"].global_position,[self,key["Target"]],0b100001)
         if Collision and !key["Target"].is_a_parent_of(Collision.collider):
             $E_ActionUI.hide()
             key["Enable"]=false
@@ -457,7 +460,7 @@ func action_ui_function():
             return
     $E_ActionUI.hide()   
     for key in Q_Actions:
-        var Collision=Global.detect_collision_in_line(global_position,key["Target"].global_position,[self,key["Target"]],1)
+        var Collision=Global.detect_collision_in_line(global_position,key["Target"].global_position,[self,key["Target"]],0b100001)
         if Collision:
             $Q_ActionUI.hide()
             key["Enable"]=false

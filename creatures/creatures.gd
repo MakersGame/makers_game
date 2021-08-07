@@ -93,7 +93,9 @@ func find_way(target:Vector2):#寻路算法，并且在拐弯处修正移动，�
 #注意，碰撞遮罩中，layer1为障碍物，也是creature作为底层对象在实现寻路时考虑的
     if TargetPath.size()<=1 or TargetPath[TargetPath.size()-1]!=target:
         if target!=global_position:
-            TargetPath=navigation.get_simple_path(global_position,target)
+            TargetPath=navigation.get_simple_path(global_position-navigation.global_position,target-navigation.global_position)
+            for i in range(TargetPath.size()):
+                TargetPath[i]+=navigation.global_position
         else:
             TargetPath=[]
         if TargetPath.size()<=1:
@@ -169,7 +171,8 @@ func _draw():
     #return
     if TargetPath==null:
         return
-    z_index=1
+    z_as_relative=false
+    z_index=1000
     visible=true
     if TargetPath.size()>1 and TargetPath[0]!=TargetPath[1]:
         for i in range(TargetPath.size()-1):
@@ -177,6 +180,8 @@ func _draw():
     if get_parent().Identifier=="Player":
         for i in TrackRecords:
             draw_circle(i-global_position,10,Color.blue)
+    z_as_relative=true
+    z_index=0
 
 func _on_creature_mouse_entered():
     if Camp=="Enermy":

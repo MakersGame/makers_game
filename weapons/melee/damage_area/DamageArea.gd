@@ -1,6 +1,7 @@
 extends Area2D
 
 var identifier="DamageArea"
+var Enable=true
 var Attack:float   
 var SingleDamage:bool           #是否单体伤害
 var Direction:Vector2 
@@ -24,20 +25,24 @@ func _physics_process(delta):
     visible=true#避免第一帧方向错误采取的操作，可以改进
 
 func _on_DamageArea_body_shape_entered(body_id, body, body_shape, local_shape):
+    if !Enable:
+        return
     #当有实例进入伤害范围时触发此函数
-    var collision=Global.detect_collision_in_line(global_position,body.global_position,[self], 1)
-    #此处探测射线的最后一个参数为1，代表碰撞mask为0x00001，即只检测layer1的碰撞，也就是障碍物
+    var collision=Global.detect_collision_in_line(global_position,body.global_position,[self], 0b100001)
+    #此处探测射线的最后一个参数为1，代表碰撞mask为0x00001，即只检测layer1的碰撞，也就是障碍物，0b100001代表检测们和障碍物
     if collision:
         return
     elif body.CreatureStatus.Camp=="Player" and Camp=="Enermy":
         if DamageList.get(body)==null:
             hit_target(body)  
             if SingleDamage:
+                Enable=false
                 $CollisionShape2D.queue_free()      
     elif body.CreatureStatus.Camp=="Enermy" and Camp=="Player":
         if DamageList.get(body)==null:
             hit_target(body)
             if SingleDamage:
+                Enable=false
                 $CollisionShape2D.queue_free()   
 
 func hit_target(target):#命中目标，并造成相应的击退

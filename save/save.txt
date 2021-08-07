@@ -26,20 +26,10 @@ EX咖喱棒 200
 @end
 
 @GoodInBackpack
-木材 50
 9mm子弹 20
-雷明顿16号弹 20
 绷带 2
 @end
 
 @WeaponInBackpack
-EX咖喱棒 10
 马桶橛子 100
-EX咖喱棒 30
-马桶橛子 60
-9mm手枪 20
-老式霰弹枪 10
-9mm手枪 25
-老式霰弹枪 20
-老式霰弹枪 0
 @end

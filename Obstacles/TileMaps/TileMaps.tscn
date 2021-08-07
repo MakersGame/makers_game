@@ -1,10 +1,11 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://art/temp/Obstacle.png" type="Texture" id=1]
 [ext_resource path="res://Obstacles/obstacle.gd" type="Script" id=2]
 [ext_resource path="res://art/temp/HeightDifference.png" type="Texture" id=3]
 [ext_resource path="res://Obstacles/TileMaps/HightDifference.gd" type="Script" id=4]
 [ext_resource path="res://art/Rooms/floor1.png" type="Texture" id=5]
+[ext_resource path="res://Scenes/NavigationTileMap.tscn" type="PackedScene" id=6]
 
 [sub_resource type="TileSet" id=1]
 0/name = "floor1.png 0"
@@ -304,6 +305,7 @@ z_index = 999
 [node name="BackGround" type="TileMap" parent="."]
 scale = Vector2( 4, 4 )
 z_index = -999
+z_as_relative = false
 tile_set = SubResource( 1 )
 cell_size = Vector2( 40, 40 )
 format = 1
@@ -320,3 +322,7 @@ tile_set = SubResource( 18 )
 cell_size = Vector2( 20, 20 )
 format = 1
 script = ExtResource( 2 )
+
+[node name="Navigation2D" type="Navigation2D" parent="."]
+
+[node name="TileMap" parent="Navigation2D" instance=ExtResource( 6 )]

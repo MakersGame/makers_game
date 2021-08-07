@@ -4,7 +4,7 @@
 [ext_resource path="res://Obstacles/Doors/Door.gd" type="Script" id=2]
 [ext_resource path="res://art/Rooms/Doors/door2.png" type="Texture" id=3]
 [ext_resource path="res://art/Rooms/Doors/door3.png" type="Texture" id=4]
-[ext_resource path="res://Obstacles/obstacle.gd" type="Script" id=5]
+[ext_resource path="res://Obstacles/Doors/DoorObstacle.gd" type="Script" id=5]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 3, 3 )
@@ -16,14 +16,14 @@ animations = [ {
 "name": "left2right",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 4 ) ],
-"loop": true,
-"name": "up2down",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 1 ) ],
 "loop": true,
 "name": "right2left",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 4 ) ],
+"loop": true,
+"name": "up2down",
 "speed": 5.0
 } ]
 
@@ -47,7 +47,7 @@ tracks/0/keys = {
 "values": [ Vector2( 0, 0 ), Vector2( 20, 0 ) ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("DoorBody/Obstacle/CollisionShape2D:shape:extents")
+tracks/1/path = NodePath("DoorBody/DoorObstacle/CollisionShape2D:shape:extents")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -59,7 +59,7 @@ tracks/1/keys = {
 "values": [ Vector2( 10, 5 ), Vector2( 0, 5 ) ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("DoorBody/Obstacle/CollisionShape2D:position")
+tracks/2/path = NodePath("DoorBody/DoorObstacle/CollisionShape2D:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -86,7 +86,7 @@ tracks/0/keys = {
 "values": [ Vector2( 0, 0 ), Vector2( -20, 0 ) ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("DoorBody/Obstacle/CollisionShape2D:shape:extents")
+tracks/1/path = NodePath("DoorBody/DoorObstacle/CollisionShape2D:shape:extents")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -98,7 +98,7 @@ tracks/1/keys = {
 "values": [ Vector2( 10, 5 ), Vector2( 0, 5 ) ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("DoorBody/Obstacle/CollisionShape2D:position")
+tracks/2/path = NodePath("DoorBody/DoorObstacle/CollisionShape2D:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -125,7 +125,7 @@ tracks/0/keys = {
 "values": [ Vector2( 0, 0 ), Vector2( 0, 20 ) ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("DoorBody/Obstacle/CollisionShape2D:shape:extents")
+tracks/1/path = NodePath("DoorBody/DoorObstacle/CollisionShape2D:shape:extents")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -137,7 +137,7 @@ tracks/1/keys = {
 "values": [ Vector2( 5, 10 ), Vector2( 5, 0 ) ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("DoorBody/Obstacle/CollisionShape2D:position")
+tracks/2/path = NodePath("DoorBody/DoorObstacle/CollisionShape2D:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -168,11 +168,12 @@ frames = SubResource( 2 )
 animation = "left2right"
 offset = Vector2( 0, -12 )
 
-[node name="Obstacle" type="KinematicBody2D" parent="DoorBody"]
-collision_mask = 6
+[node name="DoorObstacle" type="KinematicBody2D" parent="DoorBody"]
+collision_layer = 32
+collision_mask = 14
 script = ExtResource( 5 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DoorBody/Obstacle"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DoorBody/DoorObstacle"]
 position = Vector2( 0, -5 )
 shape = SubResource( 3 )
 

@@ -4,24 +4,24 @@ onready var AreaContents=$AreaContents
 var navigation=null
 
 func _ready():
-    
-    $AreaContents/Enermies/Enermy.init("test_enermy",Vector2(-1,0),-1,global_position)
-    $AreaContents/Enermies/Enermy2.init("test_enermy",Vector2(-1,0),-1,global_position)
-    $AreaContents/Enermies/Enermy3.init("test_enermy",Vector2(0,-1),-1,global_position)
-    $AreaContents/Enermies/Enermy4.init("test_enermy",Vector2(0,-1),-1,global_position)
-    $AreaContents/Enermies/Enermy5.init("test_enermy",Vector2(0,-1),-1,global_position)
+    navigation=AreaContents.get_node("TileMaps/Navigation2D")
+    set_enermies()
     set_chests()
-    $AreaContents/Doors/Door1.init("left")
+    $AreaContents/Doors/Door1.init("right")
     $AreaContents/Doors/Door2.init("right")
-    $AreaContents/Doors/Door3.init("down")
-    $AreaContents/Doors/Door4.init("down")
+    $AreaContents/Doors/Door3.init("right")
+    $AreaContents/Doors/Door4.init("right")
     $AreaContents/Doors/Door5.init("right")
     $AreaContents/Doors/Door6.init("right")
     $AreaContents/Doors/Door7.init("right")
     $AreaContents/Doors/Door8.init("right")
     $AreaContents/Doors/Door9.init("right")
+    $AreaContents/Doors/Door10.init("right")
+    $AreaContents/Doors/Door11.init("down")
+    $AreaContents/Doors/Door12.init("down")
+    $AreaContents/Doors/Door13.init("down")
+    $AreaContents/Doors/Door14.init("down")
     
-    navigation=AreaContents.get_node("TileMaps/Navigation2D")
     if Global.CurrentAreaBlock!=self:
         remove_child(AreaContents)
 
@@ -40,6 +40,19 @@ func set_chests():
             {"Name":"EX咖喱棒","Type":"Weapon","Number":[1,1],"RandomGroup":7,"Probability":0.1},
         ])
 
+func set_enermies():
+    $AreaContents/Enermies/Enermy1.init("test_enermy",Vector2(-1,0),-1,global_position)
+    $AreaContents/Enermies/Enermy2.init("test_enermy",Vector2(-1,0),-1,global_position)
+    $AreaContents/Enermies/Enermy3.init("test_enermy",Vector2(0,-1),-1,global_position)
+    $AreaContents/Enermies/Enermy4.init("test_enermy",Vector2(0,-1),-1,global_position)
+    $AreaContents/Enermies/Enermy5.init("test_enermy",Vector2(0,-1),-1,global_position)
+    $AreaContents/Enermies/Enermy6.init("test_enermy",Vector2(-1,0),-1,global_position)
+    $AreaContents/Enermies/Enermy7.init("test_enermy",Vector2(-1,0),-1,global_position)
+    $AreaContents/Enermies/Enermy8.init("test_enermy",Vector2(0,-1),-1,global_position)
+    $AreaContents/Enermies/Enermy9.init("test_enermy",Vector2(0,-1),-1,global_position)
+    $AreaContents/Enermies/Enermy10.init("test_enermy",Vector2(0,-1),-1,global_position)
+    $AreaContents/Enermies/Enermy11.init("test_enermy",Vector2(0,-1),-1,global_position)
+
 func _on_UpdateArea_body_entered(body):
     if body.Identifier=="Player":
         Global.area_block_change(self)
@@ -47,6 +60,7 @@ func _on_UpdateArea_body_entered(body):
             call_deferred("add_child",AreaContents)
         for i in AreaContents.get_node("Enermies").get_children():
             i.CreatureStatus.set_navigation(AreaContents.get_node("TileMaps/Navigation2D"))
+
 
 func _on_UpdateArea_body_exited(body):
     if body.Identifier=="Player":

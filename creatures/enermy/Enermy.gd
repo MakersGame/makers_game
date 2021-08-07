@@ -28,6 +28,8 @@ var DamageArea=preload("res://weapons/melee/damage_area/DamageArea.tscn")
    
 onready var CreatureStatus=$CreatureStatus
 
+signal LeaveDefaultMode
+
 func _init():
     AImode="default"
 
@@ -93,7 +95,7 @@ func detect():
         if CreatureStatus.AggroValue.get(Tar)==null and (Tar.global_position-global_position).length()>SightRange*2 or abs(FaceDirection.angle_to(Tar.global_position-global_position))*180/PI>SightAngle/2:
             continue#若对此单位没有仇恨，且其不在扇形区域内，直接判断下一个
         #判断是否撞上障碍物
-        var collision=Global.detect_collision_in_line(global_position,Tar.global_position,[self], 1)
+        var collision=Global.detect_collision_in_line(global_position,Tar.global_position,[self], 0b100001)
         if collision:
             if CreatureStatus.AggroValue.get(Tar)!=null:
                 CreatureStatus.dec_aggro(0.1*sqrt(CreatureStatus.AggroValue[Tar]),Tar)
@@ -136,12 +138,14 @@ func AIFunction():#AI切换以及不同AI的行动
             if Tar!=null:
                 Target=Tar
                 AImode="attacking"#找到目标后进入攻击模式
+                emit_signal("LeaveDefaultMode")
                 $CreatureStatus/GuardSign.show()
             elif GuardingPosition.z>0:
                 AImode="guarding"
                 SightAngle*=1.5
                 SightRange*=1.5
                 $CreatureStatus/GuardSign.show()
+                emit_signal("LeaveDefaultMode")
         "guarding":#警戒模式
             $CreatureStatus/GuardSign.animation="Guarding"
             detect()
@@ -152,7 +156,7 @@ func AIFunction():#AI切换以及不同AI的行动
                 SightRange/=1.5
                 $CreatureStatus/GuardSign.show()
             if (TargetPosition-global_position).length()<=SightRange/3:
-                var collision=Global.detect_collision_in_line(global_position,TargetPosition,[self],1)
+                var collision=Global.detect_collision_in_line(global_position,TargetPosition,[self],0b100001)
                 if collision:
                     return
                 TargetPosition=global_position
@@ -259,6 +263,6 @@ func _on_RandomMoveTimer_timeout():
             RandomMovement=Vector2(0,1)*(100+RandomNumber)
         else:
             RandomMovement=Vector2(0,-1)*(100+RandomNumber)
-        if !Global.detect_collision_in_line(global_position,global_position+RandomMovement,[self],1):
+        if !Global.detect_collision_in_line(global_position,global_position+RandomMovement,[self],0b100001):
             TargetPosition=global_position+RandomMovement
             return

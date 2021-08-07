@@ -75,9 +75,12 @@ func set_scnene_info():#在进入新场景的时候，记录场景中的所有�
     
 func set_navigation():#给所有生物初始化navigation，用于导航
     if CurrentAreaBlock!=null:
-        get_tree().call_group("creature","set_navigation",CurrentAreaBlock.navigation)
+        if !CurrentAreaBlock.is_inside_tree():
+            yield(CurrentAreaBlock,"ready")       
+        get_tree().call_deferred("call_group","creature","set_navigation",CurrentAreaBlock.navigation)
     else:
-        get_tree().call_group("creature","set_navigation",null)
+
+        get_tree().call_deferred("call_group","creature","set_navigation",null)
     
 func detect_collision_in_line(Pos1:Vector2,Pos2:Vector2,Ignore:Array,CollisionMask:int):
     #将探测射线功能封装，便于调用，参数Ignore为碰撞检测中忽略的对象数组

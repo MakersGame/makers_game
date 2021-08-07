@@ -14,18 +14,18 @@ func init(_Direction:String,_Opened:bool=false,_Locked=false,_Key=null):
     if _Direction=="left":
         CurrentAnimation="right2left"
         $DoorBody/AnimatedSprite.animation="right2left"
-        $DoorBody/Obstacle/CollisionShape2D.shape.extents=Vector2(10,5)   
-        $DoorBody/Obstacle/CollisionShape2D.position=Vector2(0,-5)
+        $DoorBody/DoorObstacle/CollisionShape2D.shape.extents=Vector2(10,5)   
+        $DoorBody/DoorObstacle/CollisionShape2D.position=Vector2(0,-5)
     elif _Direction=="right":
         CurrentAnimation="left2right"
         $DoorBody/AnimatedSprite.animation="left2right"
-        $DoorBody/Obstacle/CollisionShape2D.shape.extents=Vector2(10,5)   
-        $DoorBody/Obstacle/CollisionShape2D.position=Vector2(0,-5)
+        $DoorBody/DoorObstacle/CollisionShape2D.shape.extents=Vector2(10,5)   
+        $DoorBody/DoorObstacle/CollisionShape2D.position=Vector2(0,-5)
     elif _Direction=="down":
         CurrentAnimation="up2down"
         $DoorBody/AnimatedSprite.animation="up2down"
-        $DoorBody/Obstacle/CollisionShape2D.shape.extents=Vector2(5,10)
-        $DoorBody/Obstacle/CollisionShape2D.position=Vector2(0,-5)
+        $DoorBody/DoorObstacle/CollisionShape2D.shape.extents=Vector2(5,10)
+        $DoorBody/DoorObstacle/CollisionShape2D.position=Vector2(0,-5)
 
     z_index=floor(position.y/20)
 func open():
@@ -42,6 +42,8 @@ func close():
         var i=0
         while i<BodyInArea.size():
             if !BodyInArea[i].CreatureStatus.alive():
+                if BodyInArea[i].Identifier=="Enermy":
+                    BodyInArea[i].disconnect("LeaveDefaultMode",self,"open")
                 BodyInArea.remove(i)
                 i-=1
             i+=1
@@ -68,6 +70,8 @@ func _on_DetectArea_body_entered(body):
         return
     if not body in BodyInArea:
         BodyInArea.push_back(body)
+    if body.Identifier=="Enermy":
+        body.connect("LeaveDefaultMode",self,"open")
     if !Opened and !$AnimationPlayer.is_playing():
         if !(body.Identifier=="Enermy" and body.AImode=="default"):
             open()
@@ -79,4 +83,6 @@ func _on_DetectArea_body_entered(body):
 
 func _on_DetectArea_body_exited(body):
     if body in BodyInArea:
+        if body.Identifier=="Enermy":
+            body.disconnect("LeaveDefaultMode",self,"open")
         BodyInArea.erase(body)
