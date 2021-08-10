@@ -4,10 +4,10 @@
 @end
 
 @GoodInHome
-木材 1000
+建材 1000
 9mm子弹 1500
 雷明顿16号弹 100
-绷带 30
+止痛药 30
 @end
 
 @WeaponInHome
@@ -27,7 +27,7 @@ EX咖喱棒 200
 
 @GoodInBackpack
 9mm子弹 20
-绷带 2
+止痛药 2
 @end
 
 @WeaponInBackpack

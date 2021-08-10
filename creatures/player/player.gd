@@ -302,6 +302,8 @@ func animation_function():
     else:
         $Animations/PlayerAnimation.speed_scale=0.7
     $Animations/PlayerAnimation.animation=ani
+    $Animations/PlayerDetailAnimation.animation=ani
+    $Animations/PlayerDetailAnimation.frame=$Animations/PlayerAnimation.frame
     
     var Weapon=null
     if WeaponChoice=="melee":

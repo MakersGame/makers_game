@@ -10,11 +10,11 @@ var CurrentPage=1               #当前背包在第几页
 var InventoryChosen:int=0       #选中的物品栏
 var InventoryFocused:int=0      #鼠标聚焦的物品栏（可能没有选中） 
 var CraftList = {
-    "木材":{
-        "木材":1,
+    "建材":{
+        "建材":1,
         },
     "9mm子弹":{
-        "木材":500,
+        "建材":500,
        }
    }
 

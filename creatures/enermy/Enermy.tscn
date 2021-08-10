@@ -1,19 +1,15 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://creatures/creatures.tscn" type="PackedScene" id=1]
-[ext_resource path="res://art/temp/Enermy1.png" type="Texture" id=2]
+[ext_resource path="res://global/ReferenceList/Sprites/Enermies/Zombie.tres" type="SpriteFrames" id=2]
 [ext_resource path="res://creatures/enermy/Enermy.gd" type="Script" id=3]
+[ext_resource path="res://art/temp/EnermySight.png" type="Texture" id=4]
 
-[sub_resource type="SpriteFrames" id=1]
-animations = [ {
-"frames": [ ExtResource( 2 ) ],
-"loop": true,
-"name": "default",
-"speed": 5.0
-} ]
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 30, 30 )
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 30, 30 )
+extents = Vector2( 20, 40 )
 
 [node name="Enermy" type="KinematicBody2D" groups=[
 "enermy",
@@ -23,11 +19,16 @@ collision_layer = 20
 script = ExtResource( 3 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-scale = Vector2( 3, 3 )
-frames = SubResource( 1 )
+position = Vector2( -4, -22 )
+scale = Vector2( 4, 4 )
+frames = ExtResource( 2 )
+animation = "normal_walk_right"
+frame = 7
+speed_scale = 0.7
+playing = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="CreatureStatus" parent="." instance=ExtResource( 1 )]
 
@@ -48,6 +49,22 @@ one_shot = true
 [node name="RandomMoveTimer" type="Timer" parent="."]
 wait_time = 5.0
 one_shot = true
+
+[node name="SightSprite" type="Sprite" parent="."]
+visible = false
+modulate = Color( 1, 1, 1, 0.580392 )
+scale = Vector2( 10, 10 )
+z_index = 800
+z_as_relative = false
+texture = ExtResource( 4 )
+offset = Vector2( -0.5, -3 )
+
+[node name="DamageAreas" type="Node2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DamageAreas"]
+visible = false
+position = Vector2( 20, 0 )
+shape = SubResource( 2 )
 
 [connection signal="timeout" from="AttackColdTimer" to="." method="_on_AttackColdTimer_timeout"]
 [connection signal="timeout" from="RigidTimer" to="." method="_on_RigidTimer_timeout"]

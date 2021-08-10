@@ -1,84 +1,85 @@
-[gd_scene load_steps=83 format=2]
+[gd_scene load_steps=84 format=2]
 
 [ext_resource path="res://creatures/creatures.tscn" type="PackedScene" id=1]
 [ext_resource path="res://creatures/NPC/NPC.gd" type="Script" id=2]
-[ext_resource path="res://art/Player/Anim_armed/walk_armed_left_down_4.png" type="Texture" id=3]
+[ext_resource path="res://art/Player/body/Anim_armed/walk_armed_left_down_4.png" type="Texture" id=3]
 [ext_resource path="res://weapons/ranged/RangedWeapon.tscn" type="PackedScene" id=4]
 [ext_resource path="res://weapons/melee/MeleeWeapon.tscn" type="PackedScene" id=5]
-[ext_resource path="res://art/Player/Anim_armed/walk_armed_down_3.png" type="Texture" id=6]
-[ext_resource path="res://art/Player/Anim_unarmed/walk_left_up_4.png" type="Texture" id=7]
-[ext_resource path="res://art/Player/Anim_unarmed/walk_left_down_4.png" type="Texture" id=8]
-[ext_resource path="res://art/Player/Anim_unarmed/walk_right_up_3.png" type="Texture" id=9]
-[ext_resource path="res://art/Player/Anim_armed/walk_armed_up_2.png" type="Texture" id=10]
-[ext_resource path="res://art/Player/Anim_armed/walk_armed_left_up_2.png" type="Texture" id=11]
-[ext_resource path="res://art/Player/Anim_armed/walk_armed_left_down_2.png" type="Texture" id=12]
-[ext_resource path="res://art/Player/Anim_unarmed/walk_left_up_3.png" type="Texture" id=13]
-[ext_resource path="res://art/Player/Anim_unarmed/walk_right_down_3.png" type="Texture" id=14]
-[ext_resource path="res://art/Player/Anim_unarmed/walk_up_3.png" type="Texture" id=15]
-[ext_resource path="res://art/Player/Anim_unarmed/walk_right_up_4.png" type="Texture" id=16]
-[ext_resource path="res://art/Player/Anim_armed/walk_armed_left_down_1.png" type="Texture" id=17]
-[ext_resource path="res://art/Player/Anim_armed/walk_armed_right_up_2.png" type="Texture" id=18]
-[ext_resource path="res://art/Player/Anim_armed/walk_armed_right_up_1.png" type="Texture" id=19]
-[ext_resource path="res://art/Player/Anim_armed/walk_armed_up_1.png" type="Texture" id=20]
-[ext_resource path="res://art/Player/Anim_armed/walk_armed_right_down_1.png" type="Texture" id=21]
+[ext_resource path="res://art/Player/body/Anim_armed/walk_armed_down_3.png" type="Texture" id=6]
+[ext_resource path="res://art/Player/body/Anim_unarmed/walk_left_up_4.png" type="Texture" id=7]
+[ext_resource path="res://art/Player/body/Anim_unarmed/walk_left_down_4.png" type="Texture" id=8]
+[ext_resource path="res://art/Player/body/Anim_unarmed/walk_right_up_3.png" type="Texture" id=9]
+[ext_resource path="res://art/Player/body/Anim_armed/walk_armed_up_2.png" type="Texture" id=10]
+[ext_resource path="res://art/Player/body/Anim_armed/walk_armed_left_up_2.png" type="Texture" id=11]
+[ext_resource path="res://art/Player/body/Anim_armed/walk_armed_left_down_2.png" type="Texture" id=12]
+[ext_resource path="res://art/Player/body/Anim_unarmed/walk_left_up_3.png" type="Texture" id=13]
+[ext_resource path="res://art/Player/body/Anim_unarmed/walk_right_down_3.png" type="Texture" id=14]
+[ext_resource path="res://art/Player/body/Anim_unarmed/walk_up_3.png" type="Texture" id=15]
+[ext_resource path="res://art/Player/body/Anim_unarmed/walk_right_up_4.png" type="Texture" id=16]
+[ext_resource path="res://art/Player/body/Anim_armed/walk_armed_left_down_1.png" type="Texture" id=17]
+[ext_resource path="res://art/Player/body/Anim_armed/walk_armed_right_up_2.png" type="Texture" id=18]
+[ext_resource path="res://art/Player/body/Anim_armed/walk_armed_right_up_1.png" type="Texture" id=19]
+[ext_resource path="res://art/Player/body/Anim_armed/walk_armed_up_1.png" type="Texture" id=20]
+[ext_resource path="res://art/Player/body/Anim_armed/walk_armed_right_down_1.png" type="Texture" id=21]
 [ext_resource path="res://art/Player/left_hand.png" type="Texture" id=22]
-[ext_resource path="res://art/Player/Anim_armed/walk_armed_left_up_1.png" type="Texture" id=23]
-[ext_resource path="res://art/Player/Anim_armed/walk_armed_right_down_2.png" type="Texture" id=24]
+[ext_resource path="res://art/Player/body/Anim_armed/walk_armed_left_up_1.png" type="Texture" id=23]
+[ext_resource path="res://art/Player/body/Anim_armed/walk_armed_right_down_2.png" type="Texture" id=24]
 [ext_resource path="res://art/Player/right_hand.png" type="Texture" id=25]
-[ext_resource path="res://art/Player/Anim_unarmed/walk_up_4.png" type="Texture" id=26]
-[ext_resource path="res://art/Player/Anim_unarmed/walk_right_down_4.png" type="Texture" id=27]
-[ext_resource path="res://art/Player/Anim_armed/walk_armed_right_down_3.png" type="Texture" id=28]
-[ext_resource path="res://art/Player/Anim_armed/walk_armed_up_3.png" type="Texture" id=29]
-[ext_resource path="res://art/Player/Anim_armed/walk_armed_up_4.png" type="Texture" id=30]
-[ext_resource path="res://art/Player/Anim_unarmed/walk_down_3.png" type="Texture" id=31]
-[ext_resource path="res://art/Player/Anim_armed/walk_armed_right_up_4.png" type="Texture" id=32]
-[ext_resource path="res://art/Player/Anim_armed/walk_armed_left_up_4.png" type="Texture" id=33]
-[ext_resource path="res://art/Player/Anim_unarmed/walk_down_4.png" type="Texture" id=34]
-[ext_resource path="res://art/Player/Anim_unarmed/walk_left_down_3.png" type="Texture" id=35]
-[ext_resource path="res://art/Player/Anim_armed/walk_armed_down_4.png" type="Texture" id=36]
-[ext_resource path="res://art/Player/Anim_armed/walk_armed_left_down_3.png" type="Texture" id=37]
-[ext_resource path="res://art/Player/Anim_armed/walk_armed_right_down_4.png" type="Texture" id=38]
-[ext_resource path="res://art/Player/Anim_armed/walk_armed_left_up_3.png" type="Texture" id=39]
-[ext_resource path="res://art/Player/Anim_armed/walk_armed_right_up_3.png" type="Texture" id=40]
-[ext_resource path="res://art/Player/Anim_unarmed/walk_right_down_1.png" type="Texture" id=41]
-[ext_resource path="res://art/Player/Anim_unarmed/walk_left_down_1.png" type="Texture" id=42]
-[ext_resource path="res://art/Player/Anim_unarmed/stand_up_2.png" type="Texture" id=43]
-[ext_resource path="res://art/Player/Anim_armed/stand_armed_right_down_2.png" type="Texture" id=44]
-[ext_resource path="res://art/Player/Anim_unarmed/stand_right_down_2.png" type="Texture" id=45]
-[ext_resource path="res://art/Player/Anim_unarmed/walk_right_down_2.png" type="Texture" id=46]
-[ext_resource path="res://art/Player/Anim_unarmed/stand_left_down_1.png" type="Texture" id=47]
-[ext_resource path="res://art/Player/Anim_unarmed/walk_down_1.png" type="Texture" id=48]
+[ext_resource path="res://art/Player/body/Anim_unarmed/walk_up_4.png" type="Texture" id=26]
+[ext_resource path="res://art/Player/body/Anim_unarmed/walk_right_down_4.png" type="Texture" id=27]
+[ext_resource path="res://art/Player/body/Anim_armed/walk_armed_right_down_3.png" type="Texture" id=28]
+[ext_resource path="res://art/Player/body/Anim_armed/walk_armed_up_3.png" type="Texture" id=29]
+[ext_resource path="res://art/Player/body/Anim_armed/walk_armed_up_4.png" type="Texture" id=30]
+[ext_resource path="res://art/Player/body/Anim_unarmed/walk_down_3.png" type="Texture" id=31]
+[ext_resource path="res://art/Player/body/Anim_armed/walk_armed_right_up_4.png" type="Texture" id=32]
+[ext_resource path="res://art/Player/body/Anim_armed/walk_armed_left_up_4.png" type="Texture" id=33]
+[ext_resource path="res://art/Player/body/Anim_unarmed/walk_down_4.png" type="Texture" id=34]
+[ext_resource path="res://art/Player/body/Anim_unarmed/walk_left_down_3.png" type="Texture" id=35]
+[ext_resource path="res://art/Player/body/Anim_armed/walk_armed_down_4.png" type="Texture" id=36]
+[ext_resource path="res://art/Player/body/Anim_armed/walk_armed_left_down_3.png" type="Texture" id=37]
+[ext_resource path="res://art/Player/body/Anim_armed/walk_armed_right_down_4.png" type="Texture" id=38]
+[ext_resource path="res://art/Player/body/Anim_armed/walk_armed_left_up_3.png" type="Texture" id=39]
+[ext_resource path="res://art/Player/body/Anim_armed/walk_armed_right_up_3.png" type="Texture" id=40]
+[ext_resource path="res://art/Player/body/Anim_unarmed/walk_right_down_1.png" type="Texture" id=41]
+[ext_resource path="res://art/Player/body/Anim_unarmed/walk_left_down_1.png" type="Texture" id=42]
+[ext_resource path="res://art/Player/body/Anim_unarmed/stand_up_2.png" type="Texture" id=43]
+[ext_resource path="res://art/Player/body/Anim_armed/stand_armed_right_down_2.png" type="Texture" id=44]
+[ext_resource path="res://art/Player/body/Anim_unarmed/stand_right_down_2.png" type="Texture" id=45]
+[ext_resource path="res://art/Player/body/Anim_unarmed/walk_right_down_2.png" type="Texture" id=46]
+[ext_resource path="res://art/Player/body/Anim_unarmed/stand_left_down_1.png" type="Texture" id=47]
+[ext_resource path="res://art/Player/body/Anim_unarmed/walk_down_1.png" type="Texture" id=48]
 [ext_resource path="res://art/Player/info.png" type="Texture" id=49]
-[ext_resource path="res://art/Player/Anim_unarmed/walk_right_up_2.png" type="Texture" id=50]
-[ext_resource path="res://art/Player/Anim_unarmed/stand_left_up_1.png" type="Texture" id=51]
-[ext_resource path="res://art/Player/Anim_unarmed/stand_left_down_2.png" type="Texture" id=52]
-[ext_resource path="res://art/Player/Anim_unarmed/walk_left_up_1.png" type="Texture" id=53]
-[ext_resource path="res://art/Player/Anim_unarmed/walk_up_1.png" type="Texture" id=54]
-[ext_resource path="res://art/Player/Anim_armed/stand_armed_right_down_1.png" type="Texture" id=55]
-[ext_resource path="res://art/Player/Anim_armed/stand_armed_down_2.png" type="Texture" id=56]
-[ext_resource path="res://art/Player/Anim_armed/stand_armed_left_up_1.png" type="Texture" id=57]
-[ext_resource path="res://art/Player/Anim_armed/stand_armed_left_down_1.png" type="Texture" id=58]
-[ext_resource path="res://art/Player/Anim_unarmed/stand_down_1.png" type="Texture" id=59]
-[ext_resource path="res://art/Player/Anim_unarmed/walk_up_2.png" type="Texture" id=60]
-[ext_resource path="res://art/Player/Anim_unarmed/stand_right_up_2.png" type="Texture" id=61]
-[ext_resource path="res://art/Player/Anim_unarmed/stand_up_1.png" type="Texture" id=62]
-[ext_resource path="res://art/Player/Anim_unarmed/stand_right_down_1.png" type="Texture" id=63]
-[ext_resource path="res://art/Player/Anim_unarmed/stand_left_up_2.png" type="Texture" id=64]
-[ext_resource path="res://art/Player/Anim_unarmed/walk_left_up_2.png" type="Texture" id=65]
-[ext_resource path="res://art/Player/Anim_unarmed/walk_left_down_2.png" type="Texture" id=66]
-[ext_resource path="res://art/Player/Anim_unarmed/stand_down_2.png" type="Texture" id=67]
-[ext_resource path="res://art/Player/Anim_armed/stand_armed_down_1.png" type="Texture" id=68]
-[ext_resource path="res://art/Player/Anim_unarmed/stand_right_up_1.png" type="Texture" id=69]
-[ext_resource path="res://art/Player/Anim_unarmed/walk_down_2.png" type="Texture" id=70]
-[ext_resource path="res://art/Player/Anim_unarmed/walk_right_up_1.png" type="Texture" id=71]
-[ext_resource path="res://art/Player/Anim_armed/stand_armed_left_up_2.png" type="Texture" id=72]
-[ext_resource path="res://art/Player/Anim_armed/stand_armed_left_down_2.png" type="Texture" id=73]
-[ext_resource path="res://art/Player/Anim_armed/stand_armed_right_up_1.png" type="Texture" id=74]
-[ext_resource path="res://art/Player/Anim_armed/stand_armed_up_2.png" type="Texture" id=75]
-[ext_resource path="res://art/Player/Anim_armed/stand_armed_up_1.png" type="Texture" id=76]
-[ext_resource path="res://art/Player/Anim_armed/stand_armed_right_up_2.png" type="Texture" id=77]
-[ext_resource path="res://art/Player/Anim_armed/walk_armed_down_2.png" type="Texture" id=78]
-[ext_resource path="res://art/Player/Anim_armed/walk_armed_down_1.png" type="Texture" id=79]
+[ext_resource path="res://art/Player/body/Anim_unarmed/walk_right_up_2.png" type="Texture" id=50]
+[ext_resource path="res://art/Player/body/Anim_unarmed/stand_left_up_1.png" type="Texture" id=51]
+[ext_resource path="res://art/Player/body/Anim_unarmed/stand_left_down_2.png" type="Texture" id=52]
+[ext_resource path="res://art/Player/body/Anim_unarmed/walk_left_up_1.png" type="Texture" id=53]
+[ext_resource path="res://art/Player/body/Anim_unarmed/walk_up_1.png" type="Texture" id=54]
+[ext_resource path="res://art/Player/body/Anim_armed/stand_armed_right_down_1.png" type="Texture" id=55]
+[ext_resource path="res://art/Player/body/Anim_armed/stand_armed_down_2.png" type="Texture" id=56]
+[ext_resource path="res://art/Player/body/Anim_armed/stand_armed_left_up_1.png" type="Texture" id=57]
+[ext_resource path="res://art/Player/body/Anim_armed/stand_armed_left_down_1.png" type="Texture" id=58]
+[ext_resource path="res://art/Player/body/Anim_unarmed/stand_down_1.png" type="Texture" id=59]
+[ext_resource path="res://art/Player/body/Anim_unarmed/walk_up_2.png" type="Texture" id=60]
+[ext_resource path="res://art/Player/body/Anim_unarmed/stand_right_up_2.png" type="Texture" id=61]
+[ext_resource path="res://art/Player/body/Anim_unarmed/stand_up_1.png" type="Texture" id=62]
+[ext_resource path="res://art/Player/body/Anim_unarmed/stand_right_down_1.png" type="Texture" id=63]
+[ext_resource path="res://art/Player/body/Anim_unarmed/stand_left_up_2.png" type="Texture" id=64]
+[ext_resource path="res://art/Player/body/Anim_unarmed/walk_left_up_2.png" type="Texture" id=65]
+[ext_resource path="res://art/Player/body/Anim_unarmed/walk_left_down_2.png" type="Texture" id=66]
+[ext_resource path="res://art/Player/body/Anim_unarmed/stand_down_2.png" type="Texture" id=67]
+[ext_resource path="res://art/Player/body/Anim_armed/stand_armed_down_1.png" type="Texture" id=68]
+[ext_resource path="res://art/Player/body/Anim_unarmed/stand_right_up_1.png" type="Texture" id=69]
+[ext_resource path="res://art/Player/body/Anim_unarmed/walk_down_2.png" type="Texture" id=70]
+[ext_resource path="res://art/Player/body/Anim_unarmed/walk_right_up_1.png" type="Texture" id=71]
+[ext_resource path="res://art/Player/body/Anim_armed/stand_armed_left_up_2.png" type="Texture" id=72]
+[ext_resource path="res://art/Player/body/Anim_armed/stand_armed_left_down_2.png" type="Texture" id=73]
+[ext_resource path="res://art/Player/body/Anim_armed/stand_armed_right_up_1.png" type="Texture" id=74]
+[ext_resource path="res://art/Player/body/Anim_armed/stand_armed_up_2.png" type="Texture" id=75]
+[ext_resource path="res://art/Player/body/Anim_armed/stand_armed_up_1.png" type="Texture" id=76]
+[ext_resource path="res://art/Player/body/Anim_armed/stand_armed_right_up_2.png" type="Texture" id=77]
+[ext_resource path="res://art/Player/body/Anim_armed/walk_armed_down_2.png" type="Texture" id=78]
+[ext_resource path="res://art/Player/body/Anim_armed/walk_armed_down_1.png" type="Texture" id=79]
+[ext_resource path="res://creatures/player/PlayerDetailsSprites.tres" type="SpriteFrames" id=80]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 30, 30 )
@@ -103,59 +104,19 @@ animations = [ {
 "name": "armed_stand_right_up",
 "speed": 2.0
 }, {
-"frames": [ ExtResource( 51 ), ExtResource( 64 ) ],
+"frames": [ ExtResource( 41 ), ExtResource( 63 ), ExtResource( 46 ), ExtResource( 63 ), ExtResource( 14 ), ExtResource( 45 ), ExtResource( 27 ), ExtResource( 45 ) ],
 "loop": true,
-"name": "unarmed_stand_left_up",
-"speed": 2.0
-}, {
-"frames": [ ExtResource( 68 ), ExtResource( 56 ) ],
-"loop": true,
-"name": "armed_stand_down",
-"speed": 2.0
-}, {
-"frames": [ ExtResource( 71 ), ExtResource( 69 ), ExtResource( 50 ), ExtResource( 69 ), ExtResource( 9 ), ExtResource( 61 ), ExtResource( 16 ), ExtResource( 61 ) ],
-"loop": true,
-"name": "unarmed_walk_right_up",
+"name": "unarmed_walk_right_down",
 "speed": 10.0
 }, {
-"frames": [ ExtResource( 53 ), ExtResource( 51 ), ExtResource( 65 ), ExtResource( 51 ), ExtResource( 13 ), ExtResource( 64 ), ExtResource( 7 ), ExtResource( 64 ) ],
+"frames": [ ExtResource( 54 ), ExtResource( 62 ), ExtResource( 60 ), ExtResource( 62 ), ExtResource( 15 ), ExtResource( 43 ), ExtResource( 26 ), ExtResource( 43 ) ],
 "loop": true,
-"name": "unarmed_walk_left_up",
+"name": "unarmed_walk_up",
 "speed": 10.0
-}, {
-"frames": [ ExtResource( 79 ), ExtResource( 68 ), ExtResource( 78 ), ExtResource( 68 ), ExtResource( 6 ), ExtResource( 56 ), ExtResource( 36 ), ExtResource( 56 ) ],
-"loop": true,
-"name": "armed_walk_down",
-"speed": 10.0
-}, {
-"frames": [ ExtResource( 63 ), ExtResource( 45 ) ],
-"loop": true,
-"name": "unarmed_stand_right_down",
-"speed": 2.0
-}, {
-"frames": [ ExtResource( 76 ), ExtResource( 75 ) ],
-"loop": true,
-"name": "armed_stand_up",
-"speed": 2.0
 }, {
 "frames": [ ExtResource( 47 ), ExtResource( 52 ) ],
 "loop": true,
 "name": "unarmed_stand_left_down",
-"speed": 2.0
-}, {
-"frames": [ ExtResource( 59 ), ExtResource( 67 ) ],
-"loop": true,
-"name": "unarmed_stand_down",
-"speed": 2.0
-}, {
-"frames": [ ExtResource( 58 ), ExtResource( 73 ) ],
-"loop": true,
-"name": "armed_stand_left_down",
-"speed": 2.0
-}, {
-"frames": [ ExtResource( 69 ), ExtResource( 61 ) ],
-"loop": true,
-"name": "unarmed_stand_right_up",
 "speed": 2.0
 }, {
 "frames": [ ExtResource( 42 ), ExtResource( 47 ), ExtResource( 66 ), ExtResource( 47 ), ExtResource( 35 ), ExtResource( 52 ), ExtResource( 8 ), ExtResource( 52 ) ],
@@ -163,19 +124,19 @@ animations = [ {
 "name": "unarmed_walk_left_down",
 "speed": 10.0
 }, {
-"frames": [ ExtResource( 62 ), ExtResource( 43 ) ],
+"frames": [ ExtResource( 63 ), ExtResource( 45 ) ],
 "loop": true,
-"name": "unarmed_stand_up",
+"name": "unarmed_stand_right_down",
 "speed": 2.0
 }, {
-"frames": [ ExtResource( 41 ), ExtResource( 63 ), ExtResource( 46 ), ExtResource( 63 ), ExtResource( 14 ), ExtResource( 45 ), ExtResource( 27 ), ExtResource( 45 ) ],
+"frames": [ ExtResource( 53 ), ExtResource( 51 ), ExtResource( 65 ), ExtResource( 51 ), ExtResource( 13 ), ExtResource( 64 ), ExtResource( 7 ), ExtResource( 64 ) ],
 "loop": true,
-"name": "unarmed_walk_right_down",
+"name": "unarmed_walk_left_up",
 "speed": 10.0
 }, {
-"frames": [ ExtResource( 48 ), ExtResource( 59 ), ExtResource( 70 ), ExtResource( 59 ), ExtResource( 31 ), ExtResource( 67 ), ExtResource( 34 ), ExtResource( 67 ) ],
+"frames": [ ExtResource( 71 ), ExtResource( 69 ), ExtResource( 50 ), ExtResource( 69 ), ExtResource( 9 ), ExtResource( 61 ), ExtResource( 16 ), ExtResource( 61 ) ],
 "loop": true,
-"name": "unarmed_walk_down",
+"name": "unarmed_walk_right_up",
 "speed": 10.0
 }, {
 "frames": [ ExtResource( 55 ), ExtResource( 44 ) ],
@@ -183,24 +144,59 @@ animations = [ {
 "name": "armed_stand_right_down",
 "speed": 2.0
 }, {
-"frames": [ ExtResource( 54 ), ExtResource( 62 ), ExtResource( 60 ), ExtResource( 62 ), ExtResource( 15 ), ExtResource( 43 ), ExtResource( 26 ), ExtResource( 43 ) ],
+"frames": [ ExtResource( 48 ), ExtResource( 59 ), ExtResource( 70 ), ExtResource( 59 ), ExtResource( 31 ), ExtResource( 67 ), ExtResource( 34 ), ExtResource( 67 ) ],
 "loop": true,
-"name": "unarmed_walk_up",
+"name": "unarmed_walk_down",
 "speed": 10.0
 }, {
-"frames": [ ExtResource( 17 ), ExtResource( 58 ), ExtResource( 12 ), ExtResource( 58 ), ExtResource( 37 ), ExtResource( 73 ), ExtResource( 3 ), ExtResource( 73 ) ],
+"frames": [ ExtResource( 69 ), ExtResource( 61 ) ],
 "loop": true,
-"name": "armed_walk_left_down",
+"name": "unarmed_stand_right_up",
+"speed": 2.0
+}, {
+"frames": [ ExtResource( 79 ), ExtResource( 68 ), ExtResource( 78 ), ExtResource( 68 ), ExtResource( 6 ), ExtResource( 56 ), ExtResource( 36 ), ExtResource( 56 ) ],
+"loop": true,
+"name": "armed_walk_down",
 "speed": 10.0
 }, {
-"frames": [ ExtResource( 20 ), ExtResource( 76 ), ExtResource( 10 ), ExtResource( 76 ), ExtResource( 29 ), ExtResource( 75 ), ExtResource( 30 ), ExtResource( 75 ) ],
+"frames": [ ExtResource( 68 ), ExtResource( 56 ) ],
 "loop": true,
-"name": "armed_walk_up",
-"speed": 10.0
+"name": "armed_stand_down",
+"speed": 2.0
+}, {
+"frames": [ ExtResource( 76 ), ExtResource( 75 ) ],
+"loop": true,
+"name": "armed_stand_up",
+"speed": 2.0
+}, {
+"frames": [ ExtResource( 51 ), ExtResource( 64 ) ],
+"loop": true,
+"name": "unarmed_stand_left_up",
+"speed": 2.0
+}, {
+"frames": [ ExtResource( 58 ), ExtResource( 73 ) ],
+"loop": true,
+"name": "armed_stand_left_down",
+"speed": 2.0
+}, {
+"frames": [ ExtResource( 59 ), ExtResource( 67 ) ],
+"loop": true,
+"name": "unarmed_stand_down",
+"speed": 2.0
+}, {
+"frames": [ ExtResource( 62 ), ExtResource( 43 ) ],
+"loop": true,
+"name": "unarmed_stand_up",
+"speed": 2.0
 }, {
 "frames": [ ExtResource( 21 ), ExtResource( 55 ), ExtResource( 24 ), ExtResource( 55 ), ExtResource( 28 ), ExtResource( 44 ), ExtResource( 38 ), ExtResource( 44 ) ],
 "loop": true,
 "name": "armed_walk_right_down",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 19 ), ExtResource( 74 ), ExtResource( 18 ), ExtResource( 74 ), ExtResource( 40 ), ExtResource( 77 ), ExtResource( 32 ), ExtResource( 77 ) ],
+"loop": true,
+"name": "armed_walk_right_up",
 "speed": 10.0
 }, {
 "frames": [ ExtResource( 23 ), ExtResource( 57 ), ExtResource( 11 ), ExtResource( 57 ), ExtResource( 39 ), ExtResource( 72 ), ExtResource( 33 ), ExtResource( 72 ) ],
@@ -208,9 +204,14 @@ animations = [ {
 "name": "armed_walk_left_up",
 "speed": 10.0
 }, {
-"frames": [ ExtResource( 19 ), ExtResource( 74 ), ExtResource( 18 ), ExtResource( 74 ), ExtResource( 40 ), ExtResource( 77 ), ExtResource( 32 ), ExtResource( 77 ) ],
+"frames": [ ExtResource( 20 ), ExtResource( 76 ), ExtResource( 10 ), ExtResource( 76 ), ExtResource( 29 ), ExtResource( 75 ), ExtResource( 30 ), ExtResource( 75 ) ],
 "loop": true,
-"name": "armed_walk_right_up",
+"name": "armed_walk_up",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 17 ), ExtResource( 58 ), ExtResource( 12 ), ExtResource( 58 ), ExtResource( 37 ), ExtResource( 73 ), ExtResource( 3 ), ExtResource( 73 ) ],
+"loop": true,
+"name": "armed_walk_left_down",
 "speed": 10.0
 } ]
 
@@ -245,7 +246,6 @@ one_shot = true
 one_shot = true
 
 [node name="Animations" type="Node2D" parent="."]
-modulate = Color( 0.452696, 0.824219, 0.538656, 1 )
 
 [node name="NPCAnimation" type="AnimatedSprite" parent="Animations"]
 position = Vector2( -2, -22 )
@@ -254,6 +254,15 @@ frames = SubResource( 3 )
 animation = "armed_stand_down"
 speed_scale = 0.7
 playing = true
+
+[node name="NPCDetailAnimation" type="AnimatedSprite" parent="Animations"]
+modulate = Color( 0.0705882, 0.819608, 0.309804, 1 )
+position = Vector2( -2, -22 )
+scale = Vector2( 4, 4 )
+frames = ExtResource( 80 )
+animation = "unarmed_walk_up"
+frame = 1
+speed_scale = 0.7
 
 [node name="left_hand" type="Sprite" parent="Animations"]
 position = Vector2( -28.8294, 9.24988 )

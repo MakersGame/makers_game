@@ -71,7 +71,6 @@ scale = Vector2( 4, 4 )
 [node name="AnimatedSprite" type="AnimatedSprite" parent="WeaponBody"]
 z_index = 1
 frames = ExtResource( 2 )
-animation = "军刀"
 offset = Vector2( 9.5, 0.5 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WeaponBody"]

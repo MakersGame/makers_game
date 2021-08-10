@@ -22,6 +22,7 @@ var QuickUseItemChoice:int=0                        #选中的快捷栏物品
 var InCraftTable = false
 
 var WorldTime:Vector2=Vector2(6,0)
+var TimePaused:bool=false
 
 onready var PlayerCamera=$PlayerCamera  #游戏镜头对象实例
 onready var SceneChanger=$PlayerCamera/SceneChanger
@@ -145,7 +146,11 @@ func area_block_change(area):
     set_navigation()
 
 func _on_WorldTimer_timeout():
+    if TimePaused:
+        return
     WorldTime.y+=10
     if WorldTime.y>=60:
         WorldTime.y-=60
         WorldTime.x+=1
+    OverworldUIs.update_clock()
+    

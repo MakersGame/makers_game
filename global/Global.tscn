@@ -59,5 +59,6 @@ visible = false
 
 [node name="WorldTimer" type="Timer" parent="."]
 wait_time = 10.0
+autostart = true
 
 [connection signal="timeout" from="WorldTimer" to="." method="_on_WorldTimer_timeout"]

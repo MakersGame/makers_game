@@ -191,3 +191,19 @@ func _on_Messager3Timer_timeout():
     $Message/Message3.text=""
     $Message/Message3/Messager3Timer.wait_time=3
     $Message/Message3/Messager3Timer.stop()
+
+func update_clock():
+    $Clock/Time.text=""
+    if Global.WorldTime.x<10:
+        $Clock/Time.text+=" "
+    $Clock/Time.text+=String(Global.WorldTime.x)+":"
+    if Global.WorldTime.y<10:
+        $Clock/Time.text+="0"
+    $Clock/Time.text+=String(Global.WorldTime.y)
+    if Global.WorldTime.x>=6 and Global.WorldTime.x<18:
+        $Clock/Period.text="白天"
+    elif Global.WorldTime.x>=18 and Global.WorldTime.x<20:
+        $Clock/Period.text="黄昏"
+    else:
+        $Clock/Period.text="夜晚"
+

@@ -4,6 +4,7 @@ extends KinematicBody2D
 var Identifier="Enermy"
 var Name:String                         #怪物名称，也代表种类
 var Exist:bool=false
+var movement:Vector2
 var TargetPosition:Vector2              #暂定，可能无此变量
 var Target                              #锁定的目标，为玩家或NPC
 var BirthPosition:Vector2               #出生位置，回溯模式下会回到此处
@@ -14,7 +15,10 @@ var AImode:String
 var BattleMod:String                    #值为“common"或”defense"，对应正常战斗和防御战
 var KnockBack:Vector3                   #被击退值，三维向量，xy表示方向，z表示剩余击退距离，每一帧击退距离呈二次函数
 var Attackable:bool=true                #是否可以进行攻击
+var Attacking:bool=false                #是否正在攻击
 var AttackRange:float                   #攻击距离，单位为像素
+var DamageAreaRect:Vector2
+var DamageAreaOffset:Vector2
 var BeforeAttackTime:float              #攻击前摇
 var AfterAttackTime:float               #攻击后摇
 var FaceDirection:Vector2               #面朝方向，决定视野范围
@@ -53,6 +57,8 @@ func init(_Name:String,_FaceDirection:Vector2,_TempHealth:float,_CurrentAreaCent
     $AttackColdTimer.wait_time=ReferenceList.EnermyReference[Name]["AttackColdTime"]
     BeforeAttackTime=ReferenceList.EnermyReference[Name]["BeforeAttackTime"]
     AfterAttackTime=ReferenceList.EnermyReference[Name]["AfterAttackTime"]
+    DamageAreaRect=ReferenceList.EnermyReference[Name]["DamageAreaRect"]
+    DamageAreaOffset=ReferenceList.EnermyReference[Name]["DamageAreaOffset"]
               
     Attackable=true 
     Exist=true
@@ -68,7 +74,7 @@ func _physics_process(delta):
     else:
         z_index=floor((global_position-CurrentAreaCenter).y/20)+2
     Target=CreatureStatus.TargetEnermy
-    var movement:Vector2=Vector2()
+    movement=Vector2()
     if Target!=null:
         TargetPosition=Target.global_position   
         movement=CreatureStatus.find_way_to_target(Target.CreatureStatus)
@@ -79,9 +85,10 @@ func _physics_process(delta):
         FaceDirection=(CreatureStatus.TargetPath[1]-CreatureStatus.TargetPath[0]).normalized()
     elif movement!=Vector2():
         FaceDirection=movement
+    face_direction_normalize()
     Speed=CreatureStatus.Speed[CreatureStatus.SpeedType]
     move(movement)
-    $AnimatedSprite.rotation_degrees=FaceDirection.angle()*180/PI+90
+    animation_function()
 
 func detect():
     if FaceDirection==Vector2(0,0):#这种情况说明初始化有问题，且会引发错误
@@ -89,7 +96,7 @@ func detect():
     var Tars=Global.PlayerAndNPCs#所有和自己敌对的生物集合，包括玩家和NPC
     var res=null#检测到的离自己最近敌对生物
     var TempMinimumDis=INF#当前检测到的生物的离自己最短距离
-    FaceDirection=FaceDirection.normalized()
+    face_direction_normalize()
     for Tar in Tars:
         Tar.GuardingEnermies.erase(self)
         if CreatureStatus.AggroValue.get(Tar)==null and (Tar.global_position-global_position).length()>SightRange*2 or abs(FaceDirection.angle_to(Tar.global_position-global_position))*180/PI>SightAngle/2:
@@ -185,7 +192,9 @@ func AIFunction():#AI切换以及不同AI的行动
                 if !$RigidTimer.time_left and !$AttackColdTimer.time_left and Attackable and (Target.global_position-global_position).length()<=AttackRange:
                     $RigidTimer.wait_time=BeforeAttackTime
                     FaceDirection=(Target.global_position-global_position).normalized()
-                    $RigidTimer.start()                             #准备攻击
+                    face_direction_normalize()
+                    $RigidTimer.start()      
+                                        #准备攻击
         "backtracking":#回溯模式，回到出生点
             if Target!=null:
                 AImode="attacking"
@@ -211,11 +220,60 @@ func attack():#攻击
         return
     var NewDamageArea=DamageArea.instance()
     NewDamageArea.init($CreatureStatus.Attack,true,0.5,FaceDirection.normalized(),self,CreatureStatus.Camp,100)
-    self.add_child(NewDamageArea)
+    $DamageAreas.add_child(NewDamageArea)
+    NewDamageArea.get_node("CollisionShape2D").shape.extents=DamageAreaRect
+    NewDamageArea.get_node("CollisionShape2D").position=DamageAreaOffset
+    $DamageAreas.rotation=FaceDirection.angle()
     Attackable=false
     $AttackColdTimer.start()
     $RigidTimer.wait_time=AfterAttackTime
     $RigidTimer.start()
+    Attacking=true   
+
+func face_direction_normalize():
+    FaceDirection=FaceDirection.normalized()
+    if FaceDirection.x>0 and abs(FaceDirection.y)<=FaceDirection.x:
+        FaceDirection=Vector2(1,0)
+    elif FaceDirection.x<0 and abs(FaceDirection.y)<=-FaceDirection.x:
+        FaceDirection=Vector2(-1,0)
+    elif FaceDirection.y>0 and abs(FaceDirection.x)<FaceDirection.y:
+        FaceDirection=Vector2(0,1)
+    elif FaceDirection.y<0 and abs(FaceDirection.x)<-FaceDirection.y:
+        FaceDirection=Vector2(0,-1)
+        
+func animation_function():
+    var ani=""
+    if (Attackable and $RigidTimer.time_left) or (Attacking and $AnimatedSprite.playing and $AnimatedSprite.animation.find("attack")!=-1):
+        ani+="attack"
+    else:
+        $AnimatedSprite.playing=true
+        ani+="normal"
+        if movement==Vector2() or $RigidTimer.time_left:
+            ani+="_stand"
+        else:
+            ani+="_walk"
+    match(FaceDirection):
+        Vector2(1,0):
+            ani+="_right"
+        Vector2(-1,0):
+            ani+="_left"
+        Vector2(0,1):
+            ani+="_down"
+        Vector2(0,-1):
+            ani+="_up"                
+    $AnimatedSprite.animation=ani
+    if $AnimatedSprite.animation.find("attack")!=-1:
+        if !Attacking and $AnimatedSprite.playing and $AnimatedSprite.frames.get_animation_speed(ani)*$AnimatedSprite.speed_scale*$RigidTimer.time_left>$AnimatedSprite.frames.get_frame_count(ani)-1:
+            $AnimatedSprite.playing=false
+            $AnimatedSprite.frame=0
+#        print($AnimatedSprite.frames.get_animation_speed(ani)*$AnimatedSprite.speed_scale*$RigidTimer.time_left)
+#        print($AnimatedSprite.frames.get_frame_count(ani)-1)
+        elif !Attacking and !$AnimatedSprite.playing and $AnimatedSprite.frames.get_animation_speed(ani)*$AnimatedSprite.speed_scale*$RigidTimer.time_left<=$AnimatedSprite.frames.get_frame_count(ani)-1:
+            $AnimatedSprite.playing=true
+        elif Attacking and $AnimatedSprite.frame==0:
+            $AnimatedSprite.playing=false
+    
+    $SightSprite.rotation=FaceDirection.angle()+PI/2
 
 func _on_AttackColdTimer_timeout():
     if !$RigidTimer.time_left:
@@ -225,7 +283,8 @@ func _on_RigidTimer_timeout():
     if Attackable and !$AttackColdTimer.time_left:
         $AttackColdTimer.start()
         attack()
-    elif !$AttackColdTimer.time_left:
+    elif $AttackColdTimer.time_left:
+        Attacking=false
         Attackable=true
 
 func raise_guard(pos:Vector2,value:float):

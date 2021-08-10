@@ -31,8 +31,9 @@ texture = ExtResource( 1 )
 shape = SubResource( 1 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+scale = Vector2( 4, 4 )
 frames = ExtResource( 3 )
-animation = "null"
+animation = "建材"
 
 [node name="ItemNumber" type="Label" parent="."]
 margin_left = -50.0

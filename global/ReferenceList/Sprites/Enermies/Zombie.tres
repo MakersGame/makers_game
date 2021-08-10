@@ -1,0 +1,98 @@
+[gd_resource type="SpriteFrames" load_steps=34 format=2]
+
+[ext_resource path="res://art/Enermies/Zombie/normal_stand_right_2.png" type="Texture" id=1]
+[ext_resource path="res://art/Enermies/Zombie/normal_walk_down_3.png" type="Texture" id=2]
+[ext_resource path="res://art/Enermies/Zombie/normal_stand_left_2.png" type="Texture" id=3]
+[ext_resource path="res://art/Enermies/Zombie/normal_stand_left_1.png" type="Texture" id=4]
+[ext_resource path="res://art/Enermies/Zombie/normal_stand_right_1.png" type="Texture" id=5]
+[ext_resource path="res://art/Enermies/Zombie/normal_walk_left_2.png" type="Texture" id=6]
+[ext_resource path="res://art/Enermies/Zombie/normal_walk_right_3.png" type="Texture" id=7]
+[ext_resource path="res://art/Enermies/Zombie/normal_walk_down_2.png" type="Texture" id=8]
+[ext_resource path="res://art/Enermies/Zombie/normal_stand_up_2.png" type="Texture" id=9]
+[ext_resource path="res://art/Enermies/Zombie/normal_walk_up_3.png" type="Texture" id=10]
+[ext_resource path="res://art/Enermies/Zombie/normal_stand_up_1.png" type="Texture" id=11]
+[ext_resource path="res://art/Enermies/Zombie/normal_stand_down_1.png" type="Texture" id=12]
+[ext_resource path="res://art/Enermies/Zombie/normal_stand_down_2.png" type="Texture" id=13]
+[ext_resource path="res://art/Enermies/Zombie/normal_walk_up_1.png" type="Texture" id=14]
+[ext_resource path="res://art/Enermies/Zombie/normal_walk_up_4.png" type="Texture" id=15]
+[ext_resource path="res://art/Enermies/Zombie/normal_walk_down_4.png" type="Texture" id=16]
+[ext_resource path="res://art/Enermies/Zombie/normal_walk_up_2.png" type="Texture" id=17]
+[ext_resource path="res://art/Enermies/Zombie/normal_walk_left_1.png" type="Texture" id=18]
+[ext_resource path="res://art/Enermies/Zombie/normal_walk_left_3.png" type="Texture" id=19]
+[ext_resource path="res://art/Enermies/Zombie/normal_walk_left_4.png" type="Texture" id=20]
+[ext_resource path="res://art/Enermies/Zombie/normal_walk_right_1.png" type="Texture" id=21]
+[ext_resource path="res://art/Enermies/Zombie/normal_walk_right_2.png" type="Texture" id=22]
+[ext_resource path="res://art/Enermies/Zombie/normal_walk_down_1.png" type="Texture" id=23]
+[ext_resource path="res://art/Enermies/Zombie/normal_walk_right_4.png" type="Texture" id=24]
+[ext_resource path="res://art/Enermies/Zombie/attack_left_2.png" type="Texture" id=25]
+[ext_resource path="res://art/Enermies/Zombie/normal_stand_left_1_strip32.png" type="Texture" id=26]
+[ext_resource path="res://art/Enermies/Zombie/attack_up_1.png" type="Texture" id=27]
+[ext_resource path="res://art/Enermies/Zombie/attack_down_2.png" type="Texture" id=28]
+[ext_resource path="res://art/Enermies/Zombie/attack_up_2.png" type="Texture" id=29]
+[ext_resource path="res://art/Enermies/Zombie/attack_down_1.png" type="Texture" id=30]
+[ext_resource path="res://art/Enermies/Zombie/attack_right_2.png" type="Texture" id=31]
+[ext_resource path="res://art/Enermies/Zombie/attack_left_1.png" type="Texture" id=32]
+[ext_resource path="res://art/Enermies/Zombie/attack_right_1.png" type="Texture" id=33]
+
+[resource]
+animations = [ {
+"frames": [ ExtResource( 5 ), ExtResource( 1 ) ],
+"loop": true,
+"name": "normal_stand_right",
+"speed": 2.0
+}, {
+"frames": [ ExtResource( 12 ), ExtResource( 13 ) ],
+"loop": true,
+"name": "normal_stand_down",
+"speed": 2.0
+}, {
+"frames": [ ExtResource( 23 ), ExtResource( 12 ), ExtResource( 8 ), ExtResource( 12 ), ExtResource( 2 ), ExtResource( 13 ), ExtResource( 16 ), ExtResource( 13 ) ],
+"loop": true,
+"name": "normal_walk_down",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 11 ), ExtResource( 9 ) ],
+"loop": true,
+"name": "normal_stand_up",
+"speed": 2.0
+}, {
+"frames": [ ExtResource( 14 ), ExtResource( 11 ), ExtResource( 17 ), ExtResource( 11 ), ExtResource( 10 ), ExtResource( 9 ), ExtResource( 15 ), ExtResource( 9 ) ],
+"loop": true,
+"name": "normal_walk_up",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 21 ), ExtResource( 5 ), ExtResource( 22 ), ExtResource( 5 ), ExtResource( 7 ), ExtResource( 1 ), ExtResource( 24 ), ExtResource( 1 ) ],
+"loop": true,
+"name": "normal_walk_right",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 4 ), ExtResource( 3 ) ],
+"loop": true,
+"name": "normal_stand_left",
+"speed": 2.0
+}, {
+"frames": [ ExtResource( 18 ), ExtResource( 4 ), ExtResource( 6 ), ExtResource( 4 ), ExtResource( 19 ), ExtResource( 26 ), ExtResource( 20 ), ExtResource( 26 ) ],
+"loop": true,
+"name": "normal_walk_left",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 11 ), ExtResource( 27 ), ExtResource( 29 ) ],
+"loop": true,
+"name": "attack_up",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 4 ), ExtResource( 32 ), ExtResource( 25 ) ],
+"loop": true,
+"name": "attack_left",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 12 ), ExtResource( 30 ), ExtResource( 28 ) ],
+"loop": true,
+"name": "attack_down",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 5 ), ExtResource( 33 ), ExtResource( 31 ) ],
+"loop": true,
+"name": "attack_right",
+"speed": 5.0
+} ]

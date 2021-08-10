@@ -373,6 +373,8 @@ func animation_function():
     else:
         $Animations/NPCAnimation.speed_scale=0.7
     $Animations/NPCAnimation.animation=ani
+    $Animations/NPCDetailAnimation.animation=ani
+    $Animations/NPCDetailAnimation.frame=$Animations/NPCAnimation.frame
     
     var Weapon=null
     if WeaponChoice=="melee":

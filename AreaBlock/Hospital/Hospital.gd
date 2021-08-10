@@ -28,7 +28,7 @@ func _ready():
 func set_chests():
     for i in $AreaContents/Chests.get_children():
         i.init([
-            {"Name":"木材","Type":"Item","Number":[10,50],"RandomGroup":1,"Probability":1},
+            {"Name":"建材","Type":"Item","Number":[10,50],"RandomGroup":1,"Probability":1},
             {"Name":"45ACP子弹","Type":"Item","Number":[80,120],"RandomGroup":2,"Probability":0.1},
             {"Name":"汤姆逊冲锋枪","Type":"Weapon","Number":[1,1],"RandomGroup":2,"Probability":0.1},
             {"Name":"雷明顿16号弹","Type":"Item","Number":[15,40],"RandomGroup":3,"Probability":0.1},
@@ -41,17 +41,17 @@ func set_chests():
         ])
 
 func set_enermies():
-    $AreaContents/Enermies/Enermy1.init("test_enermy",Vector2(-1,0),-1,global_position)
-    $AreaContents/Enermies/Enermy2.init("test_enermy",Vector2(-1,0),-1,global_position)
-    $AreaContents/Enermies/Enermy3.init("test_enermy",Vector2(0,-1),-1,global_position)
-    $AreaContents/Enermies/Enermy4.init("test_enermy",Vector2(0,-1),-1,global_position)
-    $AreaContents/Enermies/Enermy5.init("test_enermy",Vector2(0,-1),-1,global_position)
-    $AreaContents/Enermies/Enermy6.init("test_enermy",Vector2(-1,0),-1,global_position)
-    $AreaContents/Enermies/Enermy7.init("test_enermy",Vector2(-1,0),-1,global_position)
-    $AreaContents/Enermies/Enermy8.init("test_enermy",Vector2(0,-1),-1,global_position)
-    $AreaContents/Enermies/Enermy9.init("test_enermy",Vector2(0,-1),-1,global_position)
-    $AreaContents/Enermies/Enermy10.init("test_enermy",Vector2(0,-1),-1,global_position)
-    $AreaContents/Enermies/Enermy11.init("test_enermy",Vector2(0,-1),-1,global_position)
+    $AreaContents/Enermies/Enermy1.init("Zombie",Vector2(-1,0),-1,global_position)
+    $AreaContents/Enermies/Enermy2.init("Zombie",Vector2(-1,0),-1,global_position)
+    $AreaContents/Enermies/Enermy3.init("Zombie",Vector2(0,-1),-1,global_position)
+    $AreaContents/Enermies/Enermy4.init("Zombie",Vector2(0,-1),-1,global_position)
+    $AreaContents/Enermies/Enermy5.init("Zombie",Vector2(0,-1),-1,global_position)
+    $AreaContents/Enermies/Enermy6.init("Zombie",Vector2(-1,0),-1,global_position)
+    $AreaContents/Enermies/Enermy7.init("Zombie",Vector2(-1,0),-1,global_position)
+    $AreaContents/Enermies/Enermy8.init("Zombie",Vector2(0,-1),-1,global_position)
+    $AreaContents/Enermies/Enermy9.init("Zombie",Vector2(0,-1),-1,global_position)
+    $AreaContents/Enermies/Enermy10.init("Zombie",Vector2(0,-1),-1,global_position)
+    $AreaContents/Enermies/Enermy11.init("Zombie",Vector2(0,-1),-1,global_position)
 
 func _on_UpdateArea_body_entered(body):
     if body.Identifier=="Player":

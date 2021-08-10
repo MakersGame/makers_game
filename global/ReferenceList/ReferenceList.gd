@@ -1,13 +1,13 @@
 extends Node
 #相当于是一个全局的数据访问文档，只读
 var ItemRference={
-    "木材":{
+    "建材":{
         "ID":1,                                 #ID，代表物品编号，也可以认为是另一种代号
         "Type":"Resource",                      #类型，便于区分
         "Weight":1,                             #单个物品重量
         "Usable":false,                         #是否可以直接在背包中使用
         "Price":1,                              #单价（出售）
-        "Description":"一小堆木材，常见的建筑材料。" 
+        "Description":"一小堆建材，常见的建筑材料。" 
         },
     "9mm子弹":{
         "ID":11,
@@ -33,7 +33,7 @@ var ItemRference={
         "Price":1,
         "Description":"常用于汤姆逊冲锋枪。"
        },
-    "绷带":{
+    "止痛药":{
         "ID":21,
         "Type":"Medicine",
         "HealValue":10,
@@ -168,58 +168,60 @@ var WeaponReference={
    }
 
 var EnermyReference={
-    "test_enermy":{
+    "Zombie":{
         "ID":-1,
         "Type":"Enermy",
         "MaxHealth":100,
         "Attack":10,
-        "AttackRange":100,
+        "AttackRange":40,
         "Speed":[3,3,3],
         "CollisionSize":Vector2(25,25),
         "AnimationOffset":Vector2(0,0),
         "Ability":[1,1,1,1],
-        "SightAngle":90,
+        "SightAngle":120,
         "SightRange":200,
         "BeforeAttackTime":0.5,
         "AfterAttackTime":0.5,
-        "AttackColdTime":2
+        "AttackColdTime":2,
+        "DamageAreaRect":Vector2(20,40),
+        "DamageAreaOffset":Vector2(20,0)
        }
    }
 
 var HomeUpdateReference={
     "厨房":{
         0:{
-            "Need":{"木材":100},
+            "Need":{"建材":100},
             "Description":"建造厨房。在食物充足的情况下，每天增加20点士气。"
            },
         1:{
-            "Need":{"木材":150},
+            "Need":{"建材":150},
             "Description":"二级厨房。在食物充足的情况下，每天增加30点士气。"
            },
         2:{
-            "Need":{"木材":200},
+            "Need":{"建材":200},
             "Description":"三级厨房。在食物充足的情况下，每天增加40点士气。"
            },
         3:{
-            "Need":{"木材":300},
+            "Need":{"建材":300},
             "Description":"四级厨房。在食物充足的情况下，每天增加50点士气。"
            },
        },
     "储藏室":{
         0:{
-            "Need":{"木材":200},
+            "Need":{"建材":200},
             "Description":"建造仓库。仓库容量由1000kg提升至1500kg。"
            },
         1:{
-            "Need":{"木材":400},
+            "Need":{"建材":400},
             "Description":"二级仓库。仓库容量由1500kg提升至2000kg。"
            },
         2:{
-            "Need":{"木材":800},
+            "Need":{"建材":800},
             "Description":"三级仓库。仓库容量由2000kg提升至2500kg。"
             },
         3:{
-            "Need":{"木材":160},
+            "Need":{"建材":160},
             "Description":"四级仓库。仓库容量由2500kg提升至3000kg。"
             },   
        },

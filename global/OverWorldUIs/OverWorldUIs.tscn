@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://art/temp/OverworldUIs/HealthBar/HealthBar_empty.png" type="Texture" id=1]
 [ext_resource path="res://art/temp/OverworldUIs/HealthBar/HealthBar_bg.png" type="Texture" id=2]
@@ -86,6 +86,14 @@ font_data = ExtResource( 6 )
 
 [sub_resource type="DynamicFont" id=6]
 size = 32
+font_data = ExtResource( 6 )
+
+[sub_resource type="DynamicFont" id=7]
+size = 40
+font_data = ExtResource( 6 )
+
+[sub_resource type="DynamicFont" id=8]
+size = 50
 font_data = ExtResource( 6 )
 
 [node name="OverWorldUIs" type="Node2D"]
@@ -274,8 +282,9 @@ position = Vector2( 30, 0 )
 texture = ExtResource( 12 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="WeaponChoice/MeleeWeapon"]
+scale = Vector2( 4, 4 )
 frames = ExtResource( 14 )
-animation = "test_melee_weapon"
+animation = "军刀"
 
 [node name="DurabilityBar" type="TextureProgress" parent="WeaponChoice/MeleeWeapon"]
 margin_left = -43.0
@@ -326,8 +335,9 @@ scale = Vector2( 0.5, 0.5 )
 texture = ExtResource( 12 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="WeaponChoice/RangedWeapon"]
+scale = Vector2( 4, 4 )
 frames = ExtResource( 14 )
-animation = "test_ranged_weapon"
+animation = "9mm手枪"
 
 [node name="DurabilityBar" type="TextureProgress" parent="WeaponChoice/RangedWeapon"]
 margin_left = -43.0
@@ -398,6 +408,7 @@ position = Vector2( -220, 0 )
 texture = ExtResource( 12 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="QuickUseItem/InventoryList/Inventory1"]
+scale = Vector2( 4, 4 )
 frames = ExtResource( 14 )
 
 [node name="ItemNumber" type="Label" parent="QuickUseItem/InventoryList/Inventory1"]
@@ -419,6 +430,7 @@ position = Vector2( -110, 0 )
 texture = ExtResource( 12 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="QuickUseItem/InventoryList/Inventory2"]
+scale = Vector2( 4, 4 )
 frames = ExtResource( 14 )
 
 [node name="ItemNumber" type="Label" parent="QuickUseItem/InventoryList/Inventory2"]
@@ -439,6 +451,7 @@ __meta__ = {
 texture = ExtResource( 12 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="QuickUseItem/InventoryList/Inventory3"]
+scale = Vector2( 4, 4 )
 frames = ExtResource( 14 )
 
 [node name="ItemNumber" type="Label" parent="QuickUseItem/InventoryList/Inventory3"]
@@ -460,6 +473,7 @@ position = Vector2( 110, 0 )
 texture = ExtResource( 12 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="QuickUseItem/InventoryList/Inventory4"]
+scale = Vector2( 4, 4 )
 frames = ExtResource( 14 )
 
 [node name="ItemNumber" type="Label" parent="QuickUseItem/InventoryList/Inventory4"]
@@ -481,6 +495,7 @@ position = Vector2( 220, 0 )
 texture = ExtResource( 12 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="QuickUseItem/InventoryList/Inventory5"]
+scale = Vector2( 4, 4 )
 frames = ExtResource( 14 )
 
 [node name="ItemNumber" type="Label" parent="QuickUseItem/InventoryList/Inventory5"]
@@ -540,8 +555,35 @@ __meta__ = {
 [node name="Clock" type="Node2D" parent="."]
 position = Vector2( 1205, 75 )
 
-[node name="Sprite" type="Sprite" parent="Clock"]
+[node name="Background" type="Sprite" parent="Clock"]
 texture = ExtResource( 16 )
+
+[node name="Time" type="Label" parent="Clock"]
+margin_left = -72.0
+margin_top = -50.0
+margin_right = 72.0
+margin_bottom = -8.0
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = " 6:00"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Period" type="Label" parent="Clock"]
+margin_left = -72.0
+margin_right = 72.0
+margin_bottom = 42.0
+custom_fonts/font = SubResource( 8 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "白天"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [connection signal="timeout" from="CreatureInfo/MaintainTimer" to="." method="_on_MaintainTimer_timeout"]
 [connection signal="timeout" from="Message/Message1/Messager1Timer" to="." method="_on_Messager1Timer_timeout"]

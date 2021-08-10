@@ -4,20 +4,19 @@
 [ext_resource path="res://Obstacles/Chest&Items/PickableItem/PickableItem.gd" type="Script" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 5, 5 )
+extents = Vector2( 8, 8 )
 
 [node name="PickableItem" type="KinematicBody2D"]
-scale = Vector2( 4, 4 )
+scale = Vector2( 3, 3 )
 z_index = -600
 collision_layer = 16
 collision_mask = 0
 script = ExtResource( 2 )
 
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+frames = ExtResource( 1 )
+animation = "止痛药"
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
 disabled = true
-
-[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-scale = Vector2( 0.1, 0.1 )
-frames = ExtResource( 1 )
-animation = "9mm子弹"
